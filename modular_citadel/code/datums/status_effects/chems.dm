@@ -159,6 +159,7 @@
 	rather than
 	datum/status_effect/chem/enthrall
 	as it's no longer directly tied to a chem.
+////////////////////////////////////////////
 */
 
 //Preamble
@@ -168,7 +169,7 @@
 	set name = "Toggle Lewd Hypno"
 	set desc = "Allows you to toggle if you'd like lewd flavour messages for hypno features, such as MKUltra."
 	client.prefs.cit_toggles ^= HYPNO
-	to_chat(usr, "You [((client.prefs.cit_toggles & HYPNO) ?"will":"no longer")] receive lewd flavour messages for hypno.")
+	to_chat(usr, "You [((client.prefs.cit_toggles & HYPNO) ?"will":"will no longer")] receive lewd flavour messages for hypno.")
 
 /datum/status_effect/chem/enthrall
 	id = "enthrall"
@@ -212,6 +213,7 @@
 
 /datum/status_effect/chem/enthrall/on_apply()
 	var/mob/living/carbon/M = owner
+	//We're gonna make a proc that defines the owner and such
 	var/datum/reagent/fermi/enthrall/E = locate(/datum/reagent/fermi/enthrall) in M.reagents.reagent_list
 	if(!E)
 		message_admins("WARNING: FermiChem: No master found in thrall, did you bus in the status? You need to set up the vars manually in the chem if it's not reacted/bussed. Someone set up the reaction/status proc incorrectly if not (Don't use donor blood). Console them with a chemcat plush maybe?")
@@ -561,6 +563,22 @@
 	to_chat(owner, "<span class='big redtext'><i>You're now free of [master]'s influence, and fully independent!'</i></span>")
 	UnregisterSignal(owner, COMSIG_GLOB_LIVING_SAY_SPECIAL)
 	return ..()
+
+/datum/status_effect/chem/enthrall/proc/setup_vars(masterID, masterTitle, maxPhase)
+	//this proc just sets up the big important variables, and is how the master is set up
+	//It should ALWAYS BE CALLED when adding enthrall, or else you'll run into Fun Issues(tm)
+	enthrallID = masterID
+	enthrallTitle = masterTitle
+	if (!isnum(maxPhase))
+		return
+	switch (maxPhase)
+		if (0 to 4)
+			phaselimit = maxPhase
+		if (5 to INFINITY)
+			log_reagent("WARNING: FERMICHEM: ENTHRALL: Failed to setup values for status on [owner] ckey: [owner.key]! Maximum phase greater than 4.")
+	master = get_mob_by_key(enthrallID)
+	log_reagent("FERMICHEM: ENTHRALL: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID], and maximum phase of [phaselimit].")
+	return
 
 /datum/status_effect/chem/enthrall/proc/owner_hear(datum/source, list/hearing_args)
 	if(lewd == FALSE)
