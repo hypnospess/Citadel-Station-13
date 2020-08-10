@@ -190,6 +190,8 @@
 	var/enthrallTitle //Enchanter's title
 	var/subjectTerm //Subject's term
 
+	var/initialSetup = FALSE //has the status effect been set up and logged
+
 	var/mental_capacity //Higher it is, lower the cooldown on commands, capacity reduces with resistance.
 
 	var/distancelist = list(2,1.5,1,0.8,0.6,0.5,0.4,0.3,0.2) //Distance multipliers
@@ -213,14 +215,7 @@
 
 /datum/status_effect/chem/enthrall/on_apply()
 	var/mob/living/carbon/M = owner
-	//We're gonna make a proc that defines the owner and such
-	var/datum/reagent/fermi/enthrall/E = locate(/datum/reagent/fermi/enthrall) in M.reagents.reagent_list
-	if(!E)
-		message_admins("WARNING: FermiChem: No master found in thrall, did you bus in the status? You need to set up the vars manually in the chem if it's not reacted/bussed. Someone set up the reaction/status proc incorrectly if not (Don't use donor blood). Console them with a chemcat plush maybe?")
-		owner.remove_status_effect(src)
-	enthrallID = E.creatorID
-	enthrallTitle = E.creatorTitle
-	master = get_mob_by_key(enthrallID)
+	//We're gonna make a proc that defines the master and such
 	subjectTerm = M.client?.prefs.custom_names["subject"]
 	//if(M.ckey == enthrallID)
 	//	owner.remove_status_effect(src)//At the moment, a user can enthrall themselves, toggle this back in if that should be removed.
@@ -228,16 +223,21 @@
 	RegisterSignal(owner, COMSIG_MOVABLE_HEAR, .proc/owner_hear)
 	mental_capacity = 500 - M.getOrganLoss(ORGAN_SLOT_BRAIN)//It's their brain!
 	lewd = (owner.client?.prefs.cit_toggles & HYPNO) && (master.client?.prefs.cit_toggles & HYPNO)
-	var/message = "[(lewd ? "I am a good [subjectTerm] for [enthrallTitle]." : "[master] always knows just what to say.")]"
-	SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "enthrall", /datum/mood_event/enthrall, message)
-	to_chat(owner, "<span class='[(lewd ?"big velvet":"big warning")]'><b>You feel inexplicably drawn towards [master], their words having a demonstrable effect on you. It seems the closer you are to them, the stronger the effect is. However you aren't fully swayed yet and can fight against their effects by resisting repeatedly!</b></span>")
-	log_reagent("FERMICHEM: MKULTRA: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID].")
-	SSblackbox.record_feedback("tally", "fermi_chem", 1, "Enthrall attempts")
 	return ..()
 
 /datum/status_effect/chem/enthrall/tick()
 	var/mob/living/carbon/M = owner
-
+	//Before doing anything else! Make sure that the vars are properly set up!
+	if(!master || !enthrallID || !enthrallTitle || !phaselimit)
+		return //the values aren't set up yet so do nothing.
+	if(initialSetup == FALSE)
+		var/message = "[(lewd ? "I am a good [subjectTerm] for [enthrallTitle]." : "[master] always knows just what to say.")]"
+		SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "enthrall", /datum/mood_event/enthrall, message)
+		to_chat(owner, "<span class='[(lewd ?"big velvet":"big warning")]'><b>You feel inexplicably drawn towards [master], their words having a demonstrable effect on you. It seems the closer you are to them, the stronger the effect is. However you aren't fully swayed yet and can fight against their effects by resisting repeatedly!</b></span>")
+		log_reagent("FERMICHEM: MKULTRA: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID].")
+		SSblackbox.record_feedback("tally", "fermi_chem", 1, "Enthrall attempts")
+		initialSetup = TRUE
+		
 	//chem calculations
 	if(!owner.reagents.has_reagent(/datum/reagent/fermi/enthrall))
 		if (phase < 3 && phase != 0)
