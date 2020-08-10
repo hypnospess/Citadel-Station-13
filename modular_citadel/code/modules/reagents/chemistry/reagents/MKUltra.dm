@@ -185,8 +185,11 @@ Creating a chem with a low purity will make you permanently fall in love with so
 		qdel(Vc)
 		to_chat(M, "<span class='notice'><i>You feel your vocal chords tingle as you speak in a more charasmatic and enthralling tone.</i></span>")
 	else
+		var/datum/status_effect/chem/enthrall/H
+		M.apply_status_effect(H)
+		H.setup_vars(creatorID, creatorTitle, 4)
+		H.enthrallSources += src
 		log_reagent("FERMICHEM: MKUltra: [creatorName], [creatorID], is enthralling [M.name], [M.ckey]")
-		M.apply_status_effect(/datum/status_effect/chem/enthrall)
 	log_reagent("FERMICHEM: [M] ckey: [M.key] has taken MKUltra")
 
 /datum/reagent/fermi/enthrall/on_mob_life(mob/living/carbon/M)
@@ -239,7 +242,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	if (M.ckey == creatorID && creatorName == M.real_name)//If the creator drinks 100u, then you get the status for someone random (They don't have the vocal chords though, so it's limited.)
 		if (!M.has_status_effect(/datum/status_effect/chem/enthrall))
 			to_chat(M, "<span class='love'><i>You are unable to resist your own charms anymore, and become a full blown narcissist.</i></span>")
-	ADD_TRAIT(M, TRAIT_PACIFISM, "MKUltra")
+	ADD_TRAIT(M, TRAIT_PACIFISM, "Enthrallment")
 	var/datum/status_effect/chem/enthrall/E
 	if (!M.has_status_effect(/datum/status_effect/chem/enthrall))
 		M.apply_status_effect(/datum/status_effect/chem/enthrall)
@@ -264,6 +267,12 @@ Creating a chem with a low purity will make you permanently fall in love with so
 /datum/reagent/fermi/enthrall/overdose_process(mob/living/carbon/M)
 	M.adjustOrganLoss(ORGAN_SLOT_BRAIN, 0.2)//should be ~30 in total
 	..()
+
+/datum/reagent/fermi/enthrall/on_mob_delete(mob/living/carbon/M)
+	. = ..()
+	E = M.has_status_effect(/datum/status_effect/chem/enthrall)
+	E.enthrallSources -= src
+	return
 
 //Creates a gas cloud when the reaction blows up, causing everyone in it to fall in love with someone/something while it's in their system.
 /datum/reagent/fermi/enthrallExplo//Created in a gas cloud when it explodes

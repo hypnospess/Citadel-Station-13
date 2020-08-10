@@ -1255,7 +1255,7 @@
 								E.customTriggers[trigger] = list(trigger2, trigger3)
 								log_reagent("FERMICHEM: [H] has been implanted by [user] with [trigger], triggering [trigger2], to send [trigger3].")
 								if(findtext(trigger3, "admin"))
-									message_admins("FERMICHEM: [user] maybe be trying to abuse MKUltra by implanting by [H] with [trigger], triggering [trigger2], to send [trigger3].")
+									message_admins("FERMICHEM: [user] maybe be trying to abuse Enthrallment by implanting by [H] with [trigger], triggering [trigger2], to send [trigger3].")
 							else
 								E.customTriggers[trigger] = trigger2
 								log_reagent("FERMICHEM: [H] has been implanted by [user] with [trigger], triggering [trigger2].")
@@ -1323,7 +1323,7 @@
 						//objective = replacetext(lowertext(objective), "strangle", "meow at")
 						objective = replacetext(lowertext(objective), "suicide", "self-love")
 						message_admins("[H] has been implanted by [user] with the objective [objective].")
-						log_reagent("FERMICHEM: [H] has been implanted by [user] with the objective [objective] via MKUltra.")
+						log_reagent("FERMICHEM: [H] has been implanted by [user] with the objective [objective] via Enthrallment.")
 						addtimer(CALLBACK(GLOBAL_PROC, .proc/to_chat, H, "<span class='notice'>[(E.lewd?"Your [E.enthrallTitle]":"[E.master]")] whispers you a new objective.</span>"), 5)
 						brainwash(H, objective)
 						E.mental_capacity -= 200
@@ -1342,7 +1342,7 @@
 				var/instill = stripped_input(user, "Instill an emotion in [H].", MAX_MESSAGE_LEN)
 				to_chat(H, "<i>[instill]</i>")
 				to_chat(user, "<span class='notice'><i>You sucessfully instill a feeling in [H]</i></span>")
-				log_reagent("FERMICHEM: [H] has been instilled by [user] with [instill] via MKUltra.")
+				log_reagent("FERMICHEM: [H] has been instilled by [user] with [instill] via Enthrallment.")
 				E.cooldown += 1
 
 	//RECOGNISE
