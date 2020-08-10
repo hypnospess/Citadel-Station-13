@@ -192,6 +192,7 @@
 
 	var/initialSetup = FALSE //has the status effect been set up and logged
 	var/isExposed = FALSE //Registers whether or not the player is actually exposed to the thing that's causing their enthrallment (MKUltra in bloodstream, hypnotic eyes, etc.)
+	var/list/enthrallSources = list() //List of all enthrall sources.
 
 	var/mental_capacity //Higher it is, lower the cooldown on commands, capacity reduces with resistance.
 
@@ -217,6 +218,11 @@
 /datum/status_effect/chem/enthrall/on_apply()
 	var/mob/living/carbon/M = owner
 	//We're gonna make a proc that defines the master and such
+	//be ready to delete the next three lines and remove the args if they cause problems
+	//enthrallID = masterID
+	//enthrallTitle = masterTitle
+	//phaselimit = maxPhase
+
 	subjectTerm = M.client?.prefs.custom_names["subject"]
 	//if(M.ckey == enthrallID)
 	//	owner.remove_status_effect(src)//At the moment, a user can enthrall themselves, toggle this back in if that should be removed.
@@ -241,7 +247,7 @@
 	if(phase > phaselimit)
 		phase = phaselimit //just make sure we don't surpass the phase limit.
 	//breaking free
-	if(!isExposed)
+	if(!enthrallSources.length())
 		if (phase < 3 && phase != 0)
 			deltaResist += 3//If you're not exposed, then you break out quickly
 			if(prob(5))

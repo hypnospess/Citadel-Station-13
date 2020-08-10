@@ -188,7 +188,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 		var/datum/status_effect/chem/enthrall/H
 		M.apply_status_effect(H)
 		H.setup_vars(creatorID, creatorTitle, 4)
-		H.isExposed = TRUE
+		H.enthrallSources += src
 		log_reagent("FERMICHEM: MKUltra: [creatorName], [creatorID], is enthralling [M.name], [M.ckey]")
 	log_reagent("FERMICHEM: [M] ckey: [M.key] has taken MKUltra")
 
@@ -271,7 +271,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 /datum/reagent/fermi/enthrall/on_mob_delete(mob/living/carbon/M)
 	. = ..()
 	E = M.has_status_effect(/datum/status_effect/chem/enthrall)
-	E.isExposed = FALSE
+	E.enthrallSources -= src
 	return
 
 //Creates a gas cloud when the reaction blows up, causing everyone in it to fall in love with someone/something while it's in their system.
