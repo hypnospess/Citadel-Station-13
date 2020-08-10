@@ -187,7 +187,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	else
 		var/datum/status_effect/chem/enthrall/H
 		M.apply_status_effect(H)
-		H.setup_vars(creatorID, creatorTitle, 4)H.setup_vars(creatorID, creatorTitle, 4)
+		H.setup_vars(creatorID, creatorTitle, 4)
 		H.isExposed = TRUE
 		log_reagent("FERMICHEM: MKUltra: [creatorName], [creatorID], is enthralling [M.name], [M.ckey]")
 	log_reagent("FERMICHEM: [M] ckey: [M.key] has taken MKUltra")
