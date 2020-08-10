@@ -27,6 +27,7 @@ punish_words
 0
 saymyname_words
 wakeup_words
+sayyourtitle_words
 1
 silence_words
 antiresist_words
