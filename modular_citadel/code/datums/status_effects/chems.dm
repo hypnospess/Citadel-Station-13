@@ -191,6 +191,7 @@
 	var/subjectTerm //Subject's term
 
 	var/initialSetup = FALSE //has the status effect been set up and logged
+	var/isExposed = FALSE //Registers whether or not the player is actually exposed to the thing that's causing their enthrallment (MKUltra in bloodstream, hypnotic eyes, etc.)
 
 	var/mental_capacity //Higher it is, lower the cooldown on commands, capacity reduces with resistance.
 
@@ -237,13 +238,16 @@
 		log_reagent("FERMICHEM: MKULTRA: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID].")
 		SSblackbox.record_feedback("tally", "fermi_chem", 1, "Enthrall attempts")
 		initialSetup = TRUE
-		
-	//chem calculations
-	if(!owner.reagents.has_reagent(/datum/reagent/fermi/enthrall))
+	if(phase > phaselimit)
+		phase = phaselimit //just make sure we don't surpass the phase limit.
+	//breaking free
+	if(!isExposed)
 		if (phase < 3 && phase != 0)
-			deltaResist += 3//If you've no chem, then you break out quickly
+			deltaResist += 3//If you're not exposed, then you break out quickly
 			if(prob(5))
-				to_chat(owner, "<span class='notice'><i>Your mind regains some of it's clarity as you feel the effects of the drug wain.</i></span>")
+				to_chat(owner, "<span class='notice'><i>Your mind regains some of it's clarity as you're no longer exposed to the source of your enthrallment.</i></span>")
+
+	//chem calculations
 	if (mental_capacity <= 500 || phase == 4)
 		if (owner.reagents.has_reagent(/datum/reagent/medicine/mannitol))
 			mental_capacity += 5
@@ -254,7 +258,7 @@
 	if(HAS_TRAIT(M, TRAIT_MINDSHIELD))//If you manage to enrapture a head, wow, GJ. (resisting gives a bigger bonus with a mindshield) From what I can tell, this isn't possible.
 		resistanceTally += 2
 		if(prob(10))
-			to_chat(owner, "<span class='notice'><i>You feel lucidity returning to your mind as the mindshield buzzes, attempting to return your brain to normal function.</i></span>")
+			to_chat(owner, "<span class='notice'><i>You feel lucidity returning to your mind as the mindshield buzzes, attempting to return your brain to its normal functions.</i></span>")
 		if(phase == 4)
 			mental_capacity += 5
 
@@ -270,7 +274,7 @@
 				cooldown -= 1
 			return
 		if(1)//Initial enthrallment
-			if (enthrallTally > 125)
+			if (enthrallTally > 125 && phaselimit >= 2)
 				phase += 1
 				mental_capacity -= resistanceTally//leftover resistance per step is taken away from mental_capacity.
 				resistanceTally /= 2
@@ -292,7 +296,7 @@
 				if(lewd)
 					to_chat(owner, "<span class='small velvet'><i>[pick("It feels so good to listen to [master].", "You can't keep your eyes off [master].", "[master]'s voice is making you feel so sleepy.",  "You feel so comfortable with [master]", "[master] is so dominant, it feels right to obey them.","[master]'s words soothe you and make you feel safe.")].</b></span>")
 		if (2) //partially enthralled
-			if(enthrallTally > 200)
+			if(enthrallTally > 200 && phaselimit >= 3)
 				phase += 1
 				mental_capacity -= resistanceTally//leftover resistance per step is taken away from mental_capacity.
 				enthrallTally = 0
@@ -324,31 +328,34 @@
 			if(lewd && prob(1) && !customEcho)
 				to_chat(owner, "<span class='love'><i>[pick("I belong to [enthrallTitle].", "I obey [enthrallTitle].","[enthrallTitle] knows what's best for me.", "Obedence is pleasure.",  "I exist to serve [enthrallTitle].", "[enthrallTitle] is so dominant, it feels right to obey them.","I am [enthrallTitle]'s loyal [subjectTerm]")].</i></span>")
 		if (4) //mindbroken
-			if (mental_capacity >= 499 && (owner.getOrganLoss(ORGAN_SLOT_BRAIN) <=0 || HAS_TRAIT(M, TRAIT_MINDSHIELD)) && !owner.reagents.has_reagent(/datum/reagent/fermi/enthrall))
-				phase = 2
-				mental_capacity = 500
-				customTriggers = list()
-				to_chat(owner, "<span class='notice'><i>Your mind starts to heal, fixing the damage caused by the massive amounts of chemical injected into your system earlier, returning clarity to your mind. Though stragely, you still feel drawn towards [master]'s words...'</i></span>")
-				M.slurring = 0
-				M.confused = 0
-				resistGrowth = 0
+			if (phaselimit >= 4)
+				if (mental_capacity >= 499 && (owner.getOrganLoss(ORGAN_SLOT_BRAIN) <=0 || HAS_TRAIT(M, TRAIT_MINDSHIELD)) && !owner.reagents.has_reagent(/datum/reagent/fermi/enthrall))
+					phase = 2
+					mental_capacity = 500
+					customTriggers = list()
+					to_chat(owner, "<span class='notice'><i>Your mind starts to heal, fixing the damage caused by the massive amounts of chemical injected into your system earlier, returning clarity to your mind. Though stragely, you still feel drawn towards [master]'s words...'</i></span>")
+					M.slurring = 0
+					M.confused = 0
+					resistGrowth = 0
+				else
+					if (cooldown > 0)
+						cooldown -= (0.8 + (mental_capacity/500))
+						cooldownMsg = FALSE
+					else if (cooldownMsg == FALSE)
+						if(DistApart < 10)
+							if(lewd)
+								to_chat(master, "<span class='notice'><i>Your [subjectTerm] [owner] appears to have finished internalising your last command.</i></span>")
+								cooldownMsg = TRUE
+							else
+								to_chat(master, "<span class='notice'><i>Your thrall [owner] appears to have finished internalising your last command.</i></span>")
+								cooldownMsg = TRUE
+					if(get_dist(master, owner) > 10)
+						if(prob(10))
+							to_chat(owner, "<span class='velvet'><i>You feel [(lewd ?"a deep <b>NEED</b> to return to your [enthrallTitle]":"like you have to return to [master]")].</i></span>")
+							//M.throw_at(get_step_towards(master,owner), 5, 1)
+					return//If you break the mind of someone, you can't use status effects on them.
 			else
-				if (cooldown > 0)
-					cooldown -= (0.8 + (mental_capacity/500))
-					cooldownMsg = FALSE
-				else if (cooldownMsg == FALSE)
-					if(DistApart < 10)
-						if(lewd)
-							to_chat(master, "<span class='notice'><i>Your [subjectTerm] [owner] appears to have finished internalising your last command.</i></span>")
-							cooldownMsg = TRUE
-						else
-							to_chat(master, "<span class='notice'><i>Your thrall [owner] appears to have finished internalising your last command.</i></span>")
-							cooldownMsg = TRUE
-				if(get_dist(master, owner) > 10)
-					if(prob(10))
-						to_chat(owner, "<span class='velvet'><i>You feel [(lewd ?"a deep <b>NEED</b> to return to your [enthrallTitle]":"like you have to return to [master]")].</i></span>")
-						//M.throw_at(get_step_towards(master,owner), 5, 1)
-				return//If you break the mind of someone, you can't use status effects on them.
+				phase = 3
 
 
 	//distance calculations
