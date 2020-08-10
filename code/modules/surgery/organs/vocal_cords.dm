@@ -744,8 +744,9 @@
 	var/static/regex/reward_words = regex("good boy|good girl|good pet|good toy|good drone|good job|splendid|jolly good|bloody brilliant")
 	var/static/regex/punish_words = regex("bad boy|bad girl|bad pet|bad toy|bad drone|bad job|spot of bother|gone and done it now|blast it|buggered it up")
 	//phase 0
-	var/static/regex/saymyname_words = regex("say my name|who am i|whoami")
+	var/static/regex/saymyname_words = regex("say my name|who am i|whoami|who i am")
 	var/static/regex/wakeup_words = regex("revert|awaken|snap|attention")
+	var/static/regex/sayyourtitle_words = regex("what are you|say your name|who are you|who you are|what you are|what's your name")
 	//phase1
 	var/static/regex/petstatus_words = regex("how are you|what is your status|are you okay")
 	var/static/regex/silence_words = regex("shut up|silence|be silent|ssh|quiet|hush")
@@ -855,7 +856,7 @@
 
 
 
-	//teir 0
+	//tier 0
 	//SAY MY NAME works
 	if((findtext(message, saymyname_words)))
 		for(var/V in listeners)
@@ -867,6 +868,18 @@
 				addtimer(CALLBACK(C, /atom/movable/proc/say, "[E.enthrallTitle]!"), 5)
 			else
 				addtimer(CALLBACK(C, /atom/movable/proc/say, "[E.master]!"), 5)
+	
+	//SAY YOUR TITLE
+	if((findtext(message, sayyourtitle_words)))
+		for(var/V in listeners)
+			var/mob/living/carbon/C = V
+			var/datum/status_effect/chem/enthrall/E = C.has_status_effect(/datum/status_effect/chem/enthrall)
+			REMOVE_TRAIT(C, TRAIT_MUTE, "enthrall")
+			C.silent = 0
+			if(E.lewd)
+				addtimer(CALLBACK(C, /atom/movable/proc/say, "I'm your [E.subjectTerm]!"), 5)
+			else
+				addtimer(CALLBACK(C, /atom/movable/proc/say, "I'm [C.real_name]!"), 5)
 
 	//WAKE UP
 	else if((findtext(message, wakeup_words)))
