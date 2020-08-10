@@ -148,6 +148,19 @@
 ///////////////////////////////////////////
 */
 
+/*/////////////////////////////////////////
+	The Big Enthrall Rework
+	We want enthrall to be independant of MKUltra.
+	This means that MKUltra will grant enthrall when consumed,
+	and will update the enthrall variables as before.
+
+	This might mean we'd want to make enthrall
+	datum/status_effect/<something else?>/enthrall
+	rather than
+	datum/status_effect/chem/enthrall
+	as it's no longer directly tied to a chem.
+*/
+
 //Preamble
 
 /mob/living/verb/toggle_hypno()
@@ -166,6 +179,7 @@
 	var/deltaResist //The total resistance added per resist click
 
 	var/phase = 1 //-1: resisted state, due to be removed.0: sleeper agent, no effects unless triggered 1: initial, 2: 2nd stage - more commands, 3rd: fully enthralled, 4th Mindbroken
+	var/phaselimit = 4 //the maximum allowed phase of the effect. By default, all phases are available, but it may depend on the source.
 
 	var/status = null //status effects
 	var/statusStrength = 0 //strength of status effect
