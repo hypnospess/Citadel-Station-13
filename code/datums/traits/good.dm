@@ -201,9 +201,6 @@
 
 /datum/quirk/snakeeyes/on_spawn()
 	var/mob/living/carbon/human/H = quirk_holder
-	//var/obj/item/autosurgeon/snakeeyes/snakeeyes = new(get_turf(H))
-	//H.equip_to_slot(snakeeyes, SLOT_IN_BACKPACK)
-	//H.regenerate_icons()
 	if(!ishuman(H))
 		return
 	var/obj/item/organ/eyes/Vc = H.getorganslot(ORGAN_SLOT_EYES)
