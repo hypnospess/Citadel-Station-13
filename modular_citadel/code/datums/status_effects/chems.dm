@@ -247,7 +247,7 @@
 	if(phase > phaselimit)
 		phase = phaselimit //just make sure we don't surpass the phase limit.
 	//breaking free
-	if(!enthrallSources.length())
+	if(!enthrallSources.len)
 		if (phase < 3 && phase != 0)
 			deltaResist += 3//If you're not exposed, then you break out quickly
 			if(prob(5))
@@ -562,7 +562,7 @@
 //Remove all stuff
 /datum/status_effect/chem/enthrall/on_remove()
 	var/mob/living/carbon/M = owner
-	M.mind.remove_antag_datum(/datum/antagonist/brainwashed)
+	M.mind?.remove_antag_datum(/datum/antagonist/brainwashed)
 	SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "enthrall")
 	SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "enthrallpraise")
 	SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "enthrallscold")
