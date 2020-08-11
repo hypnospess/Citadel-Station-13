@@ -428,9 +428,9 @@
 
 /obj/item/organ/eyes/snakeeyes/on_life()
 	. = ..()
-	if(!owner)
+	if(!owner || !has_spiral)
 		return
-	if((!. || eye_damaged) && has_spiral)
+	if(!. || eye_damaged)
 		to_chat(owner, "<span class='warning'>The spiral in your [src] quickly fades away as you lose the ability to focus...</span>")
 		toggle_spiral(TRUE)
 		return
@@ -456,7 +456,6 @@
 		return
 	var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
 	if(!E)
-		to_chat(world, "[M] is getting enthralled")
 		E = M.apply_status_effect(/datum/status_effect/chem/enthrall)
 		E.setup_vars(enthrallment_ID, enthrallment_title, 3)
 		E.enthrallSources |= src

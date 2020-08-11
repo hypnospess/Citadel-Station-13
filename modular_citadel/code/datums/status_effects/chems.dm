@@ -216,7 +216,10 @@
 	var/lewd = FALSE // Set on on_apply. Will only be true if both individuals involved have opted in.
 
 /datum/status_effect/chem/enthrall/on_apply()
+	. = ..()
 	var/mob/living/carbon/M = owner
+	if(!istype(M))
+		return FALSE
 	//We're gonna make a proc that defines the master and such
 	//be ready to delete the next three lines and remove the args if they cause problems
 	//enthrallID = masterID
@@ -229,8 +232,6 @@
 	RegisterSignal(owner, COMSIG_LIVING_RESIST, .proc/owner_resist) //Do resistance calc if resist is pressed#
 	RegisterSignal(owner, COMSIG_MOVABLE_HEAR, .proc/owner_hear)
 	mental_capacity = 500 - M.getOrganLoss(ORGAN_SLOT_BRAIN)//It's their brain!
-	lewd = (owner.client?.prefs.cit_toggles & HYPNO) && (master.client?.prefs.cit_toggles & HYPNO)
-	return ..()
 
 /datum/status_effect/chem/enthrall/tick()
 	var/mob/living/carbon/M = owner
@@ -591,6 +592,7 @@
 			log_reagent("WARNING: FERMICHEM: ENTHRALL: Failed to setup values for status on [owner] ckey: [owner.key]! Maximum phase greater than 4.")
 	master = get_mob_by_key(enthrallID)
 	log_reagent("FERMICHEM: ENTHRALL: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID], and maximum phase of [phaselimit].")
+	lewd = (owner.client?.prefs.cit_toggles & HYPNO) && (master.client?.prefs.cit_toggles & HYPNO)
 	return
 
 /datum/status_effect/chem/enthrall/proc/owner_hear(datum/source, list/hearing_args)
