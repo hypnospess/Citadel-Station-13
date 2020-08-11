@@ -1111,7 +1111,7 @@
 						var/newTerm = stripped_input(user, "Enter the new sub term", MAX_MESSAGE_LEN)
 						E.subjectTerm = newTerm
 						to_chat(user, "<span class='notice'><i>You successfully teach [H] their proper place.</i></span>")
-						to_chat(V, "<span class='notice'><i>You suddenly realize your proper place as [(E.lewd?"your [E.enthrallTitle]'s [E.subjectTerm]!":"[E.master]'s [E.subjectTerm]!"")
+						to_chat(V, "<span class='notice'><i>You suddenly realize your proper place as [(E.lewd?"your [E.enthrallTitle]'s [E.subjectTerm]!":"[E.master]'s [E.subjectTerm]!")]")
 
 	//awoo
 	else if((findtext(message, awoo_words)))
