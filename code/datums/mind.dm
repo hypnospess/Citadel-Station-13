@@ -36,6 +36,7 @@
 	var/active = 0
 
 	var/list/memories
+	var/list/memoryHTML
 
 	var/assigned_role
 	var/special_role
@@ -171,12 +172,13 @@
 			if (M.modified)
 				html += "<p class='uiContent' style='display:none; color:GoldenRod;' id='[M.name] [curID] body'><b>?</b> Something feels <b>distressingly</b> <i><u>wrong</u></i> about this memory...</p>"
 			html += "</div>"
-	return html
+	memoryHTML = html
 		
 
 
 /datum/mind/proc/wipe_memory()
-	memory = null
+	for(datum/memory/M in memories)
+		delete_memory(M)
 
 /datum/mind/proc/delete_memory(datum/memory/M)
 	//This will remove the specified memory
@@ -185,7 +187,7 @@
 	for(var/m in memories)
 		if (M == m) 	//No clue if this will actually work for a comparison
 			memories -= M
-	
+	update_memory_listing()
 
 // Datum antag mind procs
 /datum/mind/proc/add_antag_datum(datum_type_or_instance, team)
