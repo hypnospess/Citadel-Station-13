@@ -35,7 +35,7 @@
 	var/mob/living/current
 	var/active = 0
 
-	var/memory
+	var/list/memories
 
 	var/assigned_role
 	var/special_role
@@ -140,12 +140,52 @@
 	SEND_SIGNAL(src, COMSIG_MIND_TRANSFER, new_character, old_character)
 	SEND_SIGNAL(new_character, COMSIG_MOB_ON_NEW_MIND)
 
-/datum/mind/proc/store_memory(new_text)
-	if((length_char(memory) + length_char(new_text)) <= MAX_MESSAGE_LEN)
-		memory += "[new_text]<BR>"
+/datum/mind/proc/store_memory(datum/memory/M)
+	if(!istype(M))
+		return
+	memories |= M
+	M.owner = src
+	update_memory_listing()
+
+/datum/mind/proc/update_memory_listing()
+	//this will update and display the HTML. some of this is stolen directly from VOREstation chardirectory
+	//The memory listing will only display conscious memories.
+	//To view subconscious memories, you need to use a mindscanner in medical.
+	var/curmem_title = "default-title"
+	var/curmem_body = "default-body"
+	var/html = "<script> function togglesection(targetsection) { var targettext = document.getElementById(targetsection); if (targettext.style.display === 'none') { targettext.style.display = ''; } else { targettext.style.display = 'none'; } } </script>"
+	var/curID = 0
+	for(var/memory/M in memories)
+		if(M.conscious == TRUE)
+			html += "<div class='block'>"
+			html += "<a onclick='togglesection(\"[M.name] [curID] body\")'>[M.name]</a>"
+			html += "<p class='uiContent' style='display:none' id='[M.name] [curID] body'>[M.mem_text]</p>"
+			if (M.traumatic)
+				html += "<p class='uiContent' style='display:none; color:Tomato;' id='[M.name] [curID] body'><b>-</b> This memory is <u>traumatic.</u></p>"
+			if (M.positive)
+				html += "<p class='uiContent' style='display:none; color:ForestGreen;' id='[M.name] [curID] body'><b>+</b> This is a <u>positive</u> memory!</p>"
+			if (M.is_antag)
+				html += "<p class='uiContent' style='display:none; color:DarkRed;' id='[M.name] [curID] body'><b>!</b> This memory is related to your <u>antagonist status.</u> It will not show up on medical scans.</p>"
+			if (M.essential)
+				html += "<p class='uiContent' style='display:none; color:SlateGray;' id='[M.name] [curID] body'><b>=</b> This memory is <u>essential</u> to you, and is part of how you define yourself.</p>"
+			if (M.modified)
+				html += "<p class='uiContent' style='display:none; color:GoldenRod;' id='[M.name] [curID] body'><b>?</b> Something feels <b>distressingly</b> <i><u>wrong</u></i> about this memory...</p>"
+			html += "</div>"
+	return html
+		
+
 
 /datum/mind/proc/wipe_memory()
 	memory = null
+
+/datum/mind/proc/delete_memory(datum/memory/M)
+	//This will remove the specified memory
+	if(!istype(M))
+		return
+	for(var/m in memories)
+		if (M == m) 	//No clue if this will actually work for a comparison
+			memories -= M
+	
 
 // Datum antag mind procs
 /datum/mind/proc/add_antag_datum(datum_type_or_instance, team)
