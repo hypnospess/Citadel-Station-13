@@ -40,7 +40,7 @@
 	if (bool != TRUE || bool != FALSE)
 		return
 	else
-	is_antag = bool
+		is_antag = bool
 	if(istype(owner))
 		owner.update_memory_listing()
 
@@ -48,7 +48,7 @@
 	if (bool != TRUE || bool != FALSE)
 		return
 	else
-	traumatic = bool
+		traumatic = bool
 	if(istype(owner))
 		owner.update_memory_listing()
 
@@ -56,7 +56,7 @@
 	if (bool != TRUE || bool != FALSE)
 		return
 	else
-	positive = bool
+		positive = bool
 	if(istype(owner))
 		owner.update_memory_listing()
 
@@ -66,7 +66,7 @@
 	if(newtext)
 		mem_text = newtext
 	if(istype(owner))
-		owner.update_memory_listing
+		owner.update_memory_listing()
 
 /datum/memory/proc/force_modify(var/newtitle, var/newtext)
 	//this is like modify, but used specifically for memory modifying game mechanics
@@ -75,10 +75,10 @@
 	if(newtext)
 		mem_text = newtext
 	var/modchance = rand(1,10)
-	switch(rand)
-	if(1)
-		modified = TRUE
-		//should also alert player their memories have been updated.
+	switch(modchance)
+		if(1)
+			modified = TRUE
+			//should also alert player their memories have been updated.
 	if (istype(owner))
 		owner.update_memory_listing()
 
@@ -86,7 +86,7 @@
 	if(is_antag == TRUE)
 		return //can't remove antag memories
 	name = "???"
-	content = "This memory is distant and hazy..."
+	mem_text = "This memory is distant and hazy..."
 	traumatic = FALSE
 	positive = FALSE
 	modified = TRUE

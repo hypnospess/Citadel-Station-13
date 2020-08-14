@@ -141,8 +141,8 @@
 	SEND_SIGNAL(src, COMSIG_MIND_TRANSFER, new_character, old_character)
 	SEND_SIGNAL(new_character, COMSIG_MOB_ON_NEW_MIND)
 
-/datum/mind/proc/store_memory(datum/memory/M)
-	if(!istype(M))
+/datum/mind/proc/store_memory(var/datum/memory/M)
+	if(!istype(M, /datum/memory))
 		return
 	memories |= M
 	M.owner = src
