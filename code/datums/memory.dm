@@ -41,18 +41,24 @@
 		return
 	else
 	is_antag = bool
+	if(istype(owner))
+		owner.update_memory_listing()
 
 /datum/memory/proc/traumatize(var/bool)
 	if (bool != TRUE || bool != FALSE)
 		return
 	else
 	traumatic = bool
+	if(istype(owner))
+		owner.update_memory_listing()
 
 /datum/memory/proc/make_positive(var/bool)
 	if (bool != TRUE || bool != FALSE)
 		return
 	else
 	positive = bool
+	if(istype(owner))
+		owner.update_memory_listing()
 
 /datum/memory/proc/modify(var/newtitle, var/newtext)
 	//should be used for admin commands and internal use ONLY.

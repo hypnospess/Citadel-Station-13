@@ -372,7 +372,9 @@
 		if(uplink_owner)
 			uplink_owner.antag_memory += U.unlock_note + "<br>"
 		else
-			traitor_mob.mind.store_memory(U.unlock_note)
+			var/datum/memory/uplinkmem = new("Uplink", U.unlock_note)
+			uplinkmem.change_vals(FALSE,FALSE,TRUE,FALSE,TRUE,FALSE)
+			traitor_mob.mind.store_memory(uplinkmem)
 
 //Link a new mobs mind to the creator of said mob. They will join any team they are currently on, and will only switch teams when their creator does.
 
@@ -413,30 +415,40 @@
 /datum/mind/proc/show_memory(mob/recipient, window=1)
 	if(!recipient)
 		recipient = current
-	var/output = "<B>[current.real_name]'s Memories:</B><br>"
-	output += memory
+	var/output = "<B><h1>[current.real_name]'s Memories:</h1></B><br>"
+	
 
 
 	var/list/all_objectives = list()
 	for(var/datum/antagonist/A in antag_datums)
-		output += A.antag_memory
+		store_memory(A.antag_memory) 
 		all_objectives |= A.objectives
 
 	if(all_objectives.len)
-		output += "<B>Objectives:</B>"
 		var/obj_count = 1
+		var/duplicate = FALSE
 		for(var/datum/objective/objective in all_objectives)
-			output += "<br><B>Objective #[obj_count++]</B>: [objective.explanation_text]"
-			var/list/datum/mind/other_owners = objective.get_owners() - src
-			if(other_owners.len)
-				output += "<ul>"
-				for(var/datum/mind/M in other_owners)
-					output += "<li>Conspirator: [M.name]</li>"
-				output += "</ul>"
+			for(var/datum/memory/Me in memories)
+				if(Me.mem_text == "[objective.explanation_text]")
+					duplicate = TRUE
+			if(!duplicate)
+				var/objname = "Objective #[obj_count++]"
+				var/objtext = "[objective.explanation_text]"
+				var/list/datum/mind/other_owners = objective.get_owners() - src
+				if(other_owners.len)
+					objtext += "<ul>"
+					for(var/datum/mind/M in other_owners)
+						objtext += "<li>Conspirator: [M.name]</li>"
+					objtext += "</ul>"
+				var/datum/memory/newmem = new(objname,objtext)
+				newmem.antagonize
+				store_memory(newmem)
+		update_memory_listing()
 
+	output += memoryHTML
 	if(window)
 		recipient << browse(output,"window=memory")
-	else if(all_objectives.len || memory)
+	else if(all_objectives.len || memories.len)
 		to_chat(recipient, "<i>[output]</i>")
 
 /datum/mind/Topic(href, href_list)
@@ -461,10 +473,14 @@
 		assigned_role = new_role
 
 	else if (href_list["memory_edit"])
-		var/new_memo = stripped_multiline_input(usr, "Write new memory", "Memory", memory, MAX_MESSAGE_LEN)
-		if (isnull(new_memo))
+		var/new_title = stripped_input(usr, "Write new memory title", "Memory title", null, MAX_MESSAGE_LEN)
+		var/new_memo = stripped_multiline_input(usr, "Write new memory", "Memory", null, MAX_MESSAGE_LEN)
+		if (isnull(new_memo) || isnull(new_title))
 			return
-		memory = new_memo
+		var/datum/memory/newmem = new(new_title, new_memo)
+		store_memory(newmem)
+
+	//some way for an admin to modify a memory or delete a memory but i have no clue how this works
 
 	else if (href_list["obj_edit"] || href_list["obj_add"])
 		var/objective_pos //Edited objectives need to keep same order in antag objective list
@@ -627,7 +643,8 @@
 					current.dropItemToGround(W, TRUE) //The 1 forces all items to drop, since this is an admin undress.
 			if("takeuplink")
 				take_uplink()
-				memory = null//Remove any memory they may have had.
+				//memory = null //Remove any memory they may have had.
+				wipe_memory() //should do this but seems like overkill? oh well, will fix later
 				log_admin("[key_name(usr)] removed [current]'s uplink.")
 			if("crystals")
 				if(check_rights(R_FUN, 0))

@@ -12,7 +12,7 @@ GLOBAL_LIST_EMPTY(antagonists)
 	var/job_rank
 	var/replace_banned = TRUE //Should replace jobbaned player with ghosts if granted.
 	var/list/objectives = list()
-	var/antag_memory = ""//These will be removed with antag datum
+	var/datum/memory/antag_memory = ""//These will be removed with antag datum
 	var/antag_moodlet //typepath of moodlet that the mob will gain with their status
 	/// If above 0, this is the multiplier for the speed at which we hijack the shuttle. Do not directly read, use hijack_speed().
 	var/hijack_speed = 0
@@ -251,10 +251,15 @@ GLOBAL_LIST_EMPTY(antagonists)
 			return
 
 /datum/antagonist/proc/edit_memory(mob/user)
-	var/new_memo = stripped_multiline_input(user, "Write new memory", "Memory", antag_memory, MAX_MESSAGE_LEN)
+	var/new_name = stripped_input(user, "Write new memory title", "Memory title", null, MAX_MESSAGE_LEN)
+	var/new_memo = stripped_multiline_input(user, "Write new memory", "Memory", null, MAX_MESSAGE_LEN)
 	if (isnull(new_memo))
+		return	
+	if (isnull(new_title))
 		return
-	antag_memory = new_memo
+	var/datum/memory/newmem = new(new_name, new_memo)
+	newmem.antagonize()
+	antag_memory = newmem
 
 /// Gets how fast we can hijack the shuttle, return 0 for can not hijack. Defaults to hijack_speed var, override for custom stuff like buffing hijack speed for hijack objectives or something.
 /datum/antagonist/proc/hijack_speed()
@@ -262,6 +267,16 @@ GLOBAL_LIST_EMPTY(antagonists)
 	if(!isnull(H?.hijack_speed_override))
 		return H.hijack_speed_override
 	return hijack_speed
+
+/*
+//converts objectives to memories and adds them.
+/datum/antagonist/proc/objectives_to_memories()
+	var/obj_count = 1
+	if(objectives.len)
+		for(var/datum/objective/objective in objectives)
+			var/memtitle = 
+			*/
+
 
 /// Gets our threat level. Defaults to threat var, override for custom stuff like different traitor goals having different threats.
 /datum/antagonist/proc/threat()
