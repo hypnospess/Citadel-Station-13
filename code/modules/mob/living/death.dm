@@ -65,7 +65,9 @@
 	for(var/obj/item/I in contents)
 		I.on_mob_death(src, gibbed)
 	if(mind)
-		mind.store_memory("Time of death: [tod]", 0)
+		var/datum/memory/death = new("Time of death: [tod]")
+		death.traumatize()
+		mind.store_memory(death)
 	GLOB.alive_mob_list -= src
 	if(!gibbed)
 		GLOB.dead_mob_list += src
