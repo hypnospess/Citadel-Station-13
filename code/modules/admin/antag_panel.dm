@@ -205,7 +205,7 @@ GLOBAL_VAR(antag_prototypes)
 		out += uplink_info + "<br>"
 	//Common Memory
 	var/common_memory = "<span>Common Memory:</span>"
-	common_memory += memory
+	common_memory += update_memory_listing()
 	common_memory += "<a href='?src=[REF(src)];memory_edit=1'>Edit Memory</a>"
 	out += common_memory + "<br>"
 	//Other stuff

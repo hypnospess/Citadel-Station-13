@@ -255,7 +255,7 @@ GLOBAL_LIST_EMPTY(antagonists)
 	var/new_memo = stripped_multiline_input(user, "Write new memory", "Memory", null, MAX_MESSAGE_LEN)
 	if (isnull(new_memo))
 		return	
-	if (isnull(new_title))
+	if (isnull(new_name))
 		return
 	var/datum/memory/newmem = new(new_name, new_memo)
 	newmem.antagonize()

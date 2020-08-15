@@ -156,7 +156,7 @@
 	var/curmem_body = "default-body"
 	var/html = "<script> function togglesection(targetsection) { var targettext = document.getElementById(targetsection); if (targettext.style.display === 'none') { targettext.style.display = ''; } else { targettext.style.display = 'none'; } } </script>"
 	var/curID = 0
-	for(var/memory/M in memories)
+	for(var/datum/memory/M in memories)
 		if(M.conscious == TRUE)
 			html += "<div class='block'>"
 			html += "<a onclick='togglesection(\"[M.name] [curID] body\")'>[M.name]</a>"
@@ -177,7 +177,7 @@
 
 
 /datum/mind/proc/wipe_memory()
-	for(datum/memory/M in memories)
+	for(var/datum/memory/M in memories)
 		delete_memory(M)
 
 /datum/mind/proc/delete_memory(datum/memory/M)
@@ -441,14 +441,14 @@
 						objtext += "<li>Conspirator: [M.name]</li>"
 					objtext += "</ul>"
 				var/datum/memory/newmem = new(objname,objtext)
-				newmem.antagonize
+				newmem.antagonize()
 				store_memory(newmem)
 		update_memory_listing()
 
 	output += memoryHTML
 	if(window)
 		recipient << browse(output,"window=memory")
-	else if(all_objectives.len || memories.len)
+	else
 		to_chat(recipient, "<i>[output]</i>")
 
 /datum/mind/Topic(href, href_list)
