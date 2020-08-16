@@ -155,6 +155,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	overdose_threshold = 0 //Can't mindbreak someone with zonk
 	maxenthrall = 2
 	color = "#9B3CB8"
+	taste_description = "pure, unfiltered, concentrated grape"
 
 /datum/reagent/fermi/enthrall/zonk/reaction_mob(mob/living/M, method, reac_volume, show_message, touch_protection)
 	if(method == INGEST || method == TOUCH)
@@ -170,6 +171,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	glass_icon_state = "zonkpunch"
 	glass_name = "zonk punch"
 	glass_desc = "A mesmerizing violet drink. It has bubbles up top that swirl in a spiral pattern."
+	taste_description = "a mix of assorted berries, and a grape aftertaste"
 
 /datum/reagent/fermi/enthrall/on_new(list/data)
 	creatorID = data["creatorID"]
