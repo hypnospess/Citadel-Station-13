@@ -316,9 +316,77 @@
 	E.data["creatorID"] = B.data["ckey"]
 	E.creatorID = B.data["ckey"]
 
+/datum/chemical_reaction/fermi/enthrall/zonk
+	name = "Zonk"
+	id = /datum/reagent/fermi/enthrall/zonk
+	results = list(/datum/reagent/fermi/enthrall/zonk = 3)
+	required_reagents = list(/datum/reagent/medicine/mannitol = 1, /datum/reagent/lithium = 1, /datum/reagent/drug/space_drugs = 1)
+	mix_message = "the mixture begins bubbling in a swirling magenta pattern!"
+	FermiExplode = FALSE
+	RateUpLim = 5
+	OptimalTempMin = 320
+	OptimalTempMax = 640
+	OptimalpHMin = 4
+	OptimalpHMax = 10
+	PurityMin = 0
+	ThermicConstant = 0.5
+
+/datum/chemical_reaction/fermi/enthrall/zonk/FermiFinish(datum/reagents/holder, var/atom/my_atom)
+	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in my_atom.reagents.reagent_list
+	var/datum/reagent/fermi/enthrall/zonk/E = locate(/datum/reagent/fermi/enthrall/zonk) in my_atom.reagents.reagent_list
+	var/mob/living/carbon/M //temporary pointer to the person who's blood this is.
+	if(!B || !E)
+		return
+	if(!B.data)
+		my_atom.visible_message("<span class='warning'>The reaction splutters and fails to react properly.</span>") //Just in case
+		E.purity = 0
+	M = get_mob_by_key(B.data["ckey"])
+	E.data["creatorTitle"] = M.client.prefs?.custom_names["owner"]
+	E.data["creatorName"] = B.data["real_name"]
+	E.creatorName = B.data["real_name"]
+	E.data["creatorID"] = B.data["ckey"]
+	E.creatorID = B.data["ckey"]
+
+/datum/chemical_reaction/fermi/zonkpunch
+	name = "Zonk Punch"
+	id = /datum/reagent/fermi/enthrall/zonkpunch
+	results = list(/datum/reagent/fermi/enthrall/zonkpunch = 2)
+	required_reagents = list(/datum/reagent/consumable/berryjuice = 1, /datum/reagent/fermi/enthrall/zonk = 1)
+	mix_message = "the mixture fizzes up, the bubbles swirling in a spiral pattern!"
+	FermiExplode = FALSE
+	FermiChem = TRUE
+	RateUpLim = 10
+	OptimalTempMin = 240
+	OptimalTempMax = 300 //You should cool your punch down a little. Get it nice and chilly
+	OptimalpHMin = 2
+	OptimalpHMax = 4 //you don't want overly basic drinks or overly acidic drinks
+	ReactpHLim = 2
+	CurveSharpT = 0.5
+	CurveSharppH = 4
+	PurityMin = 0
+	ThermicConstant = 0
+	HIonRelease = 0
+
+/datum/chemical_reaction/fermi/zonkpunch/FermiFinish(datum/reagents/holder, var/atom/my_atom)
+	var/datum/reagent/fermi/enthrall/zonk/B = locate(/datum/reagent/fermi/enthrall/zonk) in my_atom.reagents.reagent_list
+	var/datum/reagent/fermi/enthrall/zonkpunch/E = locate(/datum/reagent/fermi/enthrall/zonkpunch) in my_atom.reagents.reagent_list
+	if(!B || !E)
+		return
+	if(!B.data)
+		my_atom.visible_message("<span class='warning'>The reaction splutters and fails to react properly.</span>") //Just in case
+		E.purity = 0
+	E.data["creatorTitle"] = B.data["creatorTitle"]
+	E.data["creatorName"] = B.data["creatorName"]
+	E.creatorName = B.data["creatorName"]
+	E.data["creatorID"] = B.data["creatorID"]
+	E.creatorID = B.data["creatorID"]
+
 //So slimes can play too.
 /datum/chemical_reaction/fermi/enthrall/slime
 	id = "enthrall2"
+	required_catalysts = list(/datum/reagent/blood/jellyblood = 1)
+
+/datum/chemical_reaction/fermi/enthrall/zonk/slime
 	required_catalysts = list(/datum/reagent/blood/jellyblood = 1)
 
 /datum/chemical_reaction/fermi/enthrall/slime/FermiFinish(datum/reagents/holder, var/atom/my_atom)
