@@ -191,6 +191,25 @@
 	H.equip_to_slot(gloweyes, SLOT_IN_BACKPACK)
 	H.regenerate_icons()
 
+
+/datum/quirk/snakeeyes
+	name = "Hypnotic Eyes"
+	desc = "All it takes is a little flick of the switch in your brain, and anything making eye contact with you just falls into a sweet, blissful trance."
+	value = 1
+	gain_text = "<span class='notice'>You feel as though your gaze is quite... Hypnotic.</span>"
+	lose_text = "<span class='danger'>Your gaze suddenly feels a lot duller.</span>"
+
+/datum/quirk/snakeeyes/on_spawn()
+	var/mob/living/carbon/human/H = quirk_holder
+	if(!ishuman(H))
+		return
+	var/obj/item/organ/eyes/Vc = H.getorganslot(ORGAN_SLOT_EYES)
+	var/obj/item/organ/eyes/nVc = new /obj/item/organ/eyes/snakeeyes
+	if(Vc)
+		Vc.Remove()
+	nVc.Insert(H)
+	qdel(Vc)
+
 /datum/quirk/bloodpressure
 	name = "Polycythemia vera"
 	desc = "You've a treated form of Polycythemia vera that increases the total blood volume inside of you as well as the rate of replenishment!"

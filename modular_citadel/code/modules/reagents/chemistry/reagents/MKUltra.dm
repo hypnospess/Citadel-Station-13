@@ -27,6 +27,7 @@ punish_words
 0
 saymyname_words
 wakeup_words
+sayyourtitle_words
 1
 silence_words
 antiresist_words
@@ -34,6 +35,7 @@ resist_words
 forget_words
 attract_words
 orgasm_words
+subterm_words
 2
 awoo_words
 nya_words
@@ -183,8 +185,10 @@ Creating a chem with a low purity will make you permanently fall in love with so
 		qdel(Vc)
 		to_chat(M, "<span class='notice'><i>You feel your vocal chords tingle as you speak in a more charasmatic and enthralling tone.</i></span>")
 	else
+		var/datum/status_effect/chem/enthrall/H = M.apply_status_effect(/datum/status_effect/chem/enthrall)
+		H.setup_vars(creatorID, creatorTitle, 4)
+		H.enthrallSources |= src
 		log_reagent("FERMICHEM: MKUltra: [creatorName], [creatorID], is enthralling [M.name], [M.ckey]")
-		M.apply_status_effect(/datum/status_effect/chem/enthrall)
 	log_reagent("FERMICHEM: [M] ckey: [M.key] has taken MKUltra")
 
 /datum/reagent/fermi/enthrall/on_mob_life(mob/living/carbon/M)
@@ -237,7 +241,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	if (M.ckey == creatorID && creatorName == M.real_name)//If the creator drinks 100u, then you get the status for someone random (They don't have the vocal chords though, so it's limited.)
 		if (!M.has_status_effect(/datum/status_effect/chem/enthrall))
 			to_chat(M, "<span class='love'><i>You are unable to resist your own charms anymore, and become a full blown narcissist.</i></span>")
-	ADD_TRAIT(M, TRAIT_PACIFISM, "MKUltra")
+	ADD_TRAIT(M, TRAIT_PACIFISM, "Enthrallment")
 	var/datum/status_effect/chem/enthrall/E
 	if (!M.has_status_effect(/datum/status_effect/chem/enthrall))
 		M.apply_status_effect(/datum/status_effect/chem/enthrall)
@@ -248,9 +252,9 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	else
 		E = M.has_status_effect(/datum/status_effect/chem/enthrall)
 	if(E.lewd)
-		to_chat(M, "<span class='big love'><i>Your mind shatters under the volume of the mild altering chem inside of you, breaking all will and thought completely. Instead the only force driving you now is the instinctual desire to obey and follow [creatorName]. Your highest priority is now to stay by their side and protect them at all costs.</i></span>")
+		to_chat(M, "<span class='big love'><i>Your mind shatters under the volume of the mind altering chem inside of you, completely breaking your will. The only force driving you now is the instinctual desire to follow and obey your [E.enthrallTitle]. Your highest priority is now to stay by their side and protect them at all costs.</i></span>")
 	else
-		to_chat(M, "<span class='big warning'><i>The might volume of chemicals in your system overwhelms your mind, and you suddenly agree with what [creatorName] has been saying. Your highest priority is now to stay by their side and protect them at all costs.</i></span>")
+		to_chat(M, "<span class='big warning'><i>The huge volume of chemicals in your system overwhelms your mind, and you suddenly agree with everything [creatorName] has said. Your highest priority is now to stay by their side and protect them at all costs.</i></span>")
 	log_reagent("FERMICHEM: [M] ckey: [M.key] has been mindbroken for [creatorName] ckey: [creatorID]")
 	M.slurring = 100
 	M.confused = 100
@@ -262,6 +266,11 @@ Creating a chem with a low purity will make you permanently fall in love with so
 /datum/reagent/fermi/enthrall/overdose_process(mob/living/carbon/M)
 	M.adjustOrganLoss(ORGAN_SLOT_BRAIN, 0.2)//should be ~30 in total
 	..()
+
+/datum/reagent/fermi/enthrall/on_mob_delete(mob/living/carbon/M)
+	var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
+	E.enthrallSources -= src
+	. = ..()
 
 //Creates a gas cloud when the reaction blows up, causing everyone in it to fall in love with someone/something while it's in their system.
 /datum/reagent/fermi/enthrallExplo//Created in a gas cloud when it explodes

@@ -148,6 +148,20 @@
 ///////////////////////////////////////////
 */
 
+/*/////////////////////////////////////////
+	The Big Enthrall Rework
+	We want enthrall to be independant of MKUltra.
+	This means that MKUltra will grant enthrall when consumed,
+	and will update the enthrall variables as before.
+
+	This might mean we'd want to make enthrall
+	datum/status_effect/<something else?>/enthrall
+	rather than
+	datum/status_effect/chem/enthrall
+	as it's no longer directly tied to a chem.
+////////////////////////////////////////////
+*/
+
 //Preamble
 
 /mob/living/verb/toggle_hypno()
@@ -155,7 +169,7 @@
 	set name = "Toggle Lewd Hypno"
 	set desc = "Allows you to toggle if you'd like lewd flavour messages for hypno features, such as MKUltra."
 	client.prefs.cit_toggles ^= HYPNO
-	to_chat(usr, "You [((client.prefs.cit_toggles & HYPNO) ?"will":"no longer")] receive lewd flavour messages for hypno.")
+	to_chat(usr, "You [((client.prefs.cit_toggles & HYPNO) ?"will":"will no longer")] receive lewd flavour messages for hypno.")
 
 /datum/status_effect/chem/enthrall
 	id = "enthrall"
@@ -166,13 +180,19 @@
 	var/deltaResist //The total resistance added per resist click
 
 	var/phase = 1 //-1: resisted state, due to be removed.0: sleeper agent, no effects unless triggered 1: initial, 2: 2nd stage - more commands, 3rd: fully enthralled, 4th Mindbroken
+	var/phaselimit = 4 //the maximum allowed phase of the effect. By default, all phases are available, but it may depend on the source.
 
 	var/status = null //status effects
 	var/statusStrength = 0 //strength of status effect
 
 	var/mob/living/master //Enchanter's person
 	var/enthrallID //Enchanter's ckey
-	var/enthrallTitle //Use master or mistress
+	var/enthrallTitle //Enchanter's title
+	var/subjectTerm //Subject's term
+
+	var/initialSetup = FALSE //has the status effect been set up and logged
+	var/isExposed = FALSE //Registers whether or not the player is actually exposed to the thing that's causing their enthrallment (MKUltra in bloodstream, hypnotic eyes, etc.)
+	var/list/enthrallSources = list() //List of all enthrall sources.
 
 	var/mental_capacity //Higher it is, lower the cooldown on commands, capacity reduces with resistance.
 
@@ -196,36 +216,45 @@
 	var/lewd = FALSE // Set on on_apply. Will only be true if both individuals involved have opted in.
 
 /datum/status_effect/chem/enthrall/on_apply()
+	. = ..()
 	var/mob/living/carbon/M = owner
-	var/datum/reagent/fermi/enthrall/E = locate(/datum/reagent/fermi/enthrall) in M.reagents.reagent_list
-	if(!E)
-		message_admins("WARNING: FermiChem: No master found in thrall, did you bus in the status? You need to set up the vars manually in the chem if it's not reacted/bussed. Someone set up the reaction/status proc incorrectly if not (Don't use donor blood). Console them with a chemcat plush maybe?")
-		owner.remove_status_effect(src)
-	enthrallID = E.creatorID
-	enthrallTitle = E.creatorTitle
-	master = get_mob_by_key(enthrallID)
+	if(!istype(M))
+		return FALSE
+	//We're gonna make a proc that defines the master and such
+	//be ready to delete the next three lines and remove the args if they cause problems
+	//enthrallID = masterID
+	//enthrallTitle = masterTitle
+	//phaselimit = maxPhase
+
+	subjectTerm = M.client?.prefs.custom_names["subject"]
 	//if(M.ckey == enthrallID)
 	//	owner.remove_status_effect(src)//At the moment, a user can enthrall themselves, toggle this back in if that should be removed.
 	RegisterSignal(owner, COMSIG_LIVING_RESIST, .proc/owner_resist) //Do resistance calc if resist is pressed#
 	RegisterSignal(owner, COMSIG_MOVABLE_HEAR, .proc/owner_hear)
 	mental_capacity = 500 - M.getOrganLoss(ORGAN_SLOT_BRAIN)//It's their brain!
-	lewd = (owner.client?.prefs.cit_toggles & HYPNO) && (master.client?.prefs.cit_toggles & HYPNO)
-	var/message = "[(lewd ? "I am a good pet for [enthrallTitle]." : "[master] is a really inspirational person!")]"
-	SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "enthrall", /datum/mood_event/enthrall, message)
-	to_chat(owner, "<span class='[(lewd ?"big velvet":"big warning")]'><b>You feel inexplicably drawn towards [master], their words having a demonstrable effect on you. It seems the closer you are to them, the stronger the effect is. However you aren't fully swayed yet and can fight against their effects by repeatedly resisting as much as you can!</b></span>")
-	log_reagent("FERMICHEM: MKULTRA: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID].")
-	SSblackbox.record_feedback("tally", "fermi_chem", 1, "Enthrall attempts")
-	return ..()
 
 /datum/status_effect/chem/enthrall/tick()
 	var/mob/living/carbon/M = owner
+	//Before doing anything else! Make sure that the vars are properly set up!
+	if(!master || !enthrallID || !enthrallTitle || !phaselimit)
+		return //the values aren't set up yet so do nothing.
+	if(initialSetup == FALSE)
+		var/message = "[(lewd ? "I am a good [subjectTerm] for [enthrallTitle]." : "[master] always knows just what to say.")]"
+		SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "enthrall", /datum/mood_event/enthrall, message)
+		to_chat(owner, "<span class='[(lewd ?"big velvet":"big warning")]'><b>You feel inexplicably drawn towards [master], their words having a demonstrable effect on you. It seems the closer you are to them, the stronger the effect is. However you aren't fully swayed yet and can fight against their effects by resisting repeatedly!</b></span>")
+		log_reagent("FERMICHEM: Enthrallment: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID].")
+		SSblackbox.record_feedback("tally", "fermi_chem", 1, "Enthrall attempts")
+		initialSetup = TRUE
+	if(phase > phaselimit)
+		phase = phaselimit //just make sure we don't surpass the phase limit.
+	//breaking free
+	if(!enthrallSources.len)
+		if (phase < 3 && phase != 0)
+			deltaResist += 3//If you're not exposed, then you break out quickly
+			if(prob(5))
+				to_chat(owner, "<span class='notice'><i>Your mind regains some of it's clarity as you're no longer exposed to the source of your enthrallment.</i></span>")
 
 	//chem calculations
-	if(!owner.reagents.has_reagent(/datum/reagent/fermi/enthrall))
-		if (phase < 3 && phase != 0)
-			deltaResist += 3//If you've no chem, then you break out quickly
-			if(prob(5))
-				to_chat(owner, "<span class='notice'><i>Your mind starts to restore some of it's clarity as you feel the effects of the drug wain.</i></span>")
 	if (mental_capacity <= 500 || phase == 4)
 		if (owner.reagents.has_reagent(/datum/reagent/medicine/mannitol))
 			mental_capacity += 5
@@ -236,7 +265,7 @@
 	if(HAS_TRAIT(M, TRAIT_MINDSHIELD))//If you manage to enrapture a head, wow, GJ. (resisting gives a bigger bonus with a mindshield) From what I can tell, this isn't possible.
 		resistanceTally += 2
 		if(prob(10))
-			to_chat(owner, "<span class='notice'><i>You feel lucidity returning to your mind as the mindshield buzzes, attempting to return your brain to normal function.</i></span>")
+			to_chat(owner, "<span class='notice'><i>You feel lucidity returning to your mind as the mindshield buzzes, attempting to return your brain to its normal functions.</i></span>")
 		if(phase == 4)
 			mental_capacity += 5
 
@@ -244,7 +273,7 @@
 	switch(phase)
 		if(-1)//fully removed
 			SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "enthrall")
-			log_reagent("FERMICHEM: MKULTRA: Status REMOVED from [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID].")
+			log_reagent("FERMICHEM: Enthrallment: Status REMOVED from [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID].")
 			owner.remove_status_effect(src)
 			return
 		if(0)// sleeper agent
@@ -252,40 +281,40 @@
 				cooldown -= 1
 			return
 		if(1)//Initial enthrallment
-			if (enthrallTally > 125)
+			if (enthrallTally > 125 && phaselimit >= 2)
 				phase += 1
 				mental_capacity -= resistanceTally//leftover resistance per step is taken away from mental_capacity.
 				resistanceTally /= 2
 				enthrallTally = 0
 				SSblackbox.record_feedback("tally", "fermi_chem", 1, "Enthralled to state 2")
 				if(lewd)
-					to_chat(owner, "<span class='big velvet'><i>Your conciousness slips, as you sink deeper into trance and servitude.</i></span>")
+					to_chat(owner, "<span class='big velvet'><i>Your conciousness slips as you sink deeper into trance and servitude to your [enthrallTitle].</i></span>")
 				else
-					to_chat(owner, "<span class='big velvet'><i>Your conciousness slips, as you feel more drawn to following [master].</i></span>")
+					to_chat(owner, "<span class='big velvet'><i>Your conciousness slips, and you find [master]'s words even more agreeable.'.</i></span>")
 
 			else if (resistanceTally > 125)
 				phase = -1
 				to_chat(owner, "<span class='warning'><i>You break free of the influence in your mind, your thoughts suddenly turning lucid!</i></span>")
 				if(DistApart < 10)
-					to_chat(master, "<span class='warning'>[(lewd?"Your pet":"Your thrall")] seems to have broken free of your enthrallment!</i></span>")
+					to_chat(master, "<span class='warning'>[(lewd?"Your [subjectTerm]":"Your thrall")] seems to have broken free of your enthrallment!</i></span>")
 				SSblackbox.record_feedback("tally", "fermi_chem", 1, "Thralls broken free")
 				owner.remove_status_effect(src) //If resisted in phase 1, effect is removed.
 			if(prob(10))
 				if(lewd)
-					to_chat(owner, "<span class='small velvet'><i>[pick("It feels so good to listen to [master].", "You can't keep your eyes off [master].", "[master]'s voice is making you feel so sleepy.",  "You feel so comfortable with [master]", "[master] is so dominant, it feels right to obey them.")].</b></span>")
+					to_chat(owner, "<span class='small velvet'><i>[pick("It feels so good to listen to [master].", "You can't keep your eyes off [master].", "[master]'s voice is making you feel so sleepy.",  "You feel so comfortable with [master]", "[master] is so dominant, it feels right to obey them.","[master]'s words soothe you and make you feel safe.")].</b></span>")
 		if (2) //partially enthralled
-			if(enthrallTally > 200)
+			if(enthrallTally > 200 && phaselimit >= 3)
 				phase += 1
 				mental_capacity -= resistanceTally//leftover resistance per step is taken away from mental_capacity.
 				enthrallTally = 0
 				resistanceTally /= 2
 				if(lewd)
-					to_chat(owner, "<span class='love'><b><i>Your mind gives, eagerly obeying and serving [master].</b></i></span>")
-					to_chat(owner, "<span class='big warning'><b>You are now fully enthralled to [master], and eager to follow their commands. However you find that in your intoxicated state you are unable to resort to violence. Equally you are unable to commit suicide, even if ordered to, as you cannot serve your [enthrallTitle] in death. </i></span>")//If people start using this as an excuse to be violent I'll just make them all pacifists so it's not OP.
+					to_chat(owner, "<span class='love'><b><i>Your mind gives, eagerly obeying and serving [enthrallTitle].</b></i></span>")
+					to_chat(owner, "<span class='big warning'><b>You are now fully enthralled to [master], and eager to follow their commands. In your submissive state you cannot stand the thought of being permanently separated from your [enthrallTitle] - the idea of becoming violent or committing suicide, even if ordered to, is unthinkable.</i></span>")//If people start using this as an excuse to be violent I'll just make them all pacifists so it's not OP.
 				else
-					to_chat(owner, "<span class='big nicegreen'><i>You are unable to put up a resistance any longer, and now are under the influence of [master]. However you find that in your intoxicated state you are unable to resort to violence. Equally you are unable to commit suicide, even if ordered to, as you cannot follow [master] in death. </i></span>")
-				to_chat(master, "<span class='notice'><i>Your [(lewd?"pet":"follower")] [owner] appears to have fully fallen under your sway.</i></span>")
-				log_reagent("FERMICHEM: MKULTRA: Status on [owner] ckey: [owner.key] has been fully enthralled (state 3) with a master of [master] ckey: [enthrallID].")
+					to_chat(owner, "<span class='big nicegreen'><i>You are unable to put up a resistance any longer, and are now [master]'s faithful follower. In your loyal state you cannot stand the thought of being permanently separated from your [enthrallTitle] - the idea of becoming violent or committing suicide, even if ordered to, is unthinkable.</i></span>")
+				to_chat(master, "<span class='notice'><i>Your [(lewd? "[subjectTerm]":"follower")] [owner] appears to have fully fallen under your sway.</i></span>")
+				log_reagent("FERMICHEM: Enthrallment: Status on [owner] ckey: [owner.key] has been fully enthralled (state 3) with a master of [master] ckey: [enthrallID].")
 				SSblackbox.record_feedback("tally", "fermi_chem", 1, "thralls fully enthralled.")
 			else if (resistanceTally > 200)
 				enthrallTally *= 0.5
@@ -294,7 +323,7 @@
 				resistGrowth = 0
 				to_chat(owner, "<span class='notice'><i>You manage to shake some of the effects from your addled mind, however you can still feel yourself drawn towards [master].</i></span>")
 			if(lewd && prob(10))
-				to_chat(owner, "<span class='velvet'><i>[pick("It feels so good to listen to [enthrallTitle].", "You can't keep your eyes off [enthrallTitle].", "[enthrallTitle]'s voice is making you feel so sleepy.",  "You feel so comfortable with [enthrallTitle]", "[enthrallTitle] is so dominant, it feels right to obey them.")].</i></span>")
+				to_chat(owner, "<span class='velvet'><i>[pick("It feels so good to listen to [enthrallTitle].", "You can't keep your eyes off [enthrallTitle].", "[enthrallTitle]'s voice is making you feel so sleepy.",  "You feel so comfortable with [enthrallTitle]", "[enthrallTitle] is so dominant, it feels right to obey them.","[master]'s words soothe you and make you feel safe.")].</i></span>")
 		if (3)//fully entranced
 			if ((resistanceTally >= 200 && withdrawalTick >= 150) || (HAS_TRAIT(M, TRAIT_MINDSHIELD) && (resistanceTally >= 100)))
 				enthrallTally = 0
@@ -302,35 +331,38 @@
 				resistanceTally = 0
 				resistGrowth = 0
 				to_chat(owner, "<span class='notice'><i>The separation from [(lewd?"your [enthrallTitle]":"[master]")] sparks a small flame of resistance in yourself, as your mind slowly starts to return to normal.</i></span>")
-				REMOVE_TRAIT(owner, TRAIT_PACIFISM, "MKUltra")
+				REMOVE_TRAIT(owner, TRAIT_PACIFISM, "Enthrallment")
 			if(lewd && prob(1) && !customEcho)
-				to_chat(owner, "<span class='love'><i>[pick("I belong to [enthrallTitle].", "[enthrallTitle] knows whats best for me.", "Obedence is pleasure.",  "I exist to serve [enthrallTitle].", "[enthrallTitle] is so dominant, it feels right to obey them.")].</i></span>")
+				to_chat(owner, "<span class='love'><i>[pick("I belong to [enthrallTitle].", "I obey [enthrallTitle].","[enthrallTitle] knows what's best for me.", "Obedence is pleasure.",  "I exist to serve [enthrallTitle].", "[enthrallTitle] is so dominant, it feels right to obey them.","I am [enthrallTitle]'s loyal [subjectTerm]")].</i></span>")
 		if (4) //mindbroken
-			if (mental_capacity >= 499 && (owner.getOrganLoss(ORGAN_SLOT_BRAIN) <=0 || HAS_TRAIT(M, TRAIT_MINDSHIELD)) && !owner.reagents.has_reagent(/datum/reagent/fermi/enthrall))
-				phase = 2
-				mental_capacity = 500
-				customTriggers = list()
-				to_chat(owner, "<span class='notice'><i>Your mind starts to heal, fixing the damage caused by the massive amounts of chem injected into your system earlier, returning clarity to your mind. Though, you still feel drawn towards [master]'s words...'</i></span>")
-				M.slurring = 0
-				M.confused = 0
-				resistGrowth = 0
+			if (phaselimit >= 4)
+				if (mental_capacity >= 499 && (owner.getOrganLoss(ORGAN_SLOT_BRAIN) <=0 || HAS_TRAIT(M, TRAIT_MINDSHIELD)) && !owner.reagents.has_reagent(/datum/reagent/fermi/enthrall))
+					phase = 2
+					mental_capacity = 500
+					customTriggers = list()
+					to_chat(owner, "<span class='notice'><i>Your mind starts to heal, fixing the damage caused by the massive amounts of chemical injected into your system earlier, returning clarity to your mind. Though stragely, you still feel drawn towards [master]'s words...'</i></span>")
+					M.slurring = 0
+					M.confused = 0
+					resistGrowth = 0
+				else
+					if (cooldown > 0)
+						cooldown -= (0.8 + (mental_capacity/500))
+						cooldownMsg = FALSE
+					else if (cooldownMsg == FALSE)
+						if(DistApart < 10)
+							if(lewd)
+								to_chat(master, "<span class='notice'><i>Your [subjectTerm] [owner] appears to have finished internalising your last command.</i></span>")
+								cooldownMsg = TRUE
+							else
+								to_chat(master, "<span class='notice'><i>Your thrall [owner] appears to have finished internalising your last command.</i></span>")
+								cooldownMsg = TRUE
+					if(get_dist(master, owner) > 10)
+						if(prob(10))
+							to_chat(owner, "<span class='velvet'><i>You feel [(lewd ?"a deep <b>NEED</b> to return to your [enthrallTitle]":"like you have to return to [master]")].</i></span>")
+							//M.throw_at(get_step_towards(master,owner), 5, 1)
+					return//If you break the mind of someone, you can't use status effects on them.
 			else
-				if (cooldown > 0)
-					cooldown -= (0.8 + (mental_capacity/500))
-					cooldownMsg = FALSE
-				else if (cooldownMsg == FALSE)
-					if(DistApart < 10)
-						if(lewd)
-							to_chat(master, "<span class='notice'><i>Your pet [owner] appears to have finished internalising your last command.</i></span>")
-							cooldownMsg = TRUE
-						else
-							to_chat(master, "<span class='notice'><i>Your thrall [owner] appears to have finished internalising your last command.</i></span>")
-							cooldownMsg = TRUE
-				if(get_dist(master, owner) > 10)
-					if(prob(10))
-						to_chat(owner, "<span class='velvet'><i>You feel [(lewd ?"a deep NEED to return to your [enthrallTitle]":"like you have to return to [master]")].</i></span>")
-						//M.throw_at(get_step_towards(master,owner), 5, 1)
-				return//If you break the mind of someone, you can't use status effects on them.
+				phase = 3
 
 
 	//distance calculations
@@ -348,7 +380,7 @@
 			if(owner.getOrganLoss(ORGAN_SLOT_BRAIN) >=20)
 				owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, -0.2)
 			if(withdrawal == TRUE)
-				REMOVE_TRAIT(owner, TRAIT_PACIFISM, "MKUltra")
+				REMOVE_TRAIT(owner, TRAIT_PACIFISM, "Enthrallment")
 				SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "EnthMissing1")
 				SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "EnthMissing2")
 				SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "EnthMissing3")
@@ -361,14 +393,14 @@
 	if (withdrawal == TRUE)//Your minions are really REALLY needy.
 		switch(withdrawalTick)//denial
 			if(5)//To reduce spam
-				to_chat(owner, "<span class='big warning'><b>You are unable to complete [(lewd?"your [enthrallTitle]":"[master]")]'s orders without their presence, and any commands and objectives given to you prior are not in effect until you are back with them.</b></span>")
-				ADD_TRAIT(owner, TRAIT_PACIFISM, "MKUltra") //IMPORTANT
+				to_chat(owner, "<span class='big warning'><b>You are unable to complete [(lewd?"your [enthrallTitle]":"[master]")]'s orders without their presence, and any commands and objectives previously given to you are not in effect until you are reunited.</b></span>")
+				ADD_TRAIT(owner, TRAIT_PACIFISM, "Enthrallment") //IMPORTANT
 			if(10 to 35)//Gives wiggle room, so you're not SUPER needy
 				if(prob(5))
 					to_chat(owner, "<span class='notice'><i>You're starting to miss [(lewd?"your [enthrallTitle]":"[master]")].</i></span>")
 				if(prob(5))
 					owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, 0.1)
-					to_chat(owner, "<i>[(lewd?"[enthrallTitle]":"[master]")] will surely be back soon</i>") //denial
+					to_chat(owner, "<i>Surely [(lewd?"[enthrallTitle]":"[master]")] will be back soon.</i>") //denial
 			if(36)
 				var/message = "[(lewd?"I feel empty when [enthrallTitle]'s not around..":"I miss [master]'s presence")]"
 				SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "EnthMissing1", /datum/mood_event/enthrallmissing1, message)
@@ -378,7 +410,7 @@
 					owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, 0.5)
 				if(prob(10))
 					if(lewd)
-						to_chat(owner, "<i>I just need to be a good pet for [enthrallTitle], they'll surely return if I'm a good pet.</i>")
+						to_chat(owner, "<i>I just need to be a good [subjectTerm] for [enthrallTitle], they'll surely return if I'm a good [subjectTerm].</i>")
 					owner.adjustOrganLoss(ORGAN_SLOT_BRAIN, -1.5)
 			if(66)
 				SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "EnthMissing1")
@@ -491,7 +523,7 @@
 				cooldown += 1 //Cooldown doesn't process till status is done
 
 		else if (status == "pacify")
-			ADD_TRAIT(owner, TRAIT_PACIFISM, "MKUltraStatus")
+			ADD_TRAIT(owner, TRAIT_PACIFISM, "EnthrallmentStatus")
 			status = null
 
 			//Truth serum?
@@ -515,7 +547,7 @@
 	else if (cooldownMsg == FALSE)
 		if(DistApart < 10)
 			if(lewd)
-				to_chat(master, "<span class='notice'><i>Your pet [owner] appears to have finished internalising your last command.</i></span>")
+				to_chat(master, "<span class='notice'><i>Your [subjectTerm] [owner] appears to have finished internalising your last command.</i></span>")
 			else
 				to_chat(master, "<span class='notice'><i>Your thrall [owner] appears to have finished internalising your last command.</i></span>")
 		cooldownMsg = TRUE
@@ -531,7 +563,7 @@
 //Remove all stuff
 /datum/status_effect/chem/enthrall/on_remove()
 	var/mob/living/carbon/M = owner
-	M.mind.remove_antag_datum(/datum/antagonist/brainwashed)
+	M.mind?.remove_antag_datum(/datum/antagonist/brainwashed)
 	SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "enthrall")
 	SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "enthrallpraise")
 	SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "enthrallscold")
@@ -541,10 +573,27 @@
 	SEND_SIGNAL(M, COMSIG_CLEAR_MOOD_EVENT, "EnthMissing4")
 	UnregisterSignal(M, COMSIG_LIVING_RESIST)
 	UnregisterSignal(owner, COMSIG_MOVABLE_HEAR)
-	REMOVE_TRAIT(owner, TRAIT_PACIFISM, "MKUltra")
+	REMOVE_TRAIT(owner, TRAIT_PACIFISM, "Enthrallment")
 	to_chat(owner, "<span class='big redtext'><i>You're now free of [master]'s influence, and fully independent!'</i></span>")
 	UnregisterSignal(owner, COMSIG_GLOB_LIVING_SAY_SPECIAL)
 	return ..()
+
+/datum/status_effect/chem/enthrall/proc/setup_vars(masterID, masterTitle, maxPhase)
+	//this proc just sets up the big important variables, and is how the master is set up
+	//It should ALWAYS BE CALLED when adding enthrall, or else you'll run into Fun Issues(tm)
+	enthrallID = masterID
+	enthrallTitle = masterTitle
+	if (!isnum(maxPhase))
+		return
+	switch (maxPhase)
+		if (0 to 4)
+			phaselimit = maxPhase
+		if (5 to INFINITY)
+			log_reagent("WARNING: FERMICHEM: ENTHRALL: Failed to setup values for status on [owner] ckey: [owner.key]! Maximum phase greater than 4.")
+	master = get_mob_by_key(enthrallID)
+	log_reagent("FERMICHEM: ENTHRALL: Status applied on [owner] ckey: [owner.key] with a master of [master] ckey: [enthrallID], and maximum phase of [phaselimit].")
+	lewd = (owner.client?.prefs.cit_toggles & HYPNO) && (master.client?.prefs.cit_toggles & HYPNO)
+	return
 
 /datum/status_effect/chem/enthrall/proc/owner_hear(datum/source, list/hearing_args)
 	if(lewd == FALSE)
@@ -557,14 +606,14 @@
 		var/cached_trigger = lowertext(trigger)
 		if (findtext(raw_message, cached_trigger))//if trigger1 is the message
 			cTriggered = 5 //Stops triggerparties and as a result, stops servercrashes.
-			log_reagent("FERMICHEM: MKULTRA: [owner] ckey: [owner.key] has been triggered with [cached_trigger] from [hearing_args[HEARING_SPEAKER]] saying: \"[hearing_args[HEARING_MESSAGE]]\". (their master being [master] ckey: [enthrallID].)")
+			log_reagent("FERMICHEM: Enthrallment: [owner] ckey: [owner.key] has been triggered with [cached_trigger] from [hearing_args[HEARING_SPEAKER]] saying: \"[hearing_args[HEARING_MESSAGE]]\". (their master being [master] ckey: [enthrallID].)")
 
 			//Speak (Forces player to talk)
 			if (lowertext(customTriggers[trigger][1]) == "speak")//trigger2
 				var/saytext = "Your mouth moves on it's own before you can even catch it."
 				addtimer(CALLBACK(GLOBAL_PROC, .proc/to_chat, C, "<span class='notice'><i>[saytext]</i></span>"), 5)
 				addtimer(CALLBACK(C, /atom/movable/proc/say, "[customTriggers[trigger][2]]"), 5)
-				log_reagent("FERMICHEM: MKULTRA: [owner] ckey: [owner.key] has been forced to say: \"[customTriggers[trigger][2]]\" from previous trigger.")
+				log_reagent("FERMICHEM: Enthrallment: [owner] ckey: [owner.key] has been forced to say: \"[customTriggers[trigger][2]]\" from previous trigger.")
 
 
 			//Echo (repeats message!) allows customisation, but won't display var calls! Defaults to hypnophrase.
@@ -612,7 +661,7 @@
 				var/mob/living/carbon/human/o = owner
 				o.apply_status_effect(/datum/status_effect/trance, 200, TRUE)
 				tranceTime = 50
-				log_reagent("FERMICHEM: MKULTRA: [owner] ckey: [owner.key] has been tranced from previous trigger.")
+				log_reagent("FERMICHEM: Enthrallment: [owner] ckey: [owner.key] has been tranced from previous trigger.")
 
 	return
 
@@ -638,9 +687,9 @@
 	else if (status == "Antiresist")//If ordered to not resist; resisting while ordered to not makes it last longer, and increases the rate in which you are enthralled.
 		if (statusStrength > 0)
 			if(lewd)
-				to_chat(owner, "<span class='warning'><i>The order from your [enthrallTitle] to give in is conflicting with your attempt to resist, drawing you deeper into trance! You'll have to wait a bit before attemping again, lest your attempts become frustrated again.</i></span>")
+				to_chat(owner, "<span class='warning'><i>The order from your [enthrallTitle] to give in is conflicting with your attempt to resist, drawing you deeper into trance! You'll have to wait a bit before attemping again, lest your attempts continue to be frustrated.</i></span>")
 			else
-				to_chat(owner, "<span class='warning'><i>The order from your [master] to give in is conflicting with your attempt to resist. You'll have to wait a bit before attemping again, lest your attempts become frustrated again.</i></span>")
+				to_chat(owner, "<span class='warning'><i>The order from your [master] to give in is conflicting with your attempt to resist. You'll have to wait a bit before attemping again, lest your attempts continue to be frustrated.</i></span>")
 			statusStrength += 1
 			enthrallTally += 1
 			return
