@@ -309,6 +309,11 @@
 	icon = "thehive"
 	desc = "Comb in for some sweet drinks! Not known for serving any sappy drink."
 
+/datum/barsign/lunarlure
+	name = "The Lunar Lure"
+	icon = "lunarlure"
+	desc = "Serve the customers, obey the boss!"
+
 /datum/barsign/hiddensigns
 	hidden = TRUE
 
