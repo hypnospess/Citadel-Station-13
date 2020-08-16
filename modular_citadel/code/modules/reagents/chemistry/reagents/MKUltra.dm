@@ -147,6 +147,31 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	chemical_flags = REAGENT_ONMOBMERGE | REAGENT_DONOTSPLIT //Procs on_mob_add when merging into a human
 	can_synth = FALSE
 	value = REAGENT_VALUE_EXCEPTIONAL
+	var/maxenthrall = 4
+
+/datum/reagent/fermi/enthrall/zonk
+	name = "Zonk"
+	description = "A very light, magenta mixture that brings a person into a light trance. Not susceptible enough for complete enthrallment, but enough to make someone do as you say. It has no effect when ingested or splashed onto someone. If it enters the creator's bloodstream, then their voice will gain an irresistable tone."
+	overdose_threshold = 0 //Can't mindbreak someone with zonk
+	maxenthrall = 2
+	color = "#9B3CB8"
+	taste_description = "pure, unfiltered, concentrated grape"
+
+/datum/reagent/fermi/enthrall/zonk/reaction_mob(mob/living/M, method, reac_volume, show_message, touch_protection)
+	if(method == INGEST || method == TOUCH)
+		return //aight so this is basically just code golf but if i'm looking at reagent code proper, then this SHOULD be enough to stop it from getting into the patient's system
+	. = ..()
+
+/datum/reagent/fermi/enthrall/zonkpunch
+	name = "Zonk Punch"
+	description = "A mixture of berry juice and Zonk. It has the same effects as Zonk, but is capable of being ingested. When ingested by the creator, it will give them a velvet voice."
+	color = "#d40dc4"
+	maxenthrall = 2
+	overdose_threshold = 0
+	glass_icon_state = "zonkpunch"
+	glass_name = "zonk punch"
+	glass_desc = "A mesmerizing violet drink. It has bubbles up top that swirl in a spiral pattern."
+	taste_description = "a mix of assorted berries, and a grape aftertaste"
 
 /datum/reagent/fermi/enthrall/on_new(list/data)
 	creatorID = data["creatorID"]
@@ -186,7 +211,7 @@ Creating a chem with a low purity will make you permanently fall in love with so
 		to_chat(M, "<span class='notice'><i>You feel your vocal chords tingle as you speak in a more charasmatic and enthralling tone.</i></span>")
 	else
 		var/datum/status_effect/chem/enthrall/H = M.apply_status_effect(/datum/status_effect/chem/enthrall)
-		H.setup_vars(creatorID, creatorTitle, 4)
+		H.setup_vars(creatorID, creatorTitle, maxenthrall)
 		H.enthrallSources |= src
 		log_reagent("FERMICHEM: MKUltra: [creatorName], [creatorID], is enthralling [M.name], [M.ckey]")
 	log_reagent("FERMICHEM: [M] ckey: [M.key] has taken MKUltra")
