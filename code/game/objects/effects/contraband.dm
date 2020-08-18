@@ -435,6 +435,31 @@
 	desc = "A poster advertising bounty hunting services. \"I hear you got a problem.\""
 	icon_state = "poster48"
 
+/obj/structure/sign/poster/contraband/faustech_1
+	name = "Faustech Wants You"
+	desc = "An advertisement for Faustech's labs. Allegedly, they eagerly accept test subject volunteers."
+	icon_state = "faustech_wantsyou"
+
+/obj/structure/sign/poster/contraband/faustech_2
+	name = "Faustech Slogan"
+	desc = "An advertisement for Faustech featuring their slogan: SINK, OBEY, RELAX."
+	icon_state = "faustech_slogan"
+
+/obj/structure/sign/poster/contraband/faustech_3
+	name = "Sal"
+	desc = "A poster of a Faustech favorite, Sal. He's dreamy!"
+	icon_state = "faustech_sal"
+
+/obj/structure/sign/poster/contraband/lunarlure_1
+	name = "Full Belly, Empty Mind"
+	desc = "An advertisement for the Lunar Lure, promising a full belly and an empty mind to its patrons."
+	icon_state = "lunarlure1"
+
+/obj/structure/sign/poster/contraband/lunarlure_2
+	name = "Good Boys Drink Free"
+	desc = "A neon sign from the Lunar Lure, promising that \"good boys drink free\". An odd promise for those unfamiliar with the establishment."
+	icon_state = "lunarlure2"
+
 /obj/structure/sign/poster/official
 	poster_item_name = "motivational poster"
 	poster_item_desc = "An official Nanotrasen-issued poster to foster a compliant and obedient workforce. It comes with state-of-the-art adhesive backing, for easy pinning to any vertical surface."
