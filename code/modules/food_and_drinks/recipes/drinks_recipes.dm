@@ -319,6 +319,12 @@
 	results = list(/datum/reagent/consumable/ethanol/pina_colada = 5)
 	required_reagents = list(/datum/reagent/consumable/ethanol/creme_de_coconut = 1, /datum/reagent/consumable/pineapplejuice = 3, /datum/reagent/consumable/ethanol/rum = 1, /datum/reagent/consumable/limejuice = 1)
 
+/datum/chemical_reaction/fruit_snap
+	name = "Fruit Snap"
+	id = /datum/reagent/consumable/ethanol/fruit_snap
+	results = list(/datum/reagent/consumable/ethanol/fruit_snap = 5)
+	required_reagents = list(/datum/reagent/consumable/berryjuice = 1, /datum/reagent/consumable/sodawater = 1, /datum/reagent/consumable/watermelonjuice = 1, /datum/reagent/consumable/ethanol/gin = 2)
+
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
 /datum/chemical_reaction/sbiten

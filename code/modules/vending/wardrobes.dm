@@ -255,6 +255,7 @@
 					/obj/item/clothing/under/rank/civilian/bartender/purple = 2,
 					/obj/item/clothing/accessory/waistcoat = 3,
 					/obj/item/clothing/suit/apron/purple_bartender = 2,
+					/obj/item/clothing/under/suit/waiter = 10,
 					/obj/item/clothing/head/soft/black = 4,
 					/obj/item/clothing/shoes/sneakers/black = 4,
 					/obj/item/reagent_containers/rag = 4,

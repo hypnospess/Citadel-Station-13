@@ -279,6 +279,7 @@
 		/obj/machinery/vending/clothing = "ClothesMate",
 		/obj/machinery/vending/medical = "NanoMed Plus",
 		/obj/machinery/vending/wallmed = "NanoMed",
+		/obj/machinery/vending/faustech = "FausTech",
 		/obj/machinery/vending/custom = "Custom Vendor")
 
 /obj/item/circuitboard/machine/vendor/attackby(obj/item/I, mob/user, params)
@@ -1093,6 +1094,11 @@
 	name = "Kinkmate Vendor (Machine Board)"
 	build_path = /obj/machinery/vending/kink
 	req_components = list(/obj/item/vending_refill/kink = 1)
+
+/obj/item/circuitboard/machine/faustech
+	name = "FausTech Vendor (Machine Board)"
+	build_path = /obj/machinery/vending/faustech
+	req_components = list(/obj/item/vending_refill/faustech = 1)
 
 /obj/item/circuitboard/machine/autolathe/toy
 	name = "Autoylathe (Machine Board)"

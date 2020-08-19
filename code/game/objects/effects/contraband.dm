@@ -42,6 +42,32 @@
 	poster_type = /obj/structure/sign/poster/official/random
 	icon_state = "rolled_legit"
 
+//vendable posters
+/obj/item/poster/contraband/faustech_1
+	name = "Faustech Wants You"
+	poster_type = /obj/structure/sign/poster/contraband/faustech_1
+	icon_state = "rolled_poster"
+
+/obj/item/poster/contraband/faustech_2
+	name = "Faustech Slogan"
+	poster_type = /obj/structure/sign/poster/contraband/faustech_2
+	icon_state = "rolled_poster"
+
+/obj/item/poster/contraband/faustech_3
+	name = "Sal"
+	poster_type = /obj/structure/sign/poster/contraband/faustech_3
+	icon_state = "rolled_poster"
+
+/obj/item/poster/contraband/lunarlure_1
+	name = "Full Belly, Empty Mind"
+	poster_type = /obj/structure/sign/poster/contraband/lunarlure_1
+	icon_state = "rolled_poster"
+
+/obj/item/poster/contraband/lunarlure_2
+	name = "Good Boys Drink Free"
+	poster_type = /obj/structure/sign/poster/contraband/lunarlure_2
+	icon_state = "rolled_poster"
+
 // The poster sign/structure
 
 /obj/structure/sign/poster

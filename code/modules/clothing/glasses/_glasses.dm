@@ -450,6 +450,33 @@
 	item_state = "redglasses"
 	glass_colour_type = /datum/client_colour/glass_colour/red
 
+/obj/item/clothing/glasses/hypnovisor
+	name = "hypnotic visor"
+	desc = "A FausTech hypnotic visor, designed to keep a subject deep on the go."
+	icon_state = "hypnovisor_off"
+	item_state = "hypnovisor_off"
+	var/visor_toggled = FALSE
+
+/obj/item/clothing/glasses/hypnovisor/proc/togglevisor(mob/living/user)
+	if (user && user.incapacitated())
+		return
+	visor_toggled = !visor_toggled
+	if (!visor_toggled)
+		src.icon_state = "hypnovisor_off"
+		to_chat(user, "<span class ='notice'>You switch the visor off.</span>")
+		//no hypno
+	else
+		src.icon_state = "hypnovisor_on"
+		to_chat(user, "<span class ='notice'>You switch the visor on.</span>")
+		//yes hypno
+
+/obj/item/clothing/glasses/hypnovisor/AltClick(mob/user)
+	. = ..()
+	if (!user.canUseTopic(src, BE_CLOSE, ismonkey(user)))
+		return
+	togglevisor(user)
+	return TRUE
+
 /obj/item/clothing/glasses/godeye
 	name = "eye of god"
 	desc = "A strange eye, said to have been torn from an omniscient creature that used to roam the wastes."
