@@ -2250,6 +2250,17 @@ All effects don't start immediately, but rather get worse over time; the rate is
 	glass_name = "Malibu Sunset"
 	glass_desc = "Tropical looking drinks, with ice cubes hovering on the surface and grenadine coloring the bottom."
 
+/datum/reagent/consumable/ethanol/fruit_snap
+	name = "Fruit Snap"
+	description = "A fruity drink with demonic inspirations."
+	boozepwr = 60
+	color = "#A804FD"
+	quality = DRINK_FANTASTIC
+	taste_description = "gin, with a fruity undertaste of berries and watermelon"
+	glass_icon_state = "fruit_snap"
+	glass_name = "Fruit Snap"
+	glass_desc = "A bubbly drink with mesmerizing colors. A little on the short side, though."
+
 /datum/reagent/consumable/ethanol/hotlime_miami
 	name = "Hotlime Miami"
 	description = "The essence of the 90's, if they were a bloody mess that is."

@@ -47,7 +47,7 @@
 	crate_name = "dinnerware supply crate"
 	crate_type = /obj/structure/closet/crate
 
-/datum/supply_pack/vending/dinner
+/datum/supply_pack/vending/engineering
 	name = "Engineering Supply Crate"
 	desc = "Packs of tools waiting to be used for repairing. Contains a tool and engineering vending machine refill. Requires CE access."
 	cost = 5500 //Powerfull
@@ -56,6 +56,14 @@
 					/obj/item/vending_refill/engivend)
 	crate_name = "engineering supply crate"
 	crate_type = /obj/structure/closet/crate/secure/engineering
+
+/datum/supply_pack/vending/faustech
+	name = "FausTech Supply Crate"
+	desc = "Refill your FausTech brand vending machines, to keep the hypnotic fun going."
+	cost = 2400
+	contains = list(/obj/item/vending_refill/faustech)
+	crate name = "FausTech supply crate"
+	crate_type = /obj/structure/closet/crate
 
 /datum/supply_pack/vending/games
 	name = "Games Supply Crate"

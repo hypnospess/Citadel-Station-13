@@ -15962,7 +15962,6 @@
 /turf/open/floor/wood,
 /area/crew_quarters/bar)
 "aKr" = (
-/obj/machinery/vending/snack/orange,
 /obj/machinery/light{
 	dir = 1
 	},
@@ -34832,7 +34831,7 @@
 /turf/closed/wall,
 /area/science/mixing)
 "bEt" = (
-/obj/machinery/vending/coffee,
+/obj/machinery/vending/faustech,
 /turf/open/floor/plasteel/white,
 /area/science/research)
 "bEu" = (
@@ -55900,6 +55899,10 @@
 	},
 /turf/open/floor/plasteel,
 /area/security/brig)
+"kur" = (
+/obj/machinery/vending/faustech,
+/turf/open/floor/wood,
+/area/crew_quarters/bar)
 "kuA" = (
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on,
 /obj/item/radio/intercom{
@@ -57507,6 +57510,7 @@
 /obj/structure/disposalpipe/segment{
 	dir = 4
 	},
+/obj/machinery/vending/faustech,
 /turf/open/floor/plasteel,
 /area/crew_quarters/locker)
 "psk" = (
@@ -96811,7 +96815,7 @@ aJC
 aKO
 aMw
 aNI
-aKR
+kur
 aKR
 acN
 acN
