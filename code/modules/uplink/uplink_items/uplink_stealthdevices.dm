@@ -82,7 +82,11 @@
 	U.failsafe_code = U.generate_code()
 	to_chat(user, "The new failsafe code for this uplink is now : [U.failsafe_code].")
 	if(user.mind)
-		user.mind.store_memory("Failsafe code for [U.parent] : [U.failsafe_code]")
+		var/title = "Uplink Failsafe Code"
+		var/text = "Failsafe code for [U.parent] : [U.failsafe_code]"
+		var/datum/memory/failsafemem = new(title, text)
+		failsafemem.antagonize()
+		user.mind.store_memory()
 	return U.parent //For log icon
 
 /datum/uplink_item/stealthy_tools/mulligan

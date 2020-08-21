@@ -351,7 +351,8 @@
 	message += "<font color='red'>Their ultimate objective is to take over the station with a Dominator machine.</font>"
 	message += "<font color='red'>You can identify your mates by their <b>large, <font color='[color]'> \[G\]</font> icon</b>.</font>"
 	to_chat(gangster, message)
-	gangster.store_memory("You are a member of the [name] Gang!")
+	var/datum/memory/gangmem = new("Gang affiliation","You are a member of the [name] Gang!")
+	gangster.store_memory(gangmem)
 
 /datum/team/gang/proc/handle_territories()
 	next_point_time = world.time + INFLUENCE_INTERVAL

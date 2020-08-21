@@ -65,7 +65,7 @@
 	user.copy_languages(target, LANGUAGE_ABSORB)
 
 	if(target.mind && user.mind)//if the victim and user have minds
-		target.mind.show_memory(user, 0) //I can read your mind, kekeke. Output all their notes.
+		target.mind.show_memory(user, 1) //I can read your mind, kekeke. Output all their notes.
 
 		//Some of target's recent speech, so the changeling can attempt to imitate them better.
 		//Recent as opposed to all because rounds tend to have a LOT of text.

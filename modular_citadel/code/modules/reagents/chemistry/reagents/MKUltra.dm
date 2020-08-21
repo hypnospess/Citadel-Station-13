@@ -335,7 +335,11 @@ Creating a chem with a low purity will make you permanently fall in love with so
 	var/lewd = (Lover.client?.prefs.cit_toggles & HYPNO) && (Love.client?.prefs.cit_toggles & HYPNO)
 	to_chat(Lover, "[(lewd?"<span class='love'>":"<span class='warning'>")]You develop a deep and sudden bond with [Love][(lewd?", your heart beginning to race as your mind filles with thoughts about them.":".")] You are determined to keep them safe and happy, and feel drawn towards them.</span>")
 	if(Lover.mind)
-		Lover.mind.store_memory("You are in love with [Love].")
+		var/title = "Love"
+		var/subject = "You are in love with [Love]."
+		var/datum/memory/lovemem = new(title,subject)
+		lovemem.make_positive()
+		Lover.mind.store_memory(lovemem)
 	Lover.faction |= "[REF(Love)]"
 	Lover.apply_status_effect(STATUS_EFFECT_INLOVE, Love)
 	forge_valentines_objective(Lover, Love, TRUE)

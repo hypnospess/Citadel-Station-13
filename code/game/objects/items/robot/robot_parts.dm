@@ -298,7 +298,12 @@
 			BM.mind.transfer_to(O)
 
 			if(O.mind && O.mind.special_role)
-				O.mind.store_memory("As a cyborg, you must obey your silicon laws and master AI above all else. Your objectives will consider you to be dead.")
+				var/datum/memory/cymem
+				var/memtitle = "Cyborg Status"
+				var/memcont = "As a cyborg, you must obey your silicon laws and master AI above all else. Your objectives will consider you to be dead."
+				cymem = new(memtitle, memcont)
+				cymem.traumatize()
+				O.mind.store_memory()
 				to_chat(O, "<span class='userdanger'>You have been robotized!</span>")
 				to_chat(O, "<span class='danger'>You must obey your silicon laws and master AI above all else. Your objectives will consider you to be dead.</span>")
 

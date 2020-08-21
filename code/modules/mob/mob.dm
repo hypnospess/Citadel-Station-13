@@ -426,25 +426,29 @@ mob/visible_message(message, self_message, blind_message, vision_distance = DEFA
 		update_inv_hands()
 
 /mob/verb/memory()
-	set name = "Notes"
+	set name = "Memory"
 	set category = "IC"
-	set desc = "View your character's notes memory."
+	set desc = "View your character's memory."
 	if(mind)
 		mind.show_memory(src)
 	else
-		to_chat(src, "You don't have a mind datum for some reason, so you can't look at your notes, if you had any.")
+		to_chat(src, "You don't have a mind datum for some reason, so you can't look at your memories, if you had any.")
 
-/mob/verb/add_memory(msg as message)
-	set name = "Add Note"
+/mob/verb/add_memory(title as text, msg as message)
+	set name = "Add Memory"
 	set category = "IC"
 
+	title = copytext_char(title, 1, MAX_MESSAGE_LEN)
+	title = sanitize(title)
 	msg = copytext_char(msg, 1, MAX_MESSAGE_LEN)
 	msg = sanitize(msg)
 
+	var/datum/memory/toAdd = new(title, msg)
+
 	if(mind)
-		mind.store_memory(msg)
+		mind.store_memory(toAdd)
 	else
-		to_chat(src, "You don't have a mind datum for some reason, so you can't add a note to it.")
+		to_chat(src, "You don't have a mind datum for some reason, so you can't add a memory to it.")
 
 /mob/verb/abandon_mob()
 	set name = "Respawn"
