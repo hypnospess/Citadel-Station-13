@@ -1,0 +1,11 @@
+{
+    "map_name": "Lure Station",
+    "map_path": "map_files/Lurestation",
+    "map_file": "LureStation.dmm",
+    "shuttles": {
+	    "cargo": "cargo_box",
+	    "ferry": "ferry_fancy",
+	    "whiteship": "whiteship_box",
+	    "emergency": "emergency_box"
+    }
+}

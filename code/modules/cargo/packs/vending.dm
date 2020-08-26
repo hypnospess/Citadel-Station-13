@@ -62,7 +62,7 @@
 	desc = "Refill your FausTech brand vending machines, to keep the hypnotic fun going."
 	cost = 2400
 	contains = list(/obj/item/vending_refill/faustech)
-	crate name = "FausTech supply crate"
+	crate_name = "FausTech supply crate"
 	crate_type = /obj/structure/closet/crate
 
 /datum/supply_pack/vending/games

@@ -29,6 +29,13 @@
 	item_state = "waiter"
 	can_adjust = FALSE
 
+/obj/item/clothing/under/suit/lunar_waiter
+	name = "Lunar Lure waiter's outfit"
+	desc = "Stylish and leaving little to the imagination. You sort of envy anyone wearing it."
+	icon_state = "lure_waiter"
+	item_state = "lure_waiter"
+	can_adjust = FALSE
+
 /obj/item/clothing/under/suit/black
 	name = "black suit"
 	desc = "A black suit and red tie. Very formal."
