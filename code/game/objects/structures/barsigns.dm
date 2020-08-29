@@ -312,7 +312,7 @@
 /datum/barsign/lunarlure
 	name = "The Lunar Lure"
 	icon = "lunarlure"
-	desc = "Serve the customers, obey the boss!"
+	desc = "Serve the customers, obey the Boss!"
 
 /datum/barsign/hiddensigns
 	hidden = TRUE
