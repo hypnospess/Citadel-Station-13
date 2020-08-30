@@ -1,4 +1,8 @@
 /obj/item/organ/genital/penis
+	/*
+		For the love of god, please make the wording less gross.
+		Like, really. A lot of this shit sounds absolutely disgusting.
+	*/
 	name = "penis"
 	desc = "A male reproductive organ."
 	icon_state = "penis"

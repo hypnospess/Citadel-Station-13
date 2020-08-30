@@ -28,7 +28,7 @@
 	update_appearance()
 
 /obj/item/organ/genital/testicles/update_size(modified = FALSE)
-	switch(size)
+	switch(size)	//weird, no options for smaller than average. lame.
 		if(BALLS_SIZE_MIN)
 			size_name = "average"
 		if(BALLS_SIZE_DEF)

@@ -3,17 +3,17 @@
 	w_class = WEIGHT_CLASS_SMALL
 	organ_flags = ORGAN_NO_DISMEMBERMENT|ORGAN_EDIBLE
 	var/shape
-	var/sensitivity = 1 // wow if this were ever used that'd be cool but it's not but i'm keeping it for my unshit code
-	var/genital_flags //see citadel_defines.dm
+	var/sensitivity = 1 // wow if this were ever used that'd be cool but it's not but i'm keeping it for my unshit code //note: make this used sometimes
+	var/genital_flags //see citadel_defines.dm <=== LOOK AT THIS!!
 	var/masturbation_verb = "masturbate"
 	var/orgasm_verb = "cumming" //present continous
 	var/arousal_verb = "You feel aroused"
 	var/unarousal_verb = "You no longer feel aroused"
 	var/fluid_transfer_factor = 0 //How much would a partner get in them if they climax using this?
 	var/size = 2 //can vary between num or text, just used in icon_state strings
-	var/datum/reagent/fluid_id = null
-	var/fluid_max_volume = 50
-	var/fluid_efficiency = 1
+	var/datum/reagent/fluid_id = null //what does it make
+	var/fluid_max_volume = 50 //assuming this is how much it can store
+	var/fluid_efficiency = 1 //assuming this is the ratio of stored to produced? literally no clue.
 	var/fluid_rate = CUM_RATE
 	var/fluid_mult = 1
 	var/time_since_last_orgasm = 500
@@ -26,16 +26,16 @@
 	. = ..()
 	if(fluid_id)
 		create_reagents(fluid_max_volume, NONE, NO_REAGENTS_VALUE)
-		if(CHECK_BITFIELD(genital_flags, GENITAL_FUID_PRODUCTION))
+		if(CHECK_BITFIELD(genital_flags, GENITAL_FUID_PRODUCTION)) //is... is fluid misspelled? for the love of god. 
 			reagents.add_reagent(fluid_id, fluid_max_volume)
 	if(do_update)
 		update()
 
 /obj/item/organ/genital/proc/set_aroused_state(new_state)
-	if(!(genital_flags & GENITAL_CAN_AROUSE))
-		return FALSE
-	if(!((HAS_TRAIT(owner,TRAIT_PERMABONER) && !new_state) || HAS_TRAIT(owner,TRAIT_NEVERBONER) && new_state))
-		aroused_state = new_state
+	if(!(genital_flags & GENITAL_CAN_AROUSE))	//if you can't arouse it...
+		return FALSE	//stop!
+	if(!((HAS_TRAIT(owner,TRAIT_PERMABONER) && !new_state) || HAS_TRAIT(owner,TRAIT_NEVERBONER) && new_state)) //if you don't (have a permaboner and are setting to false), or (a neverboner and are setting to true)...
+		aroused_state = new_state //set it to the new state!
 	return aroused_state
 
 /obj/item/organ/genital/proc/update()
@@ -43,18 +43,18 @@
 		return
 	update_size()
 	update_appearance()
-	if(genital_flags & UPDATE_OWNER_APPEARANCE && owner && ishuman(owner))
+	if(genital_flags & UPDATE_OWNER_APPEARANCE && owner && ishuman(owner)) //this seems jank as fuck
 		var/mob/living/carbon/human/H = owner
-		H.update_genitals()
+		H.update_genitals() //oh for fucks sake... check this thing later, where is it??
 	if(linked_organ_slot || (linked_organ && !owner))
 		update_link()
 
 //exposure and through-clothing code
-/mob/living/carbon
+/mob/living/carbon	//why is this being defined here?
 	var/list/exposed_genitals = list() //Keeping track of them so we don't have to iterate through every genitalia and see if exposed
 
-/obj/item/organ/genital/proc/is_exposed()
-	if(!owner || genital_flags & (GENITAL_INTERNAL|GENITAL_HIDDEN))
+/obj/item/organ/genital/proc/is_exposed()	//oh fuck it, come back and check this later.
+	if(!owner || genital_flags & (GENITAL_INTERNAL|GENITAL_HIDDEN)) //where is owner defined
 		return FALSE
 	if(genital_flags & GENITAL_UNDIES_HIDDEN && ishuman(owner))
 		var/mob/living/carbon/human/H = owner
@@ -115,6 +115,7 @@
 	return
 
 /mob/living/carbon/verb/toggle_arousal_state()
+	//arousal damage? hmm
 	set category = "IC"
 	set name = "Toggle genital arousal"
 	set desc = "Allows you to toggle which genitals are showing signs of arousal."

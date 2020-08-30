@@ -42,7 +42,7 @@
 		return // no adjusting made here
 	for(var/obj/item/organ/genital/G in internal_organs)
 		if(G.genital_flags & GENITAL_CAN_AROUSE && !G.aroused_state && prob(strength*G.sensitivity))
-			G.set_aroused_state(strength > 0)
+			G.set_aroused_state(strength > 0)	//the fuck does this do, doesn't it take a boolean?
 			G.update_appearance()
 			if(G.aroused_state)
 				genit_list += G
@@ -58,27 +58,33 @@
 		to_chat(H, "<span class='warning'>Your [name] is unable to produce it's own fluids, it's missing the organs for it.</span>")
 
 /mob/living/carbon/human/proc/do_climax(datum/reagents/R, atom/target, obj/item/organ/genital/G, spill = TRUE)
-	if(!G)
+	//why do we have to specify the reagent instead of specifying the organ that climaxes?
+	//That should also be able to get the reagent.
+	//you know, considering that literally the last proc was to determine if something's climaxible. 
+	if(!G)	//if there is no organ
 		return
-	if(!target || !R)
+	if(!target || !R)	//if there's no target or no reagent (see above)
 		return
-	var/turfing = isturf(target)
-	G.generate_fluid(R)
+	var/turfing = isturf(target)	//turfing means, not putting in a container
+	G.generate_fluid(R)	//check how this works
 	if(spill && R.total_volume >= 5)
-		R.reaction(turfing ? target : target.loc, TOUCH, 1, 0)
-	if(!turfing)
-		R.trans_to(target, R.total_volume * (spill ? G.fluid_transfer_factor : 1))
+		R.reaction(turfing ? target : target.loc, TOUCH, 1, 0) //I'll just trust this is correct.
+	if(!turfing)	//if the target is a container (no idea how trans_to works, assuming it already does validity checks)
+		R.trans_to(target, R.total_volume * (spill ? G.fluid_transfer_factor : 1))	//what the fuck is spill supposed to do
 	G.time_since_last_orgasm = 0
 	R.clear_reagents()
 
 /mob/living/carbon/human/proc/mob_climax_outside(obj/item/organ/genital/G, mb_time = 30) //This is used for forced orgasms and other hands-free climaxes
-	var/datum/reagents/fluid_source = G.climaxable(src, TRUE)
+	//why is this proc separate?????
+	//what is mb_time for??
+	var/datum/reagents/fluid_source = G.climaxable(src, TRUE)	//look!! see?? this is so much better
 	if(!fluid_source)
 		to_chat(src,"<span class='userdanger'>Your [G.name] cannot cum.</span>")
 		return
 	if(mb_time) //as long as it's not instant, give a warning
 		to_chat(src,"<span class='userlove'>You feel yourself about to orgasm.</span>")
 		if(!do_after(src, mb_time, target = src) || !G.climaxable(src, TRUE))
+			//note: check how do_after works
 			return
 	to_chat(src,"<span class='userlove'>You climax[isturf(loc) ? " onto [loc]" : ""] with your [G.name].</span>")
 	do_climax(fluid_source, loc, G)
@@ -98,7 +104,7 @@
 	else //knots and other non-spilling orgasms
 		to_chat(src,"<span class='userlove'>You climax with [L], your [G.name] spilling nothing.</span>")
 		to_chat(L,"<span class='userlove'>[src] climaxes with you, [p_their()] [G.name] spilling nothing!</span>")
-	SEND_SIGNAL(L, COMSIG_ADD_MOOD_EVENT, "orgasm", /datum/mood_event/orgasm)
+	SEND_SIGNAL(L, COMSIG_ADD_MOOD_EVENT, "orgasm", /datum/mood_event/orgasm)	//note: look for this mood event
 	do_climax(fluid_source, spillage ? loc : L, G, spillage)
 
 /mob/living/carbon/human/proc/mob_fill_container(obj/item/organ/genital/G, obj/item/reagent_containers/container, mb_time = 30) //For beaker-filling, beware the bartender
@@ -118,11 +124,13 @@
 
 	for(var/obj/item/organ/genital/G in internal_organs)
 		if(CHECK_BITFIELD(G.genital_flags, CAN_CLIMAX_WITH) && G.is_exposed(worn_stuff)) //filter out what you can't masturbate with
+			//this is lame, and there should be some way to ruin your clothes.
+			//(but if this gets backported, nope! that'd be a shit game mechanic.)
 			LAZYADD(genitals_list, G)
 	if(LAZYLEN(genitals_list))
 		var/obj/item/organ/genital/ret_organ = input(src, "with what?", "Climax", null) as null|obj in genitals_list
 		return ret_organ
-	else if(!silent)
+	else if(!silent)	//if its displaying messages, and theres nothing to climax with
 		to_chat(src, "<span class='warning'>You cannot climax without available genitals.</span>")
 
 /mob/living/carbon/human/proc/pick_partner(silent = FALSE)
@@ -134,31 +142,37 @@
 	//Now we got both of them, let's check if they're proper
 	for(var/mob/living/L in partners)
 		if(!L.client || !L.mind) // can't consent, not a partner
-			partners -= L
+			partners -= L //remove from the partners list if it's not a player (or is braindead, i guess)
 		if(iscarbon(L))
 			var/mob/living/carbon/C = L
 			if(!C.exposed_genitals.len && !C.is_groin_exposed() && !C.is_chest_exposed()) //Nothing through_clothing, no proper partner.
+				//if they've got no exposed genitals, and aren't exposing their chest or groin, remove them
+				//smh, clothed sex would be neat, but that's a feature for later.
+				//since it'd require different verbs and probably diff mechanics too.
 				partners -= C
 	//NOW the list should only contain correct partners
-	if(!partners.len)
+	if(!partners.len)	//no partners? stop.
 		if(!silent)
 			to_chat(src, "<span class='warning'>You cannot do this alone.</span>")
 		return //No one left.
 	var/mob/living/target = input(src, "With whom?", "Sexual partner", null) as null|anything in partners //pick one, default to null
 	if(target && in_range(src, target))
-		to_chat(src,"<span class='notice'>Waiting for consent...</span>")
+		to_chat(src,"<span class='notice'>Waiting for consent...</span>")	//THIS IS GOOD AND SMART!!
 		var/consenting = input(target, "Do you want [src] to climax with you?","Climax mechanics","No") in list("Yes","No")
+		//make sure this shit works
 		if(consenting == "Yes")
 			return target
 		else
+			//smart, logging consent issues
 			message_admins("[src] tried to climax with [target], but [target] did not consent.")
 			log_consent("[src] tried to climax with [target], but [target] did not consent.")
 
-/mob/living/carbon/human/proc/pick_climax_container(silent = FALSE)
+/mob/living/carbon/human/proc/pick_climax_container(silent = FALSE)	//when does this get called?
 	var/list/containers_list = list()
 
 	for(var/obj/item/reagent_containers/C in held_items)
 		if(C.is_open_container() || istype(C, /obj/item/reagent_containers/food/snacks))
+			//wait, wouldn't this discount beakers? i don't think they're snack containers, but not sure.
 			containers_list += C
 	for(var/obj/item/reagent_containers/C in range(1, src))
 		if((C.is_open_container() || istype(C, /obj/item/reagent_containers/food/snacks)) && CanReach(C))
@@ -168,7 +182,7 @@
 		var/obj/item/reagent_containers/SC = input(src, "Into or onto what?(Cancel for nowhere)", null)  as null|obj in containers_list
 		if(SC && CanReach(SC))
 			return SC
-	else if(!silent)
+	else if(!silent)	//no containers? tough shit
 		to_chat(src, "<span class='warning'>You cannot do this without an appropriate container.</span>")
 
 /mob/living/carbon/human/proc/available_rosie_palms(silent = FALSE, list/whitelist_typepaths = list(/obj/item/dildo))
@@ -176,19 +190,21 @@
 		if(!silent)
 			to_chat(src, "<span class='warning'>You can't do that while restrained!</span>")
 		return FALSE
-	if(!get_num_arms() || !get_empty_held_indexes())
-		if(whitelist_typepaths)
-			if(!islist(whitelist_typepaths))
-				whitelist_typepaths = list(whitelist_typepaths)
-			for(var/path in whitelist_typepaths)
-				if(is_holding_item_of_type(path))
-					return TRUE
-		if(!silent)
-			to_chat(src, "<span class='warning'>You need at least one free arm.</span>")
-		return FALSE
-	return TRUE
+	if(!get_num_arms() || !get_empty_held_indexes()) //where the fuck is get_num_arms()?? or get_empty_held_indexes()??
+		//I'm assuming that this means if there's no empty hands or you... can't get number of arms???
+		if(whitelist_typepaths) //if there's whitelisted typepaths...
+			if(!islist(whitelist_typepaths)) //(but they aren't a list...)
+				whitelist_typepaths = list(whitelist_typepaths) //(make it a list.)
+			for(var/path in whitelist_typepaths)	//then, for every whitelisted typepath...
+				if(is_holding_item_of_type(path))	//if you're holding it...
+					return TRUE	//that hand is considered free.
+		if(!silent)	//Otherwise, if we're not silent...
+			to_chat(src, "<span class='warning'>You need at least one free arm.</span>")	//tell the user they need to free up a hand.
+		return FALSE //there's no free hands.
+	return TRUE //If there's a free arm, then return true!
 
 //Here's the main proc itself
+//LOOK OVER THIS!!
 /mob/living/carbon/human/proc/mob_climax(forced_climax=FALSE) //Forced is instead of the other proc, makes you cum if you have the tools for it, ignoring restraints
 	if(mb_cd_timer > world.time)
 		if(!forced_climax) //Don't spam the message to the victim if forced to come too fast
@@ -250,6 +266,8 @@
 				return
 			var/obj/item/organ/genital/picked_organ = pick_climax_genitals()
 			if(picked_organ && available_rosie_palms(TRUE))
+				//really should add some flavor text so that it's clear this requires hands
+				//add humping?? that's something to worry about later.
 				mob_climax_outside(picked_organ)
 		if("Climax with partner")
 			//We need no hands, we can be restrained and so on, so let's pick an organ
