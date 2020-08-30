@@ -482,7 +482,9 @@ SUBSYSTEM_DEF(job)
 	if(ishuman(H))
 		var/mob/living/carbon/human/wageslave = H
 		to_chat(M, "<b><span class = 'big'>Your account ID is [wageslave.account_id].</span></b>")
-		H.add_memory("Your account ID is [wageslave.account_id].")
+		//var/datum/memory/idmem = new("Account ID", "Your account ID is [wageslave.account_id].")
+		idmem.change_vals(FALSE,FALSE,FALSE,TRUE,TRUE,FALSE)
+		H.add_memory("Account ID", "Your account ID is [wageslave.account_id].")
 	if(job && H)
 		if(job.dresscodecompliant)// CIT CHANGE - dress code compliance
 			equip_loadout(N, H) // CIT CHANGE - allows players to spawn with loadout items

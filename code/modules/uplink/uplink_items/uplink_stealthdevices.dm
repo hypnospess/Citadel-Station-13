@@ -86,7 +86,7 @@
 		var/text = "Failsafe code for [U.parent] : [U.failsafe_code]"
 		var/datum/memory/failsafemem = new(title, text)
 		failsafemem.antagonize()
-		user.mind.store_memory()
+		user.mind.store_memory(failsafemem)
 	return U.parent //For log icon
 
 /datum/uplink_item/stealthy_tools/mulligan

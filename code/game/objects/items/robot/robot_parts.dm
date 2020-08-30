@@ -303,7 +303,7 @@
 				var/memcont = "As a cyborg, you must obey your silicon laws and master AI above all else. Your objectives will consider you to be dead."
 				cymem = new(memtitle, memcont)
 				cymem.traumatize()
-				O.mind.store_memory()
+				O.mind.store_memory(cymem)
 				to_chat(O, "<span class='userdanger'>You have been robotized!</span>")
 				to_chat(O, "<span class='danger'>You must obey your silicon laws and master AI above all else. Your objectives will consider you to be dead.</span>")
 
