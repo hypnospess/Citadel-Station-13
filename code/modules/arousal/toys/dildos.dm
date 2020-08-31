@@ -1,6 +1,8 @@
 //////////
 //DILDOS//
 //////////
+
+//ADD MORE TOYS!!
 /obj/item/dildo
 	name 				= "dildo"
 	desc 				= "Floppy!"

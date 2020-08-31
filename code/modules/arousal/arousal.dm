@@ -42,7 +42,7 @@
 		return // no adjusting made here
 	for(var/obj/item/organ/genital/G in internal_organs)
 		if(G.genital_flags & GENITAL_CAN_AROUSE && !G.aroused_state && prob(strength*G.sensitivity))
-			G.set_aroused_state(strength > 0)	//the fuck does this do, doesn't it take a boolean?
+			G.set_aroused_state(strength > 0)	//oh i see, set to the result of strength > 0
 			G.update_appearance()
 			if(G.aroused_state)
 				genit_list += G

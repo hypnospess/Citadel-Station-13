@@ -116,6 +116,8 @@
 
 /mob/living/carbon/verb/toggle_arousal_state()
 	//arousal damage? hmm
+	//if we add arousal damage, make this toggle displaying those effects,
+	//rather than a binary yes/no option
 	set category = "IC"
 	set name = "Toggle genital arousal"
 	set desc = "Allows you to toggle which genitals are showing signs of arousal."
@@ -146,11 +148,12 @@
 	return
 
 /obj/item/organ/genital/proc/update_size()
-	return
+	return	//what the fuck is the point of this
 
 /obj/item/organ/genital/proc/update_appearance()
 	if(!owner || owner.stat == DEAD)
 		aroused_state = FALSE
+	//what the fuck is the point of this?
 
 /obj/item/organ/genital/on_life()
 	. = ..()
@@ -166,6 +169,7 @@
 	R.add_reagent(fluid_id,amount)
 	return TRUE
 
+//these next two procs should probably be reworked
 /obj/item/organ/genital/proc/update_link()
 	if(owner)
 		if(linked_organ)
@@ -185,6 +189,7 @@
 /obj/item/organ/genital/proc/upon_link()
 	return
 
+//fuck it i'm just assuming this one works right
 /obj/item/organ/genital/Insert(mob/living/carbon/M, special = FALSE, drop_if_replaced = TRUE)
 	. = ..()
 	if(.)
@@ -194,6 +199,7 @@
 			owner.exposed_genitals += src
 
 /obj/item/organ/genital/Remove(special = FALSE)
+	//bhijn help
 	. = ..()
 	var/mob/living/carbon/C = .
 	update()
@@ -231,7 +237,7 @@
 	return G
 
 /obj/item/organ/genital/proc/get_features(mob/living/carbon/human/H)
-	return
+	return	//what is the point of this???
 
 
 //procs to handle sprite overlays being applied to humans
@@ -239,11 +245,14 @@
 /mob/living/carbon/human/equip_to_slot(obj/item/I, slot)
 	. = ..()
 	if(!. && I && slot && !(slot in GLOB.no_genitals_update_slots)) //the item was successfully equipped, and the chosen slot wasn't merely storage, hands or cuffs.
+		//what the fuck is that conditional. this can be written to make more sense
 		update_genitals()
 
 /mob/living/carbon/human/doUnEquip(obj/item/I, force, newloc, no_move, invdrop = TRUE)
 	var/no_update = FALSE
 	if(!I || I == l_store || I == r_store || I == s_store || I == handcuffed || I == legcuffed || get_held_index_of_item(I)) //stops storages, cuffs and held items from triggering it.
+		//oh my fucking god. there's gotta be a better way to do this.
+		//maybe like a... "don't unequip" list
 		no_update = TRUE
 	. = ..()
 	if(!. || no_update)
@@ -251,6 +260,7 @@
 	update_genitals()
 
 /mob/living/carbon/human/proc/update_genitals()
+	//okay well, fuck, look at this in more detail later
 	if(QDELETED(src))
 		return
 	var/static/list/relevant_layers = list("[GENITALS_BEHIND_LAYER]" = "BEHIND", "[GENITALS_FRONT_LAYER]" = "FRONT")
@@ -269,7 +279,7 @@
 	var/list/gen_index[GENITAL_LAYER_INDEX_LENGTH]
 	var/list/genitals_to_add
 	var/list/fully_exposed
-	for(var/obj/item/organ/genital/G in internal_organs)
+	for(var/obj/item/organ/genital/G in i	nternal_organs)
 		if(G.is_exposed()) //Checks appropriate clothing slot and if it's through_clothes
 			LAZYADD(gen_index[G.layer_index], G)
 	for(var/L in gen_index)
