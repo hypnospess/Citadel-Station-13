@@ -1,0 +1,44 @@
+store undies
+toggle undies verb
+adjust arousal
+do a climax
+do a climax, but,, forced
+do a climax, but with someone
+do a climax, but in a jar
+
+okay but like, do the climax for real tho
+
+	select genitals that can climax validly
+	pick valid partners to do a climax with
+	pick a valid container to do a climax into
+	check to see if you can touch yourself
+
+things genitals must do:
+initialize
+manage their arousal level?? //why is this not handled by the arousal stuff???	
+	check if it is exposed
+toggle its own visibility
+modify its own size
+	Update its own size?? but the method does nothing and just returns
+update appearance?? (but it literally just makes your boner go away if you're dead)
+
+
+toggle visibility verb
+toggle displayed arousal verb
+
+bonus round: why the fuck is lactation tied to arousal?
+proposed solution to this bullshit: new genital subtypes! 
+	fluid holding (balls, tits): simply holds reagents, renders
+	fluid ejecting (cock, nips): can pull from any reagent holding genital in theory, allowing for some interesting stuff. renders
+	hole (vag, sheath, anus, womb): it's a hole, it might display, it might not.
+	lump (prostate): it's just a pleasure button
+
+	holes can store 1 small-medium sized item
+		faster reagent metabolism through them (rate controlled through var)
+		come in regular and "deep" varieties, it takes longer to put in/get out an item from a deep hole
+
+	fluid holding holds a reagent or mixture of reagents (in a ratio)
+	thats it thats all they do
+
+	ejecting links to a holding and releases it based on specific situations defined in the specific one
+

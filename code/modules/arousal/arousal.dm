@@ -28,7 +28,7 @@
 		hidden_socks = !hidden_socks
 
 	if(confirm == "All")
-		var/on_off = (hidden_undershirt || hidden_underwear || hidden_socks) ? FALSE : TRUE
+		var/on_off = (hidden_undershirt || hidden_underwear || hidden_socks) ? FALSE : TRUE //the fuck
 		hidden_undershirt = on_off
 		hidden_underwear = on_off
 		hidden_socks = on_off
