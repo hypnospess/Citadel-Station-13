@@ -21,7 +21,7 @@
 		if((fermi_Clone && fermi_Clone.stat != DEAD) || (fermi_Clone == null))
 			if(originalmind)
 				owner.remove_status_effect(src)
-	..()
+	..() 
 
 /datum/status_effect/chem/SGDF/on_remove()
 	log_reagent("FERMICHEM: SGDF mind shift applied. [owner] is now playing as their clone and should not have memories after their clone split (look up SGDF status applied). ID: [owner.key]")
