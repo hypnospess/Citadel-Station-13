@@ -9,7 +9,7 @@
 
 	Compulsions are an extended effect! Think of them more like a task that requires involvement.
 	They can be resist-mashed out of.
-	
+
 	Basically, if it's something that can be done on the spot, it's a command.
 	If it's something that requires movement or significant involvement,
 	or ACTIVE ROLEPLAY on the part of the victim, it's a compulsion.
@@ -52,3 +52,7 @@
 
 	//deepest commands
 	//none yet
+
+	//constructor goes here
+	
+	//listen method goes here (it returns the state.)
