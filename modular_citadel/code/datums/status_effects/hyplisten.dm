@@ -18,9 +18,10 @@
 //here are the behavior states involved:
 #define DEFAULT = 0 //the standard case, nothing happens.
 
-/datum/hyplistener
+/datum/component/hyplistener
 	var/outputstate = DEFAULT //this is what actually determines what should be happening. It will be returned.
-	
+	var/mob/living/carbon/listener //this is the mob that this is attached to.
+	var/status_effect/hypno/effect //this is the status effect that this is attached to
 	
 	
 	//earlystage commands (mostly aesthetic, with a few exceptions)
@@ -55,4 +56,10 @@
 
 	//constructor goes here
 	
-	//listen method goes here (it returns the state.)
+	/datum/component/hyplistener/Initialize()	//this is probably not gonna be the final init i am just putting it here for now
+		if(!parent)
+			return COMPONENT_INCOMPATIBLE
+
+		RegisterSignal(parent,COMSIG_MOVABLE_HEAR, .proc/parse)
+
+	/datum/component/hyplistener/proc/parse()
