@@ -62,6 +62,8 @@
 
 		RegisterSignal(parent, COMSIG_MOVABLE_HEAR, .proc/parse)
 
+	//at some point i need to unregister the signal, i think?? like when it gets delet.
+
 	/datum/component/hyplistener/proc/parse()
 		//this proc does all of the parsing!
 		//these should eventually be re-ordered in terms of reverse priority.
