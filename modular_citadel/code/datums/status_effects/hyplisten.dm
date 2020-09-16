@@ -22,7 +22,6 @@
 	var/outputstate = DEFAULT_HYPLISTEN_STATUS //this is what actually determines what should be happening. It will be returned.
 	var/mob/living/carbon/listener //this is the mob that this is attached to.
 	var/status_effect/hypno/effect //this is the status effect that this is attached to
-	var/descadd //additional description stuff
 	
 	
 	//earlystage commands (mostly aesthetic, with a few exceptions)
@@ -65,7 +64,25 @@
 
 	/datum/component/hyplistener/proc/parse()
 		//this proc does all of the parsing!
+		//these should eventually be re-ordered in terms of reverse priority.
+		//eg: things that override other things come later.		
 		
 		//simple commands
-		//Smile
+		//Smile (state 1)
 		if(findtext(HEARING_RAW_MESSAGE, smile_words))
+			outputstate = 1
+		//laugh (state 2)
+		if(findtext(HEARING_RAW_MESSAGE, laugh_words))
+			outputstate = 2
+		//drool (state 3)
+		if(findtext(HEARING_RAW_MESSGE, drool_words))
+			outputstate = 3
+		//lay down (state 4)
+		if(findtext(HEARING_RAW_MESSGE, lay_words))
+			outputstate = 4
+		//relax (state 5)
+		if(findtext(HEARING_RAW_MESSGE, relax_words))
+			outputstate = 5
+
+	/datum/component/hyplistener/proc/getState()
+		return outputstate
