@@ -16,12 +16,13 @@
 */
 
 //here are the behavior states involved:
-#define DEFAULT = 0 //the standard case, nothing happens.
+#define DEFAULT_HYPLISTEN_STATUS = 0 //the standard case, nothing happens.
 
 /datum/component/hyplistener
-	var/outputstate = DEFAULT //this is what actually determines what should be happening. It will be returned.
+	var/outputstate = DEFAULT_HYPLISTEN_STATUS //this is what actually determines what should be happening. It will be returned.
 	var/mob/living/carbon/listener //this is the mob that this is attached to.
 	var/status_effect/hypno/effect //this is the status effect that this is attached to
+	var/descadd //additional description stuff
 	
 	
 	//earlystage commands (mostly aesthetic, with a few exceptions)
@@ -60,6 +61,11 @@
 		if(!parent)
 			return COMPONENT_INCOMPATIBLE
 
-		RegisterSignal(parent,COMSIG_MOVABLE_HEAR, .proc/parse)
+		RegisterSignal(parent, COMSIG_MOVABLE_HEAR, .proc/parse)
 
 	/datum/component/hyplistener/proc/parse()
+		//this proc does all of the parsing!
+		
+		//simple commands
+		//Smile
+		if(findtext(HEARING_RAW_MESSAGE, smile_words))
