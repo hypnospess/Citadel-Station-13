@@ -13,6 +13,14 @@
 	Basically, if it's something that can be done on the spot, it's a command.
 	If it's something that requires movement or significant involvement,
 	or ACTIVE ROLEPLAY on the part of the victim, it's a compulsion.
+
+	OKAY CONCEPT: AID IS GOTTEN THROUGH A SIGNAL!!
+	when someone is targeting something with an aid (or it just... is on them)
+	it tells the mob to send a TRANCE_AID_ADD signal
+	with a little indicator of what the aid is
+	and when it's removed it makes the mob send a TRANCE_AID_REMOVE signal! 
+	(again, indicating what the aid is is.)
+	the signals will also send the scale modifier amount.
 */
 
 //here are the behavior states involved:
@@ -30,6 +38,8 @@
 	var/static/regex/drool_words = regex("drool|drip|salivate|saliva|dribble")
 	var/static/regex/lay_words = regex("lie down|lay down|recline|on the floor|on the ground|kneel|on your knees|on all fours")
 	var/static/regex/relax_words = regex("relax|loose|limp|sink|slip|deep|drift")
+	var/static/regex/atease_words = regex("at ease|stop|back to normal")
+	var/static/regex/scale_words = regex("how deep|how hypnotized|scale")
 	//more eventually
 
 	//earlystage compulsions (simple compulsions to act, very easy to comprehend)
@@ -56,13 +66,17 @@
 
 	//constructor goes here
 	
-	/datum/component/hyplistener/Initialize()	//this is probably not gonna be the final init i am just putting it here for now
-		if(!parent)
+	/datum/component/hyplistener/Initialize(linked_effect)	//this is probably not gonna be the final init i am just putting it here for now
+		if(!parent||!linked_effect)
 			return COMPONENT_INCOMPATIBLE
-
+		effect = linked_effect
 		RegisterSignal(parent, COMSIG_MOVABLE_HEAR, .proc/parse)
 
 	//at some point i need to unregister the signal, i think?? like when it gets delet.
+	/datum/component/hyplistener/Destroy()
+		. = ..() //haha hope this works :D
+		UnregisterSignal(parent, COMSIG_MOVABLE_HEAR)
+		return
 
 	/datum/component/hyplistener/proc/parse()
 		//this proc does all of the parsing!
@@ -85,6 +99,12 @@
 		//relax (state 5)
 		if(findtext(HEARING_RAW_MESSGE, relax_words))
 			outputstate = 5
+		//at ease (return to normal desc) (state 6)
+		if(findtext(HEARING_RAW_MESSAGE,atease_words))
+			outputstate = 6
+		//scale (state 7)
+		if(findtext(HEARING_RAW_MESSAGE,scale_words))
+			outputstate = 7
 
 	/datum/component/hyplistener/proc/getState()
 		return outputstate
