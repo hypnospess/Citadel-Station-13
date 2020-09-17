@@ -24,6 +24,8 @@
 
 	var/ticks_since_last_resist = 0 //how long ago the last resist was
 	var/ticks_since_last_relax = 0 //how long ago was the last relaxation
+	var/delta_resist = FALSE //has sub already resisted this tick?
+
 	/*
 		TRANCE AIDS:
 		basically, things that help u go into trance, outside of the effect.
@@ -54,6 +56,8 @@
 		HyL = new hyplistener(sub, src)
 		if (!HyL)
 			return FALSE
+		//hope i put this in the right place aahahah,,
+		RegisterSignal(owner, COMSIG_LIVING_RESIST, .proc/do_resistance)
 		return
 		
 
@@ -64,6 +68,7 @@
 		. = ..()
 		//uhh, get rid of the component.
 		HyL.Destroy() //is this how you do it???
+		UnregisterSignal(owner, COMSIG_LIVING_RESIST)
 
 	//tick!!
 	/datum/status_effect/hypno/proc/tick()
@@ -72,6 +77,11 @@
 		//do effect stuff
 		//do math
 		//remove if the scale is 0 or less
+
+		//end of tick cleanup!
+		do_relaxation(FALSE)
+		do_resistance(FALSE)
+		delta_resist = FALSE
 
 	//here be other procs
 	/datum/status_effect/hypno/proc/check_aids()
@@ -93,8 +103,21 @@
 
 	//make sure resistance doesn't go above cap. also check if we should be adding. 
 	//also reduce resistance if there's been a while since last resist
-	/datum/status_effect/hypno/proc/do_resistance()
-		return resist_amt
+	/datum/status_effect/hypno/proc/do_resistance(var/uptick = TRUE)
+		var/resisted = FALSE
+		if(uptick)
+			if(!delta_resist) //if we havent resisted this tick
+				resist_amt += 1
+				delta_resist = TRUE //we have now resisted
+				resisted = TRUE
+		if (resist_amt > resist_cap) //don't go over the cap
+			resist_amt = resist_cap
+		if(resisted || delta_resist) //if we've resisted this tick:
+			ticks_since_last_resist = 0
+		if(ticks_since_last_resist >= 5) //if it's been 5 ticks since last resist
+			resist_amt -= 1
+			ticks_since_last_resist -= 3
+		return resisted
 	
 	//make sure relaxation doesn't go above the cap.
 	//also increase relaxation if need be.
