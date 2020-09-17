@@ -2,12 +2,12 @@
 	/*
 		Actually, we do aids through signals that hyplistener picks up, we'll figure that out later.
 	*/
-	var/id = "hypno"
-	var/alert_type = null
-	var/on_remove_on_mob_delete = TRUE
-	var/examine_text = "[SUBJECTPRONOUN] looks a bit woozy."
-	var/blocks_combatmode = TRUE //this may change if it's stupid
-	var/status_type = STATUS_EFFECT_UNIQUE
+	id = "hypno"
+	alert_type = null
+	on_remove_on_mob_delete = TRUE
+	examine_text = "They look a bit woozy."
+	blocks_combatmode = TRUE //this may change if it's stupid
+	status_type = STATUS_EFFECT_UNIQUE
 	tick_interval = 2
 	
 	var/scale = 10 //deepness level from 100 (fully entranced) to 0 (fully awake)
@@ -38,8 +38,8 @@
 	var/last_state = 0 //the last unique state returned by the HL
 	var/current_state = 0 //the current state as given by the HL
 
-	var/datum/mob/living/carbon/sub //the actual subject!
 	//friendly reminder to self: owner is the person who has the effect.
+	var/mob/living/carbon/sub //the subject!
 	var/datum/component/hyplistener/HyL //the hyplistener
 
 	/*
@@ -48,14 +48,14 @@
 	*/
 
 	//on_apply setup
-	/datum/status_effect/hypno/proc/on_apply() 
+	/datum/status_effect/hypno/on_apply() 
 		. = ..()
 		if(!(istype(owner, sub))) //god i hope this works! :D
 			return FALSE
 			//output something saying "whoopsie, not living carbon"
 		sub = owner
 		check_aids()
-		HyL = new hyplistener(sub, src)
+		HyL = new(sub, src)
 		if (!HyL)
 			return FALSE
 		//hope i put this in the right place aahahah,,
@@ -66,7 +66,7 @@
 	//before_remove setup?? idk
 
 	//on_remove setup
-	/datum/status_effect/hypno/proc/on_remove()
+	/datum/status_effect/hypno/on_remove()
 		. = ..()
 		//uhh, get rid of the component.
 		qdel(HyL) //is this how you do it???
@@ -76,9 +76,9 @@
 	//  tick!!  //
 	//////////////
 
-	/datum/status_effect/hypno/proc/tick()
+	/datum/status_effect/hypno/tick()
 		//check state and perform accordingly
-		handle_effect(HyL.getState)
+		handle_effect(HyL.getState())
 
 		//do laughter stuff
 		if(laughTimer)
@@ -161,10 +161,10 @@
 		if(compare_state(statusCode))
 			switch(statusCode)
 				if(1) //smile! :D
-					examine_text = "[SUBJECTPRONOUN] is smiling widely. They're probably just happy to be here."
+					examine_text = "They're smiling widely. They're probably just happy to be here."
 					//do a visual message to everyone nearby!
 					if(!isSmiling)
-						owner.visual_message("[owner.real_name] starts to grin happily! It looks like they're having a really good time.", "You smile as widely as you can! This is the happiest you've been in a long time.")
+						owner.visible_message("[owner.real_name] starts to grin happily! It looks like they're having a really good time.", "You smile as widely as you can! This is the happiest you've been in a long time.")
 						isSmiling = TRUE
 				if(2) //laugh! :D
 					if(laughTimer == 0)

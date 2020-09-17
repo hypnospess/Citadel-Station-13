@@ -23,13 +23,11 @@
 	the signals will also send the scale modifier amount.
 */
 
-//here are the behavior states involved:
-#define DEFAULT_HYPLISTEN_STATUS = 0 //the standard case, nothing happens.
 
 /datum/component/hyplistener
-	var/outputstate = DEFAULT_HYPLISTEN_STATUS //this is what actually determines what should be happening. It will be returned.
+	var/outputstate = 0 //this is what actually determines what should be happening. It will be returned.
 	var/mob/living/carbon/listener //this is the mob that this is attached to.
-	var/status_effect/hypno/effect //this is the status effect that this is attached to
+	var/datum/status_effect/hypno/effect //this is the status effect that this is attached to
 	
 	
 	//earlystage commands (mostly aesthetic, with a few exceptions)
@@ -91,13 +89,13 @@
 		if(findtext(HEARING_RAW_MESSAGE, laugh_words))
 			outputstate = 2
 		//drool (state 3)
-		if(findtext(HEARING_RAW_MESSGE, drool_words))
+		if(findtext(HEARING_RAW_MESSAGE, drool_words))
 			outputstate = 3
 		//lay down (state 4)
-		if(findtext(HEARING_RAW_MESSGE, lay_words))
+		if(findtext(HEARING_RAW_MESSAGE, lay_words))
 			outputstate = 4
 		//relax (state 5)
-		if(findtext(HEARING_RAW_MESSGE, relax_words))
+		if(findtext(HEARING_RAW_MESSAGE, relax_words))
 			outputstate = 5
 		//at ease (return to normal desc) (state 6)
 		if(findtext(HEARING_RAW_MESSAGE,atease_words))
