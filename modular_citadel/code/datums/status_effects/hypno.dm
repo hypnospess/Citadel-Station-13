@@ -131,7 +131,7 @@
 			resist_amt = resist_cap
 		if(resisted || delta_resist) //if we've resisted this tick:
 			ticks_since_last_resist = 0
-		if(ticks_since_last_resist >= 25) //if it's been 5 seconds since last resist
+		if(ticks_since_last_resist >= 25 && resist_amt > 0) //if it's been 5 seconds since last resist
 			resist_amt -= 1
 			ticks_since_last_resist -= 10 //2 sec til next delet
 		return resisted
@@ -150,11 +150,11 @@
 		if(relaxed)
 			ticks_since_last_relax = 0
 		//if it's been 15 ticks since last relaxation:
-		if(ticks_since_last_relax >= 300)	//one minute without relax
+		if(ticks_since_last_relax >= 300 && relax_amt > 0)	//one minute without relax
 			relax_amt -= 1
 			ticks_since_last_relax -= 75 //15 sec until next delet
 		return relaxed
-
+	//handles the listener input
 	/datum/status_effect/hypno/proc/handle_effect(var/statusCode)
 		if(!statusCode)
 			return	//default case of 0, nothing happens.
@@ -170,7 +170,12 @@
 					if(laughTimer == 0)
 						owner.audible_message("[owner.real_name] begins to giggle!", "Everything seems really funny all of the sudden!")
 						laughTimer = 150
-
+				if(5) //skipping straight to relax for now
+					do_relaxation(TRUE)
+					to_chat(owner, "You relax a little bit.")
+				if(7) //again, skipping to scale for now
+					owner.say("[scale].")
+	//compares a given state to the last state recieved
 	/datum/status_effect/hypno/proc/compare_state(var/inState)
 		//if the new state is the same as the old state, return false
 		//if the new state is different from the old state, return true. then make the new state the old state.
