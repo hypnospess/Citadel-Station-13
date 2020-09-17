@@ -206,6 +206,9 @@
 		I.ui_action_click(owner, src)
 	return 1
 
+/datum/action/item_action/togglevisor
+	name = "Toggle Visor"
+
 /datum/action/item_action/toggle_light
 	name = "Toggle Light"
 
