@@ -106,16 +106,17 @@
 	//here be other procs//
 	///////////////////////
 
-	/datum/status_effect/hypno/proc/check_aids()
-		//haha do nothing for now lmaooooo
-		//it will add to the list of trance aids present in the environment
-		return
-	/datum/status_effect/hypno/proc/aid_setup()
-		//haha do nothing for now
-		//will do aid setup
-		//sum aid scale buffs
-		//add to default max to make scale cap
-		return
+/datum/status_effect/hypno/proc/check_aids()
+	//haha do nothing for now lmaooooo
+	//it will add to the list of trance aids present in the environment
+	return
+
+/datum/status_effect/hypno/proc/aid_setup()
+	//haha do nothing for now
+	//will do aid setup
+	//sum aid scale buffs
+	//add to default max to make scale cap
+	return
 
 	//does math to determine the new scale
 /datum/status_effect/hypno/proc/change_scale()
