@@ -64,45 +64,45 @@
 
 	//constructor goes here
 	
-	/datum/component/hyplistener/Initialize(linked_effect)	//this is probably not gonna be the final init i am just putting it here for now
-		if(!parent||!linked_effect)
-			return COMPONENT_INCOMPATIBLE
-		effect = linked_effect
-		RegisterSignal(parent, COMSIG_MOVABLE_HEAR, .proc/parse)
+/datum/component/hyplistener/Initialize(linked_effect)	//this is probably not gonna be the final init i am just putting it here for now
+	if(!parent||!linked_effect)
+		return COMPONENT_INCOMPATIBLE
+	effect = linked_effect
+	RegisterSignal(parent, COMSIG_MOVABLE_HEAR, .proc/parse)
 
-	//at some point i need to unregister the signal, i think?? like when it gets delet.
-	/datum/component/hyplistener/Destroy()
-		. = ..() //haha hope this works :D
-		UnregisterSignal(parent, COMSIG_MOVABLE_HEAR)
-		return
+//at some point i need to unregister the signal, i think?? like when it gets delet.
+/datum/component/hyplistener/Destroy()
+	. = ..() //haha hope this works :D
+	UnregisterSignal(parent, COMSIG_MOVABLE_HEAR)
+	return
 
-	/datum/component/hyplistener/proc/parse()
-		//this proc does all of the parsing!
-		//these should eventually be re-ordered in terms of reverse priority.
-		//eg: things that override other things come later.		
-		
-		//simple commands
-		//Smile (state 1)
-		if(findtext(HEARING_RAW_MESSAGE, smile_words))
-			outputstate = 1
-		//laugh (state 2)
-		if(findtext(HEARING_RAW_MESSAGE, laugh_words))
-			outputstate = 2
-		//drool (state 3)
-		if(findtext(HEARING_RAW_MESSAGE, drool_words))
-			outputstate = 3
-		//lay down (state 4)
-		if(findtext(HEARING_RAW_MESSAGE, lay_words))
-			outputstate = 4
-		//relax (state 5)
-		if(findtext(HEARING_RAW_MESSAGE, relax_words))
-			outputstate = 5
-		//at ease (return to normal desc) (state 6)
-		if(findtext(HEARING_RAW_MESSAGE,atease_words))
-			outputstate = 6
-		//scale (state 7)
-		if(findtext(HEARING_RAW_MESSAGE,scale_words))
-			outputstate = 7
+/datum/component/hyplistener/proc/parse()
+	//this proc does all of the parsing!
+	//these should eventually be re-ordered in terms of reverse priority.
+	//eg: things that override other things come later.		
+	
+	//simple commands
+	//Smile (state 1)
+	if(findtext(HEARING_RAW_MESSAGE, smile_words))
+		outputstate = 1
+	//laugh (state 2)
+	if(findtext(HEARING_RAW_MESSAGE, laugh_words))
+		outputstate = 2
+	//drool (state 3)
+	if(findtext(HEARING_RAW_MESSAGE, drool_words))
+		outputstate = 3
+	//lay down (state 4)
+	if(findtext(HEARING_RAW_MESSAGE, lay_words))
+		outputstate = 4
+	//relax (state 5)
+	if(findtext(HEARING_RAW_MESSAGE, relax_words))
+		outputstate = 5
+	//at ease (return to normal desc) (state 6)
+	if(findtext(HEARING_RAW_MESSAGE,atease_words))
+		outputstate = 6
+	//scale (state 7)
+	if(findtext(HEARING_RAW_MESSAGE,scale_words))
+		outputstate = 7
 
-	/datum/component/hyplistener/proc/getState()
-		return outputstate
+/datum/component/hyplistener/proc/getState()
+	return outputstate
