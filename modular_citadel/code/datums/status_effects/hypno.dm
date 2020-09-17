@@ -8,7 +8,7 @@
 	var/examine_text = "[SUBJECTPRONOUN] looks a bit woozy."
 	var/blocks_combatmode = TRUE //this may change if it's stupid
 	var/status_type = STATUS_EFFECT_UNIQUE
-	//examine_text TODO
+	tick_interval = 2
 	
 	var/scale = 10 //deepness level from 100 (fully entranced) to 0 (fully awake)
 	var/resist_amt = 0 //amount of resistance (increased by pressing resist.)
@@ -72,15 +72,17 @@
 
 	//tick!!
 	/datum/status_effect/hypno/proc/tick()
-		//this be where things be done
-		//check to see if owner is resisting
 		//do effect stuff
+
 		//do math
+		change_scale()
 		//remove if the scale is 0 or less
 
 		//end of tick cleanup!
-		do_relaxation(FALSE)
-		do_resistance(FALSE)
+		if(!do_relaxation(FALSE))
+			ticks_since_last_relax += 1
+		if(!do_resistance(FALSE))
+			ticks_since_last_resist += 1
 		delta_resist = FALSE
 
 	//here be other procs
@@ -114,9 +116,9 @@
 			resist_amt = resist_cap
 		if(resisted || delta_resist) //if we've resisted this tick:
 			ticks_since_last_resist = 0
-		if(ticks_since_last_resist >= 5) //if it's been 5 ticks since last resist
+		if(ticks_since_last_resist >= 25) //if it's been 5 seconds since last resist
 			resist_amt -= 1
-			ticks_since_last_resist -= 3
+			ticks_since_last_resist -= 10 //2 sec til next delet
 		return resisted
 	
 	//make sure relaxation doesn't go above the cap.
@@ -135,7 +137,7 @@
 		if(relaxed)
 			ticks_since_last_relax = 0
 		//if it's been 15 ticks since last relaxation:
-		if(ticks_since_last_relax >= 15)
+		if(ticks_since_last_relax >= 300)	//one minute without relax
 			relax_amt -= 1
-			ticks_since_last_relax -= 5
+			ticks_since_last_relax -= 75 //15 sec until next delet
 		return relaxed
