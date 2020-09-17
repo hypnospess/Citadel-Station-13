@@ -99,3 +99,19 @@
 	name = "dancefloor"
 	desc = "Funky floor."
 	coloredlights = list("dancefloor_B")
+
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure1
+	name = "dancefloor"
+	desc = "Hypnotic floor."
+	coloredlights = list("dancefloor_lunarlure1")
+
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure2
+	name = "dancefloor"
+	desc = "Hypnotic floor."
+	coloredlights = list("dancefloor_lunarlure2")
+
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure3
+	name = "dancefloor"
+	desc = "Hypnotic floor."
+	coloredlights = list("dancefloor_lunarlure3")
+

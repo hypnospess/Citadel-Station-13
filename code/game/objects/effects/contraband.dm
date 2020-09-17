@@ -486,6 +486,16 @@
 	desc = "A neon sign from the Lunar Lure, promising that \"good boys drink free\". An odd promise for those unfamiliar with the establishment."
 	icon_state = "lunarlure2"
 
+/obj/structure/sign/poster/contraband/lunarlure_3
+	name = "Indulge, Relax, Let Go"
+	desc = "A neon sign from the Lunar Lure, urging their patrons to indulge, relax, and let go. Sound advice."
+	icon_state = "lunarlure3"
+
+/obj/structure/sign/poster/contraband/lunarlure_4
+	name = "Dance, Forget..."
+	desc = "A shimmering, dazzling poster that encourages Lure patrons to lose themselves to the music."
+	icon_state = "lunarlure4"
+
 /obj/structure/sign/poster/official
 	poster_item_name = "motivational poster"
 	poster_item_desc = "An official Nanotrasen-issued poster to foster a compliant and obedient workforce. It comes with state-of-the-art adhesive backing, for easy pinning to any vertical surface."

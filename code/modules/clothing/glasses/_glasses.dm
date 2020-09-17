@@ -456,33 +456,33 @@
 	icon_state = "hypnovisor"
 	item_state = "hypnovisor"
 	var/visor_toggled = FALSE
+	actions_types = list(/datum/action/item_action/togglevisor)
 
-	/obj/item/clothing/glasses/hypnovisor/lurevisor
+/obj/item/clothing/glasses/hypnovisor/lurevisor
 	name = "hypnotic visor"
 	desc = "A FausTech hypnotic visor, specially programmed for Lunar Lure staff training."
 	icon_state = "lurevisor"
 	item_state = "lurevisor"
 	visor_toggled = FALSE
 
+/obj/item/clothing/glasses/hypnovisor/ui_action_click(mob/user, actiontype)
+	togglevisor(user)
+
 /obj/item/clothing/glasses/hypnovisor/proc/togglevisor(mob/living/user)
-	if (user && user.incapacitated())
-		return
 	visor_toggled = !visor_toggled
 	if (!visor_toggled)
 		src.icon_state = initial(icon_state)
 		to_chat(user, "<span class ='notice'>You switch the visor off.</span>")
+		update_icon()
 		//no hypno
 	else
 		icon_state += "_on"
 		to_chat(user, "<span class ='notice'>You switch the visor on.</span>")
+		update_icon()
 		//yes hypno
-
-/obj/item/clothing/glasses/hypnovisor/AltClick(mob/user)
-	. = ..()
-	if (!user.canUseTopic(src, BE_CLOSE, ismonkey(user)))
-		return
-	togglevisor(user)
-	return TRUE
+	if(iscarbon(user))
+		var/mob/living/carbon/C = user
+		C.head_update(src, forced = 1)
 
 /obj/item/clothing/glasses/godeye
 	name = "eye of god"
