@@ -69,7 +69,7 @@
 	/datum/status_effect/hypno/proc/on_remove()
 		. = ..()
 		//uhh, get rid of the component.
-		HyL.Destroy() //is this how you do it???
+		qdel(HyL) //is this how you do it???
 		UnregisterSignal(owner, COMSIG_LIVING_RESIST)
 
 	//////////////
