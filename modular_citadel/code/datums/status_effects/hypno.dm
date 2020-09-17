@@ -48,8 +48,9 @@
 	*/
 
 	//on_apply setup
-/datum/status_effect/hypno/on_apply() 
-	if(!(istype(owner, sub))) //god i hope this works! :D
+/datum/status_effect/hypno/on_apply()
+	. = ..()
+	if(!iscarbon(owner)) //god i hope this works! :D
 		return FALSE
 		//output something saying "whoopsie, not living carbon"
 	sub = owner
@@ -59,11 +60,6 @@
 		return FALSE
 	//hope i put this in the right place aahahah,,
 	RegisterSignal(owner, COMSIG_LIVING_RESIST, .proc/do_resistance)
-	SHOULD_CALL_PARENT(TRUE)
-	if(blocks_combatmode)
-		ADD_TRAIT(owner, TRAIT_COMBAT_MODE_LOCKED, src)
-	if(blocks_sprint)
-		ADD_TRAIT(owner, TRAIT_SPRINT_LOCKED, src)
 	return TRUE
 		
 
