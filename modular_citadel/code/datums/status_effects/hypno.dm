@@ -26,6 +26,8 @@
 	var/ticks_since_last_relax = 0 //how long ago was the last relaxation
 	var/delta_resist = FALSE //has sub already resisted this tick?
 
+	var/isSmiling = FALSE
+	var/laughTimer = 0 //amount of ticks until laughter is done
 	/*
 		TRANCE AIDS:
 		basically, things that help u go into trance, outside of the effect.
@@ -70,9 +72,20 @@
 		HyL.Destroy() //is this how you do it???
 		UnregisterSignal(owner, COMSIG_LIVING_RESIST)
 
-	//tick!!
+	//////////////
+	//  tick!!  //
+	//////////////
+
 	/datum/status_effect/hypno/proc/tick()
-		//do effect stuff
+		//check state and perform accordingly
+		handle_effect(HyL.getState)
+
+		//do laughter stuff
+		if(laughTimer)
+			var/laughprob = rand(1,10)
+			if(laughprob == 10)
+				owner.say(pick("Hahaha!","Hee Hee!","Pffft~","Hehehe!","Ahahah!"))
+			laughTimer -= 1
 
 		//do math
 		change_scale()
@@ -85,7 +98,10 @@
 			ticks_since_last_resist += 1
 		delta_resist = FALSE
 
-	//here be other procs
+	///////////////////////
+	//here be other procs//
+	///////////////////////
+
 	/datum/status_effect/hypno/proc/check_aids()
 		//haha do nothing for now lmaooooo
 		//it will add to the list of trance aids present in the environment
@@ -103,8 +119,7 @@
 		scale += delta_scale
 		return scale
 
-	//make sure resistance doesn't go above cap. also check if we should be adding. 
-	//also reduce resistance if there's been a while since last resist
+	//updates resistance
 	/datum/status_effect/hypno/proc/do_resistance(var/uptick = TRUE)
 		var/resisted = FALSE
 		if(uptick)
@@ -121,9 +136,7 @@
 			ticks_since_last_resist -= 10 //2 sec til next delet
 		return resisted
 	
-	//make sure relaxation doesn't go above the cap.
-	//also increase relaxation if need be.
-	//also, decrease relaxation if it's been a while since last relaxation.
+	//updates relaxation.
 	/datum/status_effect/hypno/proc/do_relaxation(var/uptick = FALSE)
 		var/relaxed = FALSE
 		//if it's supposed to increase relaxation:
@@ -141,3 +154,29 @@
 			relax_amt -= 1
 			ticks_since_last_relax -= 75 //15 sec until next delet
 		return relaxed
+
+	/datum/status_effect/hypno/proc/handle_effect(var/statusCode)
+		if(!statusCode)
+			return	//default case of 0, nothing happens.
+		if(compare_state(statusCode))
+			switch(statusCode)
+				if(1) //smile! :D
+					examine_text = "[SUBJECTPRONOUN] is smiling widely. They're probably just happy to be here."
+					//do a visual message to everyone nearby!
+					if(!isSmiling)
+						owner.visual_message("[owner.real_name] starts to grin happily! It looks like they're having a really good time.", "You smile as widely as you can! This is the happiest you've been in a long time.")
+						isSmiling = TRUE
+				if(2) //laugh! :D
+					if(laughTimer == 0)
+						owner.audible_message("[owner.real_name] begins to giggle!", "Everything seems really funny all of the sudden!")
+						laughTimer = 150
+
+	/datum/status_effect/hypno/proc/compare_state(var/inState)
+		//if the new state is the same as the old state, return false
+		//if the new state is different from the old state, return true. then make the new state the old state.
+		if(inState == last_state)
+			return FALSE
+		if(inState != last_state)
+			last_state = inState
+			return TRUE
+
