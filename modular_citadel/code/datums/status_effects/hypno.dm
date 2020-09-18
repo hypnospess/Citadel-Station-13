@@ -9,6 +9,8 @@
 	blocks_combatmode = TRUE //this may change if it's stupid
 	status_type = STATUS_EFFECT_UNIQUE
 	tick_interval = 2
+
+	var/static/default_scale_cap = 50 //the natural resting place of the scale cap. (for calculation purposes)
 	
 	var/scale = 10 //deepness level from 100 (fully entranced) to 0 (fully awake)
 	var/resist_amt = 0 //amount of resistance (increased by pressing resist.)
@@ -18,7 +20,6 @@
 	var/relax_amt = 0 //amount of relaxation points
 	var/relax_cap = 5 //max amount of relaxation points 
 	var/scale_cap = 50 //highest scale without aids
-	var/default_scale_cap = 50 //the natural resting place of the scale cap. (for calculation purposes)
 
 	var/list/aids //list of trance aids. different aids have different IDs.
 
@@ -26,14 +27,9 @@
 	var/ticks_since_last_relax = 0 //how long ago was the last relaxation
 	var/delta_resist = FALSE //has sub already resisted this tick?
 
+	var/firstSetup = TRUE //is this the first run through the tick method?
 	var/isSmiling = FALSE
 	var/laughTimer = 0 //amount of ticks until laughter is done
-	/*
-		TRANCE AIDS:
-		basically, things that help u go into trance, outside of the effect.
-		Different aids add to your scale cap by different amounts.
-		Aids are differentiated by their position in the list. Don't worry about it for now.
-	*/
 
 	var/last_state = 0 //the last unique state returned by the HL
 	var/current_state = 0 //the current state as given by the HL
@@ -43,8 +39,10 @@
 	var/datum/component/hyplistener/HyL //the hyplistener
 
 	/*
-		hyplistener will be added on mob add, and delet when on mob remove
-		something like that, i guess! now time to figure out how do
+		TRANCE AIDS:
+		basically, things that help u go into trance, outside of the effect.
+		Different aids add to your scale cap by different amounts.
+		Aids are differentiated by their position in the list. Don't worry about it for now.
 	*/
 
 	//on_apply setup
@@ -55,9 +53,6 @@
 		//output something saying "whoopsie, not living carbon"
 	sub = owner
 	check_aids()
-	HyL = new(sub, src)
-	if (!HyL)
-		return FALSE
 	//hope i put this in the right place aahahah,,
 	RegisterSignal(owner, COMSIG_LIVING_RESIST, .proc/do_resistance)
 	return TRUE
@@ -77,6 +72,8 @@
 	//////////////
 
 /datum/status_effect/hypno/tick()
+	if (firstSetup)
+		HyL = new(sub, src)
 	//check state and perform accordingly
 	handle_effect(HyL.getState())
 
