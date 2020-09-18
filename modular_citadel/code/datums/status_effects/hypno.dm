@@ -84,6 +84,8 @@
 		if(laughprob == 10)
 			owner.say(pick("Hahaha!","Hee Hee!","Pffft~","Hehehe!","Ahahah!"))
 		laughTimer -= 1
+		if(!laughTimer)
+			to_chat(owner,"<span class='notice'>You stop laughing!</span>")
 
 	//do math
 	change_scale()
@@ -160,6 +162,7 @@
 	if(compare_state(statusCode))
 		switch(statusCode)
 			if(1) //smile! :D
+				to_chat(owner, "<span class='notice'>You smile widely! You're the happiest you've felt in a long time.")
 				examine_text = "They're smiling widely. They're probably just happy to be here."
 				//do a visual message to everyone nearby!
 				if(!isSmiling)
@@ -167,6 +170,7 @@
 					isSmiling = TRUE
 			if(2) //laugh! :D
 				if(laughTimer == 0)
+					to_chat(owner, "<span class='notice'>Everything seems really funny all of the sudden!</span>")
 					owner.audible_message("[owner.real_name] begins to giggle!", "Everything seems really funny all of the sudden!")
 					laughTimer = 150
 			if(5) //skipping straight to relax for now
