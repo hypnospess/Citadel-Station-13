@@ -73,7 +73,7 @@
 
 /datum/status_effect/hypno/tick()
 	if (firstSetup)
-		HyL = new(sub, src)
+		HyL = new(list(sub, src))
 	//check state and perform accordingly
 	handle_effect(HyL.getState())
 
