@@ -457,7 +457,7 @@
 	item_state = "hypnovisor"
 	var/visor_toggled = FALSE
 
-	/obj/item/clothing/glasses/hypnovisor/lurevisor
+/obj/item/clothing/glasses/hypnovisor/lurevisor
 	name = "hypnotic visor"
 	desc = "A FausTech hypnotic visor, specially programmed for Lunar Lure staff training."
 	icon_state = "lurevisor"
