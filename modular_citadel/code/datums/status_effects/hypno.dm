@@ -11,7 +11,9 @@
 	tick_interval = 2
 
 	var/static/default_scale_cap = 50 //the natural resting place of the scale cap. (for calculation purposes)
-	
+	var/static/default_relax_cap = 5
+	var/static/default_resist_cap = 15
+
 	var/scale = 10 //deepness level from 100 (fully entranced) to 0 (fully awake)
 	var/resist_amt = 0 //amount of resistance (increased by pressing resist.)
 	var/resist_cap = 15 //max amount of resistance points
@@ -20,8 +22,6 @@
 	var/relax_amt = 0 //amount of relaxation points
 	var/relax_cap = 5 //max amount of relaxation points 
 	var/scale_cap = 50 //highest scale without aids
-
-	var/list/aids //list of trance aids. different aids have different IDs.
 
 	var/ticks_since_last_resist = 0 //how long ago the last resist was
 	var/ticks_since_last_relax = 0 //how long ago was the last relaxation

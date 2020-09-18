@@ -28,6 +28,8 @@
 	var/outputstate = 0 //this is what actually determines what should be happening. It will be returned.
 	var/mob/living/carbon/listener //this is the mob that this is attached to.
 	var/datum/status_effect/hypno/effect //this is the status effect that this is attached to
+
+	var/list/aidlist //the list of aids affecting the trance!
 	
 	
 	//earlystage commands (mostly aesthetic, with a few exceptions)
@@ -79,29 +81,29 @@
 /datum/component/hyplistener/proc/parse()
 	//this proc does all of the parsing!
 	//these should eventually be re-ordered in terms of reverse priority.
-	//eg: things that override other things come later.		
-	
+	//eg: things that override other things come later.	
+	var/msg = args[HEARING_RAW_MESSAGE]
 	//simple commands
 	//Smile (state 1)
-	if(findtext(HEARING_RAW_MESSAGE, smile_words))
+	if(findtext(msg, smile_words))
 		outputstate = 1
 	//laugh (state 2)
-	if(findtext(HEARING_RAW_MESSAGE, laugh_words))
+	if(findtext(msg, laugh_words))
 		outputstate = 2
 	//drool (state 3)
-	if(findtext(HEARING_RAW_MESSAGE, drool_words))
+	if(findtext(msg, drool_words))
 		outputstate = 3
 	//lay down (state 4)
-	if(findtext(HEARING_RAW_MESSAGE, lay_words))
+	if(findtext(msg, lay_words))
 		outputstate = 4
 	//relax (state 5)
-	if(findtext(HEARING_RAW_MESSAGE, relax_words))
+	if(findtext(msg, relax_words))
 		outputstate = 5
 	//at ease (return to normal desc) (state 6)
-	if(findtext(HEARING_RAW_MESSAGE,atease_words))
+	if(findtext(msg,atease_words))
 		outputstate = 6
 	//scale (state 7)
-	if(findtext(HEARING_RAW_MESSAGE,scale_words))
+	if(findtext(msg,scale_words))
 		outputstate = 7
 
 /datum/component/hyplistener/proc/getState()
