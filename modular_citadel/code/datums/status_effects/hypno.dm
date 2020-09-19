@@ -187,4 +187,3 @@
 	if(inState != last_state)
 		last_state = inState
 		return TRUE
-

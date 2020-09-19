@@ -108,3 +108,13 @@
 
 /datum/component/hyplistener/proc/getState()
 	return outputstate
+
+/datum/component/hyplistener/proc/ping_nearby(view_distance)
+	//clear the aidlist
+	//yadda yadda get things in view of the mob
+	//iterate through
+	//send signal
+	SEND_SIGNAL(next, COMSIG_COMPONENT_HYPNO_CHECK, src)
+
+/datum/component/hyplistener/proc/registerAid(aidID, list/bonuses)
+	aidlist[aidID] = bonuses
