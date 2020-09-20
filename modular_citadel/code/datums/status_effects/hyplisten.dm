@@ -110,11 +110,19 @@
 	return outputstate
 
 /datum/component/hyplistener/proc/ping_nearby(view_distance)
-	//clear the aidlist
+	aidlist = list()
 	//yadda yadda get things in view of the mob
-	//iterate through
-	//send signal
-	SEND_SIGNAL(next, COMSIG_COMPONENT_HYPNO_CHECK, src)
+	for(var/obj/O in view(view_distance, listener))
+		//iterate through
+		//send signal
+		SEND_SIGNAL(O, COMSIG_COMPONENT_HYPNO_CHECK, src)
 
 /datum/component/hyplistener/proc/registerAid(aidID, list/bonuses)
 	aidlist[aidID] = bonuses
+
+/datum/component/hyplistener/proc/sum_bonuses()
+	var/list/bonuses_summed = list(0,0,0,0,0,0)
+	for(var/list/B in aidlist)
+		for(var/i = 1, i <= 6, i++)
+			bonuses_summed[i] = B[i]
+	return bonuses_summed
