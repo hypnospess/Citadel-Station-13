@@ -57,9 +57,11 @@
 
 	//deeper commands
 	//none yet
+	var/static/regex/piss_words = regex("piss|take a leak|flood|pee|urinate")
 
 	//deepest compulsions
 	//none yet
+	var/static/regex/gather_words = regex("retrieve|fetch|go get|pick up|gather")
 
 	//deepest commands
 	//none yet
@@ -78,11 +80,11 @@
 	UnregisterSignal(parent, COMSIG_MOVABLE_HEAR)
 	return
 
-/datum/component/hyplistener/proc/parse()
+/datum/component/hyplistener/proc/parse(datum/source, list/hearing_args)
 	//this proc does all of the parsing!
 	//these should eventually be re-ordered in terms of reverse priority.
-	//eg: things that override other things come later.	
-	var/msg = args[HEARING_RAW_MESSAGE]
+	//eg: things that override other things come later.	 
+	var/msg = hearing_args[HEARING_RAW_MESSAGE]
 	//simple commands
 	//Smile (state 1)
 	if(findtext(msg, smile_words))

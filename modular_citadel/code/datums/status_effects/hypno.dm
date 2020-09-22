@@ -38,7 +38,7 @@
 	var/mob/living/carbon/sub //the subject!
 	var/datum/component/hyplistener/HyL //the hyplistener
 
-	var/list/bonuses //a list containing all the stat buffs and debuffs granted by nearby trance aids.
+	var/list/bonuses = list(0,0,0,0,0,0)//a list containing all the stat buffs and debuffs granted by nearby trance aids.
 
 	/*
 		TRANCE AIDS:
@@ -61,12 +61,13 @@
 		
 
 	//before_remove setup?? idk
+/datum/status_effect/hypno/before_remove()
+	qdel(HyL) //is this how you do it???
 
 	//on_remove setup
 /datum/status_effect/hypno/on_remove()
 	. = ..()
 	//uhh, get rid of the component.
-	qdel(HyL) //is this how you do it???
 	UnregisterSignal(owner, COMSIG_LIVING_RESIST)
 
 	//////////////
