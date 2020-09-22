@@ -77,9 +77,8 @@
 
 //at some point i need to unregister the signal, i think?? like when it gets delet.
 /datum/component/hyplistener/Destroy()
-	. = ..() //haha hope this works :D
 	UnregisterSignal(parent, COMSIG_MOVABLE_HEAR)
-	return
+	. = ..() //haha hope this works :D
 
 /datum/component/hyplistener/proc/parse(datum/source, list/hearing_args)
 	//this proc does all of the parsing!

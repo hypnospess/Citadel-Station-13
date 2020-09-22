@@ -63,6 +63,7 @@
 	//before_remove setup?? idk
 /datum/status_effect/hypno/before_remove()
 	qdel(HyL) //is this how you do it???
+	return TRUE
 
 	//on_remove setup
 /datum/status_effect/hypno/on_remove()
