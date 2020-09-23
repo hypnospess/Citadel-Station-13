@@ -84,7 +84,8 @@
 	//this proc does all of the parsing!
 	//these should eventually be re-ordered in terms of reverse priority.
 	//eg: things that override other things come later.	 
-	var/msg = hearing_args[HEARING_RAW_MESSAGE]
+	var/unproc = hearing_args[HEARING_RAW_MESSAGE]
+	var/msg = lowertext(unproc)
 	//simple commands
 	//Smile (state 1)
 	if(findtext(msg, smile_words))
