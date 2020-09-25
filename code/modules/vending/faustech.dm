@@ -28,7 +28,7 @@
 	extra_price = PRICE_EXPENSIVE
 	payment_department = NO_FREEBIES
 	cost_multiplier_per_dept = list(ACCOUNT_SCI = 0)
-	aid_bonuses = list(5,1,0,0,0,0)
+	var/list/aid_bonuses = list(5,1,0,0,0,0)
 
 /obj/item/vending_refill/faustech
 	machine_name 	= "FausTech"
