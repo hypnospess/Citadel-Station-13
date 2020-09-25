@@ -166,8 +166,11 @@
 
 //does math to determine the new scale
 /datum/status_effect/hypno/proc/change_scale()
-	delta_scale = (relax_amt*deepener_mult) - resist_amt
+	//delta_scale = (relax_amt*deepener_mult) - resist_amt
+	delta_scale = ((relax_amt*deepener_mult)/(ticks_since_last_relax + 1)) - (resist_amt/ticks_since_last_resist)
 	scale += delta_scale
+	if(scale > scale_cap)
+		scale = scale_cap
 	return scale
 
 //updates resistance

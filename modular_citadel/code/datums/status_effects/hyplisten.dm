@@ -143,3 +143,5 @@
 		for(var/i = 1, i <= 6, i++)
 			bonuses_summed[i] = B[i]
 	return bonuses_summed
+
+//some hyplistener stuff to do blurbs, bleh!
