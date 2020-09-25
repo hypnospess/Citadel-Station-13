@@ -39,13 +39,19 @@ datum/element/hypnotic/proc/check_validity(datum/component/hyplistener/H)
 		//Be sure to call H.registerAid(effectID, bonuses) when you're done.
 		if("aid-faustech-vending")
 			if(Near(4))
-				H.registerAid(effectID, bonuses)
+				Yes()
 		//This is the default case, if the specific effectID you've specified has no specified behavior.
 		else
 			//Mmhm, yeah, just... assume we're supposed to give out the buffs.
-			H.registerAid(effectID, bonuses)
+			Yes()
 			//well, we're done here.
 
+//fuck you i am not writing this every time
+//have a method that just calls a method
+datum/element/hypnotic/proc/Yes()
+	H.registerAid(effectID, bonuses)
+
+//check if near
 datum/element/hypnotic/proc/Near(var/dist)
 	for(var/datum/I in searcherMob.view(dist))
 		if(target == I)
