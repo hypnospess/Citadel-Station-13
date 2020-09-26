@@ -24,9 +24,9 @@
 	element_flags = ELEMENT_DETACH | ELEMENT_BESPOKE
 	id_arg_index = 2
 	var/list/bonuses // the list of hypnotic bonuses that this element gives out
-	var/effectID = "aid-default-effect" // The string effect ID of the actual element.  
-	var/applyBlurb = "apply placeholder for [effectID]" // a string that gets shown when the aid is applied
-	var/removeBlurb = "remove placeholder for [effectID]" // a string that gets shown when the aid is removed
+	var/effectID = "aid-default-effect" // The string effect ID of the actual element.
+	var/applyBlurb = "apply placeholder" // a string that gets shown when the aid is applied
+	var/removeBlurb = "remove placeholder" // a string that gets shown when the aid is removed
 
 	var/searcherMob // whatever it is that sends out the triggering signal.
 
@@ -44,7 +44,7 @@
 	var/list/global/HYP_DIALOGUE_LIST = list(
 		"aid-default-effect" = list("default aid add message!", "default aid remove message!"),
 		"pos-faustech-vending" = list("The Faustech-brand vending machine helps remind you of the joys of sinking and obeying.","The Faustech machine is out of earshot, and its jingles no longer affect you."),
-		"neg-wanted-poster" = list("Uh oh. It seems like someone's wanted. I should be careful.","You forget about the threat advertised in the wanted poster.")
+		"neg-wanted-poster" = list("Uh oh. It seems like someone's wanted. I should be careful.","You forget about the threat advertised in the wanted poster."),
 		"pos-hot-xeno" = list(),
 		"aid-synd-recruit" = list(),
 		"aid-greytide" = list(),
@@ -65,7 +65,7 @@
 		"pos-faus-refill" = list(),
 	)
 
-datum/element/hypnotic/Attach(datum/target,effect_name,list/bonus_list,apply,remove)
+/datum/element/hypnotic/Attach(datum/target,effect_name,list/bonus_list,apply,remove)
 	. = ..()
 	if(!islist(bonus_list) || !effect_name)
 		return ELEMENT_INCOMPATIBLE
@@ -77,7 +77,7 @@ datum/element/hypnotic/Attach(datum/target,effect_name,list/bonus_list,apply,rem
 		removeBlurb = remove
 	RegisterSignal(target,COMSIG_COMPONENT_HYPNO_CHECK,.proc/check_validity)
 
-datum/element/hypnotic/Detach(datum/target)
+/datum/element/hypnotic/Detach(datum/target)
 	. = ..()
 	UnregisterSignal(target, COMSIG_COMPONENT_HYPNO_CHECK)
 
@@ -96,7 +96,9 @@ datum/element/hypnotic/Detach(datum/target)
 	In the long term, it will make everyone's lives easier <3
 */
 
-datum/element/hypnotic/proc/check_validity(datum/component/hyplistener/H)
+/datum/element/hypnotic/proc/check_validity(datum/component/hyplistener/H, atom/A)
+	if(!istype(H))
+		return
 	searcherMob = H.listener
 	switch(effectID)
 		//THIS IS WHERE CUSTOM BEHAVIOR IS DEFINED.
@@ -105,8 +107,8 @@ datum/element/hypnotic/proc/check_validity(datum/component/hyplistener/H)
 
 		// FAUSTECH VENDOR (et. al)
 		if("pos-faustech-vending" || "pos-faus-refill")
-			if(Near(4))
-				Yes()
+			if(Near(4, A))
+				Yes(H)
 
 		// POSTERS (TODO)
 		// All pos/neg posters have a criteria of:
@@ -126,7 +128,9 @@ datum/element/hypnotic/proc/check_validity(datum/component/hyplistener/H)
 
 //fuck you i am not writing this every time
 //have a method that just calls a method
-datum/element/hypnotic/proc/Yes()
+/datum/element/hypnotic/proc/Yes(datum/component/hyplistener/H)
+	if(!istype(H))
+		return
 	H.registerAid(effectID, bonuses)
 
 /*
@@ -140,10 +144,12 @@ datum/element/hypnotic/proc/Yes()
 */
 
 //Near: Is this thing within view of the mob?
-datum/element/hypnotic/proc/Near(var/dist)
-	for(var/datum/I in searcherMob.view(dist))
+/datum/element/hypnotic/proc/Near(dist, atom/A)
+	/*for(var/atom/I in view(dist, searcherMob))
 		if(target == I)
-			return TRUE
+			return TRUE*/
+	if(get_dist(searcherMob, A))
+		return TRUE
 	return FALSE
 
 //LookingAt: Is the mob looking in the general direction of this thing?

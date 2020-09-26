@@ -129,10 +129,10 @@
 /datum/component/hyplistener/proc/ping_nearby(view_distance)
 	aidlist = list()
 	//yadda yadda get things in view of the mob
-	for(var/obj/O in view(view_distance, listener))
+	for(var/atom/A in view(view_distance, listener))
 		//iterate through
 		//send signal
-		SEND_SIGNAL(O, COMSIG_COMPONENT_HYPNO_CHECK, src)
+		SEND_SIGNAL(A, COMSIG_COMPONENT_HYPNO_CHECK, src, A)
 
 /datum/component/hyplistener/proc/registerAid(aidID, list/bonuses)
 	aidlist[aidID] = bonuses
