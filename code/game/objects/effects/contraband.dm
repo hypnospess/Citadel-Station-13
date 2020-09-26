@@ -531,8 +531,6 @@
 	poster_item_name = "motivational poster"
 	poster_item_desc = "An official Nanotrasen-issued poster to foster a compliant and obedient workforce. It comes with state-of-the-art adhesive backing, for easy pinning to any vertical surface."
 	poster_item_icon_state = "rolled_legit"
-	var/list/aids = list(10,10,-5,0,1,-2)
-	//I'm so glad I have this job at Nanotrasen...
 
 /obj/structure/sign/poster/official/random
 	name = "random official poster"

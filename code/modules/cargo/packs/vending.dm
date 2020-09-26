@@ -64,6 +64,7 @@
 	contains = list(/obj/item/vending_refill/faustech)
 	crate_name = "FausTech supply crate"
 	crate_type = /obj/structure/closet/crate
+	//add some aid, very mild. ("there's a faint, distracting hum coming from the refill crate.")
 
 /datum/supply_pack/vending/games
 	name = "Games Supply Crate"
