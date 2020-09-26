@@ -24,7 +24,7 @@
 	element_flags = ELEMENT_DETACH | ELEMENT_BESPOKE
 	id_arg_index = 2
 	var/list/bonuses // the list of hypnotic bonuses that this element gives out
-	var/effectID = "trance-default-effect" // The string effect ID of the actual element.  
+	var/effectID = "aid-default-effect" // The string effect ID of the actual element.  
 	var/applyBlurb = "apply placeholder for [effectID]" // a string that gets shown when the aid is applied
 	var/removeBlurb = "remove placeholder for [effectID]" // a string that gets shown when the aid is removed
 
@@ -35,14 +35,14 @@
 	// define the behavior below.
 	// In fact, most IDs are added to this list on the fly as they're registered! 
 	// I'm using this typed out list as reference for what sends what.
-	
+
 	// NAMING PRACTICES:
 	// if an id does something good for the tist, use pos. 
 	// if it does something bad for the tist, use neg.
 	// if it's mixed, use mix.
 	// for "it depends" cases, use aid. (Things starting with aid often have their bonus lists re-defined in the validity code.)
 	var/list/global/HYP_DIALOGUE_LIST = list(
-		"aid-default" = list("default aid add message!", "default aid remove message!"),
+		"aid-default-effect" = list("default aid add message!", "default aid remove message!"),
 		"pos-faustech-vending" = list("The Faustech-brand vending machine helps remind you of the joys of sinking and obeying.","The Faustech machine is out of earshot, and its jingles no longer affect you."),
 		"neg-wanted-poster" = list("Uh oh. It seems like someone's wanted. I should be careful.","You forget about the threat advertised in the wanted poster.")
 		"pos-hot-xeno" = list(),
