@@ -8,6 +8,9 @@
 /datum/aid
 	var/aid_ID //The String ID of the aid. This is used to find/differentiate different sources of aid.
 
+	var/list/bonuslist //list of bonuses
+
+	var/list/desclist //2d list of dialogue
 	/* CAP BONUSES:
 	** Cap bonuses increase or decrease 
 	** the MAX AMOUNT of a particular point type.
@@ -31,13 +34,9 @@
 
 /datum/aid/New(var/id, list/bonuses)
 	aid_ID = id
+	PullDialogue()
 	if(bonuses.len == 6)
-		cap_scale_bonus = bonuses[0]
-		cap_relax_bonus = bonuses[1]
-		cap_resist_bonus = bonuses[2]
-		scale_bonus = bonuses[3]
-		relax_bonus = bonuses[4]
-		resist_bonus = bonuses[5]
+		bonuslist = bonuses
 		return
 	//oopsie you did a fucky wucky haha
 
@@ -46,6 +45,33 @@
 	if(idToCheck == aid_ID)
 		return TRUE
 	return FALSE
-	
-	
-	
+
+//pull dialogue from the file. basically, searches for the id, and then throws together the dialogue list.
+/datum/aid/proc/PullDialogue()
+	var/textfile = "modular_citadel/code/datums/status_effects/hypdialogue.txt"
+	var/list/file_lines = world.file2list(textfile)
+	var/found_id = FALSE
+	var/num_lines = 0
+	for(var/line in file_lines)
+		//ignoring comments:
+		if(findtextEx(line,"**",1,3))
+			//ok move on
+			continue
+		else if(findtextEx(line,">",1,2))
+			//wait, how to get substring,
+			var/to_check = copytext(line,2)
+			if(aid_ID == to_check)
+				found_ID = TRUE
+				if(num_lines)
+					//what? this should not happen. bleh, error!!
+				num_lines = 1
+				continue
+		else if(num_lines)
+			if(num_lines > 5)
+				num_lines = 0
+				continue
+			var/list/altlines = splittext(line,"|")
+			desclist[num_lines] = altlines
+			num_lines ++
+	if(!found_id)
+		//we couldn't find this id. Output something.

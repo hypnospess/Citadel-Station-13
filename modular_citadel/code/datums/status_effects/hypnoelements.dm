@@ -157,3 +157,9 @@
 
 //Antag: Is the mob an antag (of the specific type, if applicable?)
 // TODO
+
+//Wearing: Is the mob wearing this thing?
+// TODO
+
+//State: Is this thing in a particular state?
+// TODO (also idk how much sense this makes)
