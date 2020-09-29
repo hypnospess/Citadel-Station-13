@@ -117,6 +117,10 @@
 			i++
 			var/type = checks[i]
 			results += Antag(type)
+		if(checks[i] == "antag")
+			i++
+			var/type = checks[i]
+			results += Job(type)
 		if(checks[i] == "wearing")
 			results += Wearing(A)
 		if(checks[i] == "state") 
@@ -160,6 +164,9 @@
 // TODO
 
 //Antag: Is the mob an antag (of the specific type, if applicable?)
+// TODO
+
+//Job: does the mob have the specified job? (or, a job at all)
 // TODO
 
 //Wearing: Is the mob wearing this thing?
