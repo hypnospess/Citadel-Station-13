@@ -117,10 +117,14 @@
 			i++
 			var/type = checks[i]
 			results += Antag(type)
-		if(checks[i] == "antag")
+		if(checks[i] == "job")
 			i++
 			var/type = checks[i]
 			results += Job(type)
+		if(checks[i] == "mobtype")
+			i++
+			var/type = checks[i]
+			results += IsMobtype(type)
 		if(checks[i] == "wearing")
 			results += Wearing(A)
 		if(checks[i] == "state") 
@@ -174,6 +178,9 @@
 
 //State: Is this thing in a particular state?
 // TODO (also idk how much sense this makes)
+
+//IsMobtype: Is the mob of the specified mobtype?
+// TODO
 
 //Custom: This is where other types of behavior are defined. What this does is dependent on the effectID.
 //TODO (Assuming this is used.)
