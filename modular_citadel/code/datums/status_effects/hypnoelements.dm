@@ -10,7 +10,7 @@
 **
 ** 	- There's a global list of all of the effect dialogue. This list is added to when a new
 ** 	  instance of the element is created. This list is what's actually pulled from
-**    when the text is displayed.
+**    when the text is displayed. \
 **
 **	- The searcherMob var represents the mob that's "pinging" this element.
 **	  In other words, whatever is hypnotized and the effects will be applied to.
@@ -29,6 +29,8 @@
 	var/removeBlurb = "remove placeholder" // a string that gets shown when the aid is removed
 
 	var/searcherMob // whatever it is that sends out the triggering signal.
+
+	var/list/checks //list of all the checktypes and args
 
 	// a 2d list of all add/remove dialogue for aids!
 	// this can also be seen as the official effectID registry, though you still have to
@@ -65,7 +67,7 @@
 		"pos-faus-refill" = list(),
 	)
 
-/datum/element/hypnotic/Attach(datum/target,effect_name,list/bonus_list,apply,remove)
+/datum/element/hypnotic/Attach(datum/target,effect_name,list/bonus_list,apply,remove,list/checklist)
 	. = ..()
 	if(!islist(bonus_list) || !effect_name)
 		return ELEMENT_INCOMPATIBLE
@@ -75,6 +77,8 @@
 		applyBlurb = apply
 	if(remove)
 		removeBlurb = remove
+	if(checklist)
+		checks = checklist
 	RegisterSignal(target,COMSIG_COMPONENT_HYPNO_CHECK,.proc/check_validity)
 
 /datum/element/hypnotic/Detach(datum/target)
@@ -100,31 +104,29 @@
 	if(!istype(H))
 		return
 	searcherMob = H.listener
-	switch(effectID)
-		//THIS IS WHERE CUSTOM BEHAVIOR IS DEFINED.
-		//Each specific validity check is in a different if case corresponding to it's effectID.
-		//Be sure to call Yes() when you're checking.
+	var/list/results //results of each check
+	var/out = TRUE //whether or not it passes the check
+	for(var/i = 1, i <= checks.len, i++)
+		if(checks[i] == "near")
+			i++
+			var/dist = checks[i]
+			results += Near(dist, A)
+		if(checks[i] == "lookingat")
+			results += LookingAt(A)
+		if(checks[i] == "antag")
+			i++
+			var/type = checks[i]
+			results += Antag(type)
+		if(checks[i] == "wearing")
+			results += Wearing(A)
+		if(checks[i] == "state") 
+			//still unsure how this one works
+	for(var/o in results)
+		if(o == FALSE)
+		out = FALSE
+	if(out)
+		Yes(H)
 
-		// FAUSTECH VENDOR (et. al)
-		if("pos-faustech-vending" || "pos-faus-refill")
-			if(Near(4, A))
-				Yes(H)
-
-		// POSTERS (TODO)
-		// All pos/neg posters have a criteria of:
-		// 		Near(6)
-		// 		Mob is looking in that general direction.
-		// 			Note to Bhijn/158: Make this determination a proc that the element can access.
-		// EXCEPT for aid-type posters, and the wanted poster! 
-		// Those have specialized requirements.
-
-
-
-		//This is the default case, if the specific effectID you've specified has no specified behavior.
-		else
-			//Mmhm, yeah, just... assume we're supposed to give out the buffs.
-			Yes()
-			//well, we're done here.
 
 //fuck you i am not writing this every time
 //have a method that just calls a method
