@@ -98,4 +98,73 @@ You catch a glimpse of the hot xenos out of the corner of your eye. Hell yeah.
 
 **something something pos-cola-post
 **joke about mindless consumerism, or smth, idk,
+>pos-cola-post
+Mmmmm, cola. Refreshing. | The cola poster puts you in the mood to kick back and relax.
+The cola poster disappears from your view. 
+You glance over at the cola poster and think about doing as it says.
+[owner.real_name] is looking over the cola poster, and looking slightly thirsty.
+[owner.real_name] is no longer looking at the cola poster.
 
+>pos-faus-p1
+You meet Dr. Faustus's confident gaze and feel a little more docile.
+You can no longer see the Faustech poster.
+Dr. Faustus's smile keeps your nerves at ease. 
+[owner.real_name] seems to be putting some thought into the Faustech poster.
+[owner.real_name] has stopped looking at the Faustech poster.
+
+>pos-faus-p2
+Sink, obey relax. Yeah, you can do that.
+The Faustech poster disappears from your sight.
+Sink, obey, relax... Faustech sure has a nice slogan.
+[owner.real_name] sighs contentedly, seeming to take the Faustech poster's advice.
+[owner.real_name] seems more attentive, now that the Faustech poster is out of their mind.
+
+>pos-sal
+Your eyes fix on Sal, the Faustech posterboy. You feel weaker-willed already.
+You pull your eyes away from that sexy hunk of dragon, Sal.
+Sal has nice eyes.
+[owner.real_name] seems to be having trouble pulling their gaze off the Sal poster.
+[owner.real_name] manages to pull their eyes away from Sal's smile.
+
+**tweak this one when you're not so fucking tired
+>pos-lure-p1
+Full belly... empty mind. Empty mind. 
+You avert your eyes from the tempting poster.
+Full belly, empty mind... what an incredible concept. 
+[owner.real_name] seems to be taking the poster's message to heart. Or, to mind, rather.
+[owner.real_name] is no longer paying any attention to the Lure's poster.
+
+>pos-lure-p2
+The promise of drinking free gets you thinking about what it means to be a "good boy."
+You look away from the neon lights, and get them out of your mind.
+Being a good boy isn't so hard, and it feels... right.
+The neon lights of the sign are reflected in [owner.real_name]'s slightly glassy eyes.
+[owner.real_name] seems to have forgotten the words on the sign. 
+
+>pos-obey-poster
+The poster urging you to obey authority puts you in a certain mindset.
+You avert your eyes from the poster.
+There's really nothing wrong with being obedient to authority.
+[owner.real_name] is looking slightly more docile beneath the poster.
+[owner.real_name] seems to have found their strength again.
+
+>pos-question-poster
+Being told not to question authority makes you feel... small.
+You push those thoughts out of your mind.
+You really shouldn't question the words of those who know better.
+[owner.real_name] is looking a little intimidated by the poster.
+[owner.real_name] is back to their normal self.
+
+>pos-greencross
+The Green Cross poster reminds you that your health is secure.
+You move on from the Green Cross poster.
+It's nice to know that there are good people out there.
+[owner.real_name] seems slightly at ease, looking at the poster.
+[owner.real_name] is back to the way they were feeling before.
+
+>pos-faus-refill
+Just seeing those familiar Faustech colors gets you in a good mindset. 
+You put Faustech out of your mind... for now.
+Just the hint of Faustech fun gets your mind racing with hypnotic ideas.
+[owner.real_name] continually glances to the Faustech refill box in eager anticipation.
+[owner.real_name] seems to have forgotten their excitement.
