@@ -121,6 +121,8 @@
 			results += Wearing(A)
 		if(checks[i] == "state") 
 			//still unsure how this one works
+		if(checks[i] == "custom")
+			//specialized custom behavior, this uses the ids.
 	for(var/o in results)
 		if(o == FALSE)
 		out = FALSE
@@ -165,3 +167,6 @@
 
 //State: Is this thing in a particular state?
 // TODO (also idk how much sense this makes)
+
+//Custom: This is where other types of behavior are defined. What this does is dependent on the effectID.
+//TODO (Assuming this is used.)
