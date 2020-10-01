@@ -25,8 +25,6 @@
 
 
 /datum/component/hyplistener
-	var/outputstate = 0 //this is what actually determines what should be happening. It will be returned.
-	var/laststate = 0 //the last unique, nonzero state. Used to make sure that a state is held onto until the next effect update.
 	var/mob/living/carbon/listener //this is the mob that this is attached to.
 	var/datum/status_effect/hypno/effect //this is the status effect that this is attached to
 
@@ -54,25 +52,8 @@
 	for(var/datum/trance_effect/T in SShypno.trance_effects)
 		if(effect.scale >= T.req_scale)
 			if(findtext(msg, regex(T.wordlist)))
-				outputstate = T.trigger(listener, effect) //`outputstate =` is just a hack for compatibility with the currently existing code. to be removed when trance effects are moved to trance_effect.trigger()
-				break
-
-//this one just does the outputstate updating.
-/datum/component/hyplistener/proc/out(var/state)
-	var/isNonzero = FALSE
-	var/isNew = FALSE
-	if(state != 0)
-		isNonzero = TRUE
-	if(state != laststate)
-		isNew = TRUE
-	if((isNonzero && isNew)||(laststate == 0))
-		outputstate = state
-		return
-
-/datum/component/hyplistener/proc/getState()
-	if(outputstate == 0)
-		return laststate
-	return outputstate
+				if(T.trigger(listener, effect))
+					break
 
 /datum/component/hyplistener/proc/ping_nearby(view_distance)
 	aidlist = list()
