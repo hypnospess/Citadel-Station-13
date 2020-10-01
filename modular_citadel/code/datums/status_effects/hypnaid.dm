@@ -61,7 +61,7 @@
 			//wait, how to get substring,
 			var/to_check = copytext(line,2)
 			if(aid_ID == to_check)
-				found_ID = TRUE
+				found_id = TRUE
 				if(num_lines)
 					//what? this should not happen. bleh, error!!
 				num_lines = 1
