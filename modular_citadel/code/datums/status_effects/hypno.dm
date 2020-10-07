@@ -31,8 +31,6 @@
 	var/isSmiling = FALSE
 	var/laughTimer = 0 //amount of ticks until laughter is done
 
-	var/last_state = 0 //the last unique state returned by the HL
-	var/current_state = 0 //the current state as given by the HL
 
 	//friendly reminder to self: owner is the person who has the effect.
 	var/mob/living/carbon/sub //the subject!
@@ -79,8 +77,6 @@
 	if (firstSetup)
 		HyL = new(list(sub, src))
 		firstSetup = FALSE
-	//check state and perform accordingly
-	handle_effect(HyL.getState())
 
 	//do laughter stuff
 	if(laughTimer)
@@ -167,7 +163,7 @@
 //does math to determine the new scale
 /datum/status_effect/hypno/proc/change_scale()
 	//delta_scale = (relax_amt*deepener_mult) - resist_amt
-	delta_scale = ((relax_amt*deepener_mult)/(ticks_since_last_relax + 1)) - (resist_amt/ticks_since_last_resist)
+	delta_scale = ((relax_amt*deepener_mult)/(ticks_since_last_relax + 1)) - (resist_amt/max(ticks_since_last_resist,1))
 	scale += delta_scale
 	if(scale > scale_cap)
 		scale = scale_cap
@@ -208,35 +204,3 @@
 		relax_amt -= 1
 		ticks_since_last_relax -= 75 //15 sec until next delet
 	return relaxed
-//handles the listener input
-/datum/status_effect/hypno/proc/handle_effect(var/statusCode)
-	if(!statusCode)
-		return	//default case of 0, nothing happens.
-	if(compare_state(statusCode))
-		switch(statusCode)
-			if(1) //smile! :D
-				to_chat(owner, "<span class='notice'>You smile widely! You're the happiest you've felt in a long time.")
-				examine_text = "They're smiling widely. They're probably just happy to be here."
-				//do a visual message to everyone nearby!
-				if(!isSmiling)
-					owner.visible_message("[owner.real_name] starts to grin happily! It looks like they're having a really good time.", "You smile as widely as you can! This is the happiest you've been in a long time.")
-					isSmiling = TRUE
-			if(2) //laugh! :D
-				if(laughTimer == 0)
-					to_chat(owner, "<span class='notice'>Everything seems really funny all of the sudden!</span>")
-					owner.audible_message("[owner.real_name] begins to giggle!", "Everything seems really funny all of the sudden!")
-					laughTimer = 150
-			if(5) //skipping straight to relax for now
-				do_relaxation(TRUE)
-				to_chat(owner, "You relax a little bit.")
-			if(7) //again, skipping to scale for now
-				owner.say("[scale].")
-//compares a given state to the last state recieved
-/datum/status_effect/hypno/proc/compare_state(var/inState)
-	//if the new state is the same as the old state, return false
-	//if the new state is different from the old state, return true. then make the new state the old state.
-	if(inState == last_state)
-		return FALSE
-	if(inState != last_state)
-		last_state = inState
-		return TRUE

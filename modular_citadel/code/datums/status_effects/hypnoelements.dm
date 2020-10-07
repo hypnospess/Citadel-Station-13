@@ -127,15 +127,32 @@
 			results += IsMobtype(type)
 		if(checks[i] == "wearing")
 			results += Wearing(A)
-		if(checks[i] == "state") 
+		if(checks[i] == "state")
+			continue
 			//still unsure how this one works
 		if(checks[i] == "custom")
+			continue
 			//specialized custom behavior, this uses the ids.
-	for(var/o in results)
-		if(o == FALSE)
-		out = FALSE
+	//for(var/o in results)
+		//if(o == FALSE)
+		//out = FALSE
 	if(out)
 		Yes(H)
+
+/datum/element/hypnotic/proc/LookingAt(a)
+	return "STUB"
+
+/datum/element/hypnotic/proc/Antag(a)
+	return "STUB"
+
+/datum/element/hypnotic/proc/Job(a)
+	return "STUB"
+
+/datum/element/hypnotic/proc/IsMobtype(a)
+	return "STUB"
+
+/datum/element/hypnotic/proc/Wearing(a)
+	return "STUB"
 
 
 //fuck you i am not writing this every time
