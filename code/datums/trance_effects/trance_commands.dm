@@ -44,7 +44,7 @@
 /datum/trance_effect/scale/trigger(mob/living/carbon/C, datum/status_effect/hypno/H, msg)
 	if(!istype(H) || !istype(C))
 		return FALSE
-	addtimer(CALLBACK(C, /atom/movable/proc/say, "[H.scale]", null, list(), TRUE, null, FALSE, "hypnosis"), 1)
+	addtimer(CALLBACK(C, /atom/movable/proc/say, "[100 - round(H.scale)]", null, list(), TRUE, null, FALSE, "hypnosis"), 1)
 
 //more eventually
 //earlystage compulsions (simple compulsions to act, very easy to comprehend)

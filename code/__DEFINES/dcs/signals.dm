@@ -384,7 +384,9 @@
 
 /*******Component Specific Signals*******/
 //Hypnosis
-#define COMSIG_COMPONENT_HYPNO_CHECK "hypno_check"					//from component/hyplistener/ping_nearby()
+//#define COMSIG_COMPONENT_HYPNO_CHECK "hypno_check"					//from component/hyplistener/ping_nearby()
+#define COMSIG_COMPONENT_HYPNO_ABSTRACT "hypno_abstract"			//from component/hyplistener/do_ping(). This signal pings hypno elements that're handled by the origin object's logic.
+#define COMSIG_COMPONENT_HYPNO_VIEW "hypno_view"					//from component/hyplistener/do_ping(). This signal pings hypno elements that're simply in the mob's view range.
 
 //Janitor
 #define COMSIG_TURF_IS_WET "check_turf_wet"							//(): Returns bitflags of wet values.

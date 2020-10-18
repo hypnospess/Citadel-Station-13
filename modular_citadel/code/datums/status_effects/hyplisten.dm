@@ -30,6 +30,8 @@
 
 	var/list/aidlist //the list of aids affecting the trance!
 
+	var/list/abstract_aids //Aid components that don't exactly have a physical presence 
+
 /datum/component/hyplistener/Initialize(linked_effect)	//this is probably not gonna be the final init i am just putting it here for now
 	if(!parent||!linked_effect)
 		return COMPONENT_INCOMPATIBLE
@@ -57,20 +59,34 @@
 
 /datum/component/hyplistener/proc/ping_nearby(view_distance)
 	aidlist = list()
-	//yadda yadda get things in view of the mob
+
+	for(var/atom/A in abstract_aids)
+		SEND_SIGNAL(A, COMSIG_COMPONENT_HYPNO_ABSTRACT, src, HYPNOTIC_ABSTRACT)
+
 	for(var/atom/A in view(view_distance, listener))
-		//iterate through
-		//send signal
-		SEND_SIGNAL(A, COMSIG_COMPONENT_HYPNO_CHECK, src, A)
+		SEND_SIGNAL(A, COMSIG_COMPONENT_HYPNO_VIEW, src, HYPNOTIC_VIEW)
 
 /datum/component/hyplistener/proc/registerAid(aidID, list/bonuses)
 	aidlist[aidID] = bonuses
 
 /datum/component/hyplistener/proc/sum_bonuses()
 	var/list/bonuses_summed = list(0,0,0,0,0,0)
-	for(var/list/B in aidlist)
-		for(var/i = 1, i <= 6, i++)
-			bonuses_summed[i] = B[i]
+	for(var/hypnoaid in aidlist)
+		var/list/L = aidlist[hypnoaid]
+		for(var/i in 1 to 6)
+			bonuses_summed[i] += L[i]
 	return bonuses_summed
+
+/datum/component/hyplistener/proc/registerAbstractAid(atom/A)
+	if(!A)
+		return
+	LAZYINITLIST(abstract_aids)
+	abstract_aids |= A
+
+/datum/component/hyplistener/proc/unregisterAbstractAid(atom/A)
+	if(!A)
+		return
+	LAZYINITLIST(abstract_aids)
+	abstract_aids -= A
 
 //some hyplistener stuff to do blurbs, bleh!

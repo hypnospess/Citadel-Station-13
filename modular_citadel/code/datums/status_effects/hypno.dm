@@ -14,7 +14,7 @@
 	var/static/default_relax_cap = 5
 	var/static/default_resist_cap = 15
 
-	var/scale = 10 //deepness level from 100 (fully entranced) to 0 (fully awake)
+	var/scale = 1 //deepness level from 100 (fully entranced) to 0 (fully awake)
 	var/resist_amt = 0 //amount of resistance (increased by pressing resist.)
 	var/resist_cap = 15 //max amount of resistance points
 	var/deepener_mult = 1 //the multiplier for deepening effects
@@ -68,6 +68,16 @@
 	. = ..()
 	//uhh, get rid of the component.
 	UnregisterSignal(owner, COMSIG_LIVING_RESIST)
+
+/datum/status_effect/hypno/proc/add_abstract_aid(atom/A)
+	if(!A || !HyL)
+		return
+	HyL.registerAbstractAid(A)
+
+/datum/status_effect/hypno/proc/remove_abstract_aid(atom/A)
+	if(!A || !HyL)
+		return
+	HyL.unregisterAbstractAid(A)
 
 	//////////////
 	//  tick!!  //

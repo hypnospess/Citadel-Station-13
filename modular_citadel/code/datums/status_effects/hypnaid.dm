@@ -64,6 +64,7 @@
 				found_id = TRUE
 				if(num_lines)
 					//what? this should not happen. bleh, error!!
+					continue
 				num_lines = 1
 				continue
 		else if(num_lines)
@@ -75,3 +76,4 @@
 			num_lines ++
 	if(!found_id)
 		//we couldn't find this id. Output something.
+		return
