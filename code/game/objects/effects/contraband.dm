@@ -58,11 +58,6 @@
 	poster_type = /obj/structure/sign/poster/contraband/faustech_3
 	icon_state = "rolled_poster"
 
-/obj/item/poster/contraband/lunarlure_1
-	name = "Full Belly, Empty Mind"
-	poster_type = /obj/structure/sign/poster/contraband/lunarlure_1
-	icon_state = "rolled_poster"
-
 /obj/item/poster/contraband/lunarlure_2
 	name = "Good Boys Drink Free"
 	poster_type = /obj/structure/sign/poster/contraband/lunarlure_2
@@ -476,11 +471,6 @@
 	desc = "A poster of a Faustech favorite, Sal. He's dreamy!"
 	icon_state = "faustech_sal"
 
-/obj/structure/sign/poster/contraband/lunarlure_1
-	name = "Full Belly, Empty Mind"
-	desc = "An advertisement for the Lunar Lure, promising a full belly and an empty mind to its patrons."
-	icon_state = "lunarlure1"
-
 /obj/structure/sign/poster/contraband/lunarlure_2
 	name = "Good Boys Drink Free"
 	desc = "A neon sign from the Lunar Lure, promising that \"good boys drink free\". An odd promise for those unfamiliar with the establishment."
@@ -491,10 +481,15 @@
 	desc = "A neon sign from the Lunar Lure, urging their patrons to indulge, relax, and let go. Sound advice."
 	icon_state = "lunarlure3"
 
-/obj/structure/sign/poster/contraband/lunarlure_4
-	name = "Dance, Forget..."
-	desc = "A shimmering, dazzling poster that encourages Lure patrons to lose themselves to the music."
-	icon_state = "lunarlure4"
+/obj/structure/sign/poster/contraband/bat_begood
+	name = "Be Good"
+	desc = "The green color of this poster makes you feel oddly safe. The text helps some, too."
+	icon_state = "bat_begood"
+
+/obj/structure/sign/poster/contraband/bat_seesyou
+	name = "Peeking Fang"
+	desc = "You're not sure why, but you find it hard to break eye contact."
+	icon_state = "bat_seesyou"
 
 /obj/structure/sign/poster/official
 	poster_item_name = "motivational poster"
