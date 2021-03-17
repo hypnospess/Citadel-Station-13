@@ -314,6 +314,11 @@
 // 	icon = "lunarlure"
 // 	desc = "Serve the customers, obey the Boss!"
 
+/datum/barsign/sinners_roast
+	name = "Sinner's Roast"
+	icon = "sinnersroast"
+	desc = "A comfy, cozy spot to forget your troubles."
+
 /datum/barsign/hiddensigns
 	hidden = TRUE
 
