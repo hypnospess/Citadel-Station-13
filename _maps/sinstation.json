@@ -1,0 +1,11 @@
+{
+    "map_name": "Sin Station",
+    "map_path": "map_files/SinStation",
+    "map_file": "SinStation.dmm",
+    "shuttles": {
+	    "cargo": "cargo_box",
+	    "ferry": "ferry_fancy",
+	    "whiteship": "whiteship_box",
+	    "emergency": "emergency_box"
+    }
+}
