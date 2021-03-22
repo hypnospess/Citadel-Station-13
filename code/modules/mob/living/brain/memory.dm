@@ -22,3 +22,33 @@
 	errormsg = er
 	emotions = em
 	ailments = ai
+
+/datum/mental/memory/genHTML()
+	var/outCode = ""
+	//first, we want to make the collapsible with the memory inside it.
+	//...
+	//fuck, that requires javascript and I dunno how to do that.
+	//TODO: Make it collapsible.
+	var/depthDots= ""
+	var/stabilityDots=""
+	var/moodIcon=""
+	for(i=1, i<=depth, i++)
+		depthDots = depthDots + "•"
+	for(i=1, i<=stability, i++)
+		stabilityDots = stabilityDots + "•"
+	switch(mood)
+		if(0)
+			moodIcon = "⦾ - Neutral."
+		if(1)
+			moodIcon = "❂ - Positive."
+		if(2)
+			moodIcon = "⦻ - Negative."
+	var/outCodeHead = {"
+	<h2>[title]</h2>
+	<h4>Depth: [depthDots]</h4>
+	<h4>Stability: [stabilityDots]</h4>
+	<h4>Mood: [moodIcon]</h4>
+	<p>[body]</p>
+	"}
+	//under here we'll do the other stuff (the lists and "whoops someone did a fucky" stuff)
+	//but not yet	
