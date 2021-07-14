@@ -394,14 +394,14 @@
 	visible_message("<b>[src]</b> points at [A].", "<span class='notice'>You point at [A].</span>")
 	return TRUE
 
-//temporary "give me hypno please!" debug verb
-/mob/living/verb/selfhypno()
-	set name = "Meditate"
-	set category = "IC"
-	if(src.has_status_effect(/datum/status_effect/hypno))
-		return
-	src.apply_status_effect(/datum/status_effect/hypno)
-	to_chat(src, "<span class='notice'>You begin to meditate, dropping into a light trance.</span>")
+// //temporary "give me hypno please!" debug verb (OLD HYPNO METHOD)
+// /mob/living/verb/selfhypno()
+// 	set name = "Meditate"
+// 	set category = "IC"
+// 	if(src.has_status_effect(/datum/status_effect/hypno))
+// 		return
+// 	src.apply_status_effect(/datum/status_effect/hypno)
+// 	to_chat(src, "<span class='notice'>You begin to meditate, dropping into a light trance.</span>")
 	
 
 /mob/living/verb/succumb() //tweak this for hypno as well

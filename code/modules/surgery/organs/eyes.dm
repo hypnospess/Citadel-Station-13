@@ -400,9 +400,9 @@
 	actions_types = list(/datum/action/item_action/organ_action/toggle)
 	var/mutable_appearance/mob_overlay
 	var/has_spiral = FALSE
-	var/enthrallment_ID
-	var/enthrallment_title
-	var/list/mesmerized_subjects = list()
+	// var/enthrallment_ID
+	// var/enthrallment_title
+	// var/list/mesmerized_subjects = list()
 
 /obj/item/organ/eyes/snakeeyes/Initialize()
 	. = ..()
@@ -412,14 +412,14 @@
 	. = ..()
 	if(eye_color)
 		mob_overlay.color = "#[eye_color]"
-	if(!iscarbon(M))
-		return
-	var/obj/item/organ/vocal_cords/Vc = M.getorganslot(ORGAN_SLOT_VOICE)
-	var/obj/item/organ/vocal_cords/nVc = new /obj/item/organ/vocal_cords/velvet
-	if(Vc)
-		Vc.Remove()
-	nVc.Insert(M)
-	qdel(Vc)
+// 	if(!iscarbon(M))
+// 		return
+// 	var/obj/item/organ/vocal_cords/Vc = M.getorganslot(ORGAN_SLOT_VOICE)
+// 	var/obj/item/organ/vocal_cords/nVc = new /obj/item/organ/vocal_cords/velvet
+// 	if(Vc)
+// 		Vc.Remove()
+// 	nVc.Insert(M)
+// 	qdel(Vc)
 
 /obj/item/organ/eyes/snakeeyes/Remove(special = FALSE)
 	if(has_spiral)
@@ -437,28 +437,18 @@
 	var/list/in_sight = view(3, owner)
 	for(var/mob/living/carbon/M in in_sight)
 		if(get_cardinal_dir(owner, M) == owner.dir && turn(M.dir, 180) == owner.dir)
-			do_enthrallment(M)
-			mesmerized_subjects |= M
-			var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
-			if(istype(E))
-				E.enthrallSources |= src
+			M.adjustWillPower(5) //5 WP damage/second vs a normal person
 		else
 			in_sight -= M
-	for(var/mob/living/carbon/M in mesmerized_subjects)
-		if(!(M in in_sight))
-			mesmerized_subjects -= M
-			var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
-			if(istype(E))
-				E.enthrallSources -= src
 
-/obj/item/organ/eyes/snakeeyes/proc/do_enthrallment(mob/living/carbon/M)
-	if(!istype(M))
-		return
-	var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
-	if(!E)
-		E = M.apply_status_effect(/datum/status_effect/chem/enthrall)
-		E.setup_vars(enthrallment_ID, enthrallment_title, 3)
-		E.enthrallSources |= src
+// /obj/item/organ/eyes/snakeeyes/proc/do_enthrallment(mob/living/carbon/M)
+// 	if(!istype(M))
+// 		return
+// 	var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
+// 	if(!E)
+// 		E = M.apply_status_effect(/datum/status_effect/chem/enthrall)
+// 		E.setup_vars(enthrallment_ID, enthrallment_title, 3)
+// 		E.enthrallSources |= src
 	
 
 /obj/item/organ/eyes/snakeeyes/proc/add_mob_overlay()
@@ -474,8 +464,6 @@
 	if(!has_spiral)
 		if(!silent)
 			to_chat(owner, "<span class='notice'>You start gazing more intently with your [src]...</span>")
-		enthrallment_ID = owner?.ckey
-		enthrallment_title = owner.client.prefs?.custom_names["owner"]
 		has_spiral = TRUE
 		add_mob_overlay()
 	else
@@ -483,11 +471,11 @@
 			to_chat(owner, "<span class='notice'>You stop gazing intently with your [src].</span>")
 		has_spiral = FALSE
 		remove_mob_overlay()
-		for(var/mob/living/carbon/M in mesmerized_subjects)
-			mesmerized_subjects -= M
-			var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
-			if(istype(E))
-				E.enthrallSources -= src
+		// for(var/mob/living/carbon/M in mesmerized_subjects)
+		// 	mesmerized_subjects -= M
+		// 	var/datum/status_effect/chem/enthrall/E = M.has_status_effect(/datum/status_effect/chem/enthrall)
+		// 	if(istype(E))
+		// 		E.enthrallSources -= src
 
 /obj/item/organ/eyes/snakeeyes/ui_action_click(owner, action)
 	if(istype(action, /datum/action/item_action/organ_action/toggle))

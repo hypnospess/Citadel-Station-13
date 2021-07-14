@@ -33,7 +33,3 @@
 /obj/item/vending_refill/faustech
 	machine_name 	= "FausTech"
 	icon_state 		= "refill_faustech"
-
-/obj/machinery/vending/faustech/ComponentInitialize()
-	. = ..()
-	AddElement(/datum/element/hypnotic, "pos-faustech-vending", aid_bonuses, "The Faustech-brand vending machine helps remind you somewhat of the joys of sinking and obeying.", "The Faustech machine is no longer nearby.")

@@ -203,6 +203,9 @@
 #define TRAIT_MUTATION_STASIS			"mutation_stasis" //Prevents processed genetics mutations from processing.
 #define TRAIT_FAST_PUMP				"fast_pump"
 #define TRAIT_NICE_SHOT			"nice_shot" //hnnnnnnnggggg..... you're pretty good....
+#define TRAIT_STRONGWILLED		"strong_willed"
+#define TRAIT_WEAKWILLED		"weak_willed"
+#define TRAIT_MINDBROKEN		"mind_broken"
 
 // mobility flag traits
 // IN THE FUTURE, IT WOULD BE NICE TO DO SOMETHING SIMILAR TO https://github.com/tgstation/tgstation/pull/48923/files (ofcourse not nearly the same because I have my.. thoughts on it)
@@ -249,6 +252,7 @@
 #define SPECIES_TRAIT "species"
 #define ORGAN_TRAIT "organ"
 #define JOB_TRAIT "job"
+#define ZONK_TRAIT "hypnosis"
 #define CYBORG_ITEM_TRAIT "cyborg-item"
 #define ADMIN_TRAIT "admin" // (B)admins only.
 #define CHANGELING_TRAIT "changeling"

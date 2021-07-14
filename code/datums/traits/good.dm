@@ -191,6 +191,20 @@
 	H.equip_to_slot(gloweyes, SLOT_IN_BACKPACK)
 	H.regenerate_icons()
 
+//here's some hypnosis themed traits!
+
+/datum/quirk/strongwilled
+	name = "Strong Willed"
+	desc = "You have a natural resistance to hypnotic effects, on account of your strong will."
+	value = 1
+	mob_trait = TRAIT_STRONGWILLED
+	gain_text = "Your will is as iron."
+	lose_text = "You feel a little more agreeable."
+	
+	//weak-wiled is in bad traits for obvious reasons
+
+//todo: musk
+//fuck, what organ would that repalce? do we even have to? probably?
 
 /datum/quirk/snakeeyes
 	name = "Hypnotic Eyes"
@@ -209,6 +223,8 @@
 		Vc.Remove()
 	nVc.Insert(H)
 	qdel(Vc)
+
+//hypnosis traits end here
 
 /datum/quirk/bloodpressure
 	name = "Polycythemia vera"
