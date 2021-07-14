@@ -53172,7 +53172,7 @@
 	dir = 1;
 	pixel_y = -22
 	},
-/turf/open/floor/light/colour_cycle/dancefloor_a,
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure2,
 /area/crew_quarters/bar)
 "eiZ" = (
 /obj/machinery/meter,
@@ -53882,7 +53882,7 @@
 /obj/structure/extinguisher_cabinet{
 	pixel_y = -30
 	},
-/turf/open/floor/light/colour_cycle/dancefloor_a,
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure2,
 /area/crew_quarters/bar)
 "fZm" = (
 /obj/structure/chair/sofa/left,
@@ -53986,7 +53986,7 @@
 /area/quartermaster/warehouse)
 "glo" = (
 /obj/machinery/light,
-/turf/open/floor/light/colour_cycle/dancefloor_b,
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure2,
 /area/crew_quarters/bar)
 "gnf" = (
 /obj/structure/disposalpipe/segment{
@@ -54326,6 +54326,12 @@
 /obj/effect/landmark/blobstart,
 /turf/open/floor/plating,
 /area/maintenance/department/electrical)
+"hkB" = (
+/obj/structure/sign/poster/contraband/lunarlure_4{
+	pixel_x = 32
+	},
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure3,
+/area/crew_quarters/bar)
 "hlT" = (
 /obj/machinery/door/airlock/external{
 	name = "Labor Camp Shuttle Airlock";
@@ -54399,10 +54405,6 @@
 /area/crew_quarters/fitness)
 "hDU" = (
 /obj/structure/table/wood,
-/obj/item/key/displaycase{
-	pixel_x = -7;
-	pixel_y = 2
-	},
 /obj/item/pen/fountain/captain,
 /obj/item/key/collar{
 	pixel_x = 7;
@@ -55777,6 +55779,9 @@
 /obj/item/clothing/under/rank/civilian/lawyer/red,
 /turf/open/floor/plasteel,
 /area/crew_quarters/locker)
+"ljc" = (
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure1,
+/area/crew_quarters/bar)
 "lnk" = (
 /obj/item/radio/intercom{
 	pixel_y = 25
@@ -55799,7 +55804,7 @@
 /obj/structure/camera_assembly{
 	dir = 1
 	},
-/turf/open/floor/light/colour_cycle/dancefloor_b,
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure3,
 /area/crew_quarters/bar)
 "ltK" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden{
@@ -56447,7 +56452,7 @@
 /turf/open/floor/plating,
 /area/maintenance/starboard/fore)
 "nuJ" = (
-/turf/open/floor/light/colour_cycle/dancefloor_b,
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure3,
 /area/crew_quarters/bar)
 "nwX" = (
 /obj/structure/grille/broken,
@@ -56649,6 +56654,9 @@
 "oaN" = (
 /obj/structure/chair/sofa/corp/corner{
 	dir = 1
+	},
+/obj/structure/sign/poster/contraband/lunarlure_2{
+	pixel_y = -32
 	},
 /turf/open/floor/carpet/purple,
 /area/crew_quarters/bar)
@@ -56995,9 +57003,6 @@
 /turf/open/floor/plasteel,
 /area/crew_quarters/fitness)
 "pcf" = (
-/obj/structure/sign/poster/contraband/lunarlure_1{
-	pixel_x = 32
-	},
 /obj/machinery/light{
 	dir = 4
 	},
@@ -57057,6 +57062,9 @@
 /obj/structure/chair/sofa/corp/right{
 	pixel_x = 7;
 	pixel_y = 6
+	},
+/obj/structure/sign/poster/contraband/lunarlure_3{
+	pixel_y = 32
 	},
 /turf/open/floor/carpet/red,
 /area/crew_quarters/bar)
@@ -57984,7 +57992,7 @@
 /turf/open/floor/plasteel/dark,
 /area/hallway/primary/central)
 "rVl" = (
-/turf/open/floor/light/colour_cycle/dancefloor_a,
+/turf/open/floor/light/colour_cycle/dancefloor_lunarlure2,
 /area/crew_quarters/bar)
 "rVN" = (
 /obj/machinery/atmospherics/pipe/simple/scrubbers/hidden,
@@ -58330,7 +58338,7 @@
 /obj/structure/disposalpipe/trunk{
 	dir = 1
 	},
-/obj/structure/sign/poster/contraband/lunarlure_2{
+/obj/structure/sign/poster/contraband/lunarlure_1{
 	pixel_y = 32
 	},
 /turf/open/floor/plasteel/dark,
@@ -59776,8 +59784,8 @@
 	pixel_x = -8;
 	pixel_y = -1
 	},
-/obj/structure/sign/poster/contraband/lunarlure_2{
-	pixel_x = -31
+/obj/structure/sign/poster/contraband/lunarlure_3{
+	pixel_x = -32
 	},
 /turf/open/floor/carpet/purple,
 /area/crew_quarters/bar)
@@ -96569,7 +96577,7 @@ aSH
 nkt
 pjO
 nuJ
-rVl
+nuJ
 lsY
 aJC
 bcr
@@ -96826,7 +96834,7 @@ aVy
 nkt
 pjO
 rVl
-nuJ
+rVl
 fWY
 aJC
 aYV
@@ -97082,8 +97090,8 @@ xqG
 eUQ
 pjO
 pjO
-nuJ
 rVl
+ljc
 glo
 aQg
 aYV
@@ -97340,7 +97348,7 @@ eUQ
 pjO
 pjO
 rVl
-nuJ
+rVl
 eiF
 aJC
 aYV
@@ -97596,8 +97604,8 @@ fdd
 cyA
 pcf
 pjO
+hkB
 nuJ
-rVl
 nuJ
 aJC
 aYV
