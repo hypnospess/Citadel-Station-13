@@ -57,7 +57,7 @@ global procs
 
 	say(message)
 		Say() is the "mother-proc". It calls all the other procs required for speaking, but does little itself.
-		At the atom/movable level, say() just calls send_speech.
+		At the atom/movable level, say() just calls send_speech. 
 
 	Hear(message, atom/movable/speaker, message_langs, raw_message, radio_freq, spans)
 		This proc handles hearing. What it does varies. For mobs, it treats the message with hearer-specific things

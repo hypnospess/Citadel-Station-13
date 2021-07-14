@@ -47,21 +47,31 @@
 	name = "Faustech Wants You"
 	poster_type = /obj/structure/sign/poster/contraband/faustech_1
 	icon_state = "rolled_poster"
+	//see below
 
 /obj/item/poster/contraband/faustech_2
 	name = "Faustech Slogan"
 	poster_type = /obj/structure/sign/poster/contraband/faustech_2
 	icon_state = "rolled_poster"
+	//see below
 
 /obj/item/poster/contraband/faustech_3
 	name = "Sal"
 	poster_type = /obj/structure/sign/poster/contraband/faustech_3
 	icon_state = "rolled_poster"
+	//see below
+
+/obj/item/poster/contraband/lunarlure_1
+	name = "Full Belly, Empty Mind"
+	poster_type = /obj/structure/sign/poster/contraband/lunarlure_1
+	icon_state = "rolled_poster"
+	//see below
 
 /obj/item/poster/contraband/lunarlure_2
 	name = "Good Boys Drink Free"
 	poster_type = /obj/structure/sign/poster/contraband/lunarlure_2
 	icon_state = "rolled_poster"
+	//see below
 
 // The poster sign/structure
 
@@ -192,6 +202,8 @@
 	icon_state = "poster_ripped"
 	name = "ripped poster"
 	desc = "You can't make out anything from the poster's original print. It's ruined."
+	var/list/aid = list(0,0,2,0,0,1)
+	//Someone's been tearing down posters... Is there something to hide?
 
 /obj/structure/sign/poster/random
 	name = "random poster" // could even be ripped
@@ -229,6 +241,8 @@
 	name = "Lusty Xenomorph"
 	desc = "A heretical poster depicting the titular star of an equally heretical book."
 	icon_state = "poster4"
+	var/list/aids = list(5,5,0,0,0,0)
+	//Heyyyyy, that xeno is kinda hot, ngl...
 
 /obj/structure/sign/poster/contraband/post_ratvar
 	name = "Post This Ratvar"
@@ -239,6 +253,10 @@
 	name = "Syndicate Recruitment"
 	desc = "See the galaxy! Shatter corrupt megacorporations! Join today!"
 	icon_state = "poster5"
+	var/list/aids_innocent = list(-10,0,5,0,-1,3)
+	var/list/aids_traitor = list(10,5,0,0,3,0)
+	//Yikes. Syndicate propaganda. Not cool.
+	//Ayy, major props to whoever's put up this syndi stuff!
 
 /obj/structure/sign/poster/contraband/clown
 	name = "Clown"
@@ -254,6 +272,10 @@
 	name = "Grey Tide"
 	desc = "A rebellious poster symbolizing assistant solidarity."
 	icon_state = "poster8"
+	var/list/aids_innocent = list(-10,0,5,0,-1,3)
+	var/list/aids_traitor = list(10,5,0,0,3,0)
+	//ahh... let's not rise up, gamers...
+	//All in a day's work of encouraging rebellion! Gamers, rise up.
 
 /obj/structure/sign/poster/contraband/missing_gloves
 	name = "Missing Gloves"
@@ -299,6 +321,8 @@
 	name = "Space Cube"
 	desc = "Ignorant of Nature's Harmonic 6 Side Space Cube Creation, the Spacemen are Dumb, Educated Singularity Stupid and Evil."
 	icon_state = "poster17"
+	var/list/aids = list(20,-1,-5,0,0,2)
+	//Space Cube hurts my brain...
 
 /obj/structure/sign/poster/contraband/communist_state
 	name = "Communist State"
@@ -329,6 +353,10 @@
 	name = "Rebels Unite"
 	desc = "A poster urging the viewer to rebel against Nanotrasen."
 	icon_state = "poster23"
+	var/list/aids_innocent = list(-10,0,5,0,-1,3)
+	var/list/aids_traitor = list(10,5,0,0,3,0)
+	//Hmmm... maybe rebellion isn't a great idea...
+	//hell yeah, down with nanotrasen!
 
 /obj/structure/sign/poster/contraband/c20r
 	// have fun seeing this poster in "spawn 'c20r'", admins...
@@ -365,6 +393,8 @@
 	name = "Red Rum"
 	desc = "Looking at this poster makes you want to kill."
 	icon_state = "poster30"
+	var/list/aids = list(-15,0,10,0,0,10)
+	//AAAAAAAAAAAAAAAAAAAAAA
 
 /obj/structure/sign/poster/contraband/cc64k_ad
 	name = "CC 64K Ad"
@@ -385,6 +415,8 @@
 	name = "Lizard"
 	desc = "This lewd poster depicts a lizard preparing to mate."
 	icon_state = "poster34"
+	var/list/aids = list(5,5,0,0,0,0)
+	//Ayy... that lizardperson is kinda hot, ngl...
 
 /obj/structure/sign/poster/contraband/free_drone
 	name = "Free Drone"
@@ -395,6 +427,8 @@
 	name = "Busty Backdoor Xeno Babes 6"
 	desc = "Get a load, or give, of these all natural Xenos!"
 	icon_state = "poster36"
+	var/list/aids = list(5,5,0,0,0,0)
+	//woah... I've gotta admit, those xenos are pretty hot...
 
 /obj/structure/sign/poster/contraband/robust_softdrinks
 	name = "Robust Softdrinks"
@@ -420,6 +454,8 @@
 	name = "Space Cola"
 	desc = "Your favorite cola, in space."
 	icon_state = "poster41"
+	var/list/aids = list(15,15,0,0,2,0)
+	//ahh, yes! space cola! must consume product.
 
 /obj/structure/sign/poster/contraband/space_up
 	name = "Space-Up!"
@@ -460,36 +496,46 @@
 	name = "Faustech Wants You"
 	desc = "An advertisement for Faustech's labs. Allegedly, they eagerly accept test subject volunteers."
 	icon_state = "faustech_wantsyou"
+	var/list/aids = list(10,10,-5,0,0,0)
+	//a job at faustech doesn't seem too bad after all...
 
 /obj/structure/sign/poster/contraband/faustech_2
 	name = "Faustech Slogan"
 	desc = "An advertisement for Faustech featuring their slogan: SINK, OBEY, RELAX."
 	icon_state = "faustech_slogan"
+	var/list/aids = list(10,10,-5,0,0,0)
+	//Hmm, faustech's slogans are awfully convincing...
 
 /obj/structure/sign/poster/contraband/faustech_3
 	name = "Sal"
 	desc = "A poster of a Faustech favorite, Sal. He's dreamy!"
 	icon_state = "faustech_sal"
+	var/list/aids = list(10,10,-5,0,3,0)
+	//Hey, it's Sal! Love that cutie. Just being nearby him is relaxing!
+
+/obj/structure/sign/poster/contraband/lunarlure_1
+	name = "Full Belly, Empty Mind"
+	desc = "An advertisement for the Lunar Lure, promising a full belly and an empty mind to its patrons."
+	icon_state = "lunarlure1"
+	var/list/aids = list(10,10,-5,0,0,0)
+	//Hmm... a bite at the lunar lure seems like a good time right now...
 
 /obj/structure/sign/poster/contraband/lunarlure_2
 	name = "Good Boys Drink Free"
 	desc = "A neon sign from the Lunar Lure, promising that \"good boys drink free\". An odd promise for those unfamiliar with the establishment."
 	icon_state = "lunarlure2"
+	var/list/aids = list(10,10,-5,0,0,0)
+	//Good boys drink free? I want to drink free!
 
 /obj/structure/sign/poster/contraband/lunarlure_3
 	name = "Indulge, Relax, Let Go"
 	desc = "A neon sign from the Lunar Lure, urging their patrons to indulge, relax, and let go. Sound advice."
 	icon_state = "lunarlure3"
 
-/obj/structure/sign/poster/contraband/bat_begood
-	name = "Be Good"
-	desc = "The green color of this poster makes you feel oddly safe. The text helps some, too."
-	icon_state = "bat_begood"
-
-/obj/structure/sign/poster/contraband/bat_seesyou
-	name = "Peeking Fang"
-	desc = "You're not sure why, but you find it hard to break eye contact."
-	icon_state = "bat_seesyou"
+/obj/structure/sign/poster/contraband/lunarlure_4
+	name = "Dance, Forget..."
+	desc = "A shimmering, dazzling poster that encourages Lure patrons to lose themselves to the music."
+	icon_state = "lunarlure4"
 
 /obj/structure/sign/poster/official
 	poster_item_name = "motivational poster"
@@ -546,6 +592,8 @@
 	name = "Obey"
 	desc = "A poster instructing the viewer to obey authority."
 	icon_state = "poster9_legit"
+	var/list/aids = list(0,0,10,-5,0,0,-3)
+	//Obey. A compelling argument, to be sure!
 
 /obj/structure/sign/poster/official/walk
 	name = "Walk"
@@ -581,6 +629,8 @@
 	name = "Do Not Question"
 	desc = "A poster instructing the viewer not to ask about things they aren't meant to know."
 	icon_state = "poster16_legit"
+	var/list/aids = list(0,0,10,-5,0,0,-3)
+	//Don't question? Sounds easy enough.
 
 /obj/structure/sign/poster/official/work_for_a_future
 	name = "Work For A Future"
@@ -711,6 +761,8 @@
 	name = "Medical"
 	desc = "A green cross, one of the interplanetary symbol of health and aid. It has a bunch of common languages at the top with translations." // Didn't the American Heart Foundation trademark red crosses? I'm playing it safe with green, not that they'll notice spacegame13 poster.
 	icon_state = "poster42_legit"
+	var/list/aids = list(15,15,5,10,2,0)
+	//Just being near the green cross insignia makes me feel safe and cared for.
 
 /obj/structure/sign/poster/official/nt_storm_officer
 	name = "NT Storm Ad"

@@ -121,6 +121,18 @@ GLOBAL_LIST_EMPTY(family_heirlooms)
 	lose_text = "<span class='notice'>You feel awake again.</span>"
 	medical_record_text = "Patient has abnormal sleep study results and is difficult to wake up."
 
+//hypnosis themed negative traits go here!
+
+/datum/quirk/weakwilled
+	name = "Weak Willed"
+	desc = "You have a natural vulnerability to hypnotic effects. You're a good subject!"
+	value = -1
+	mob_trait = TRAIT_WEAKWILLED
+	gain_text = "<span class='danger'>You feel compliant... perhaps moreso than you aught to.</span>"
+	lose_text = "<span class='notice'>You're nobody's pet!</span>"
+
+//hypnosis themed negative traits end here.
+
 /datum/quirk/brainproblems
 	name = "Brain Tumor"
 	desc = "You have a little friend in your brain that is slowly destroying it. Better bring some mannitol!"

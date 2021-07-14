@@ -2139,6 +2139,8 @@
 #include "code\modules\hydroponics\grown\tomato.dm"
 #include "code\modules\hydroponics\grown\towercap.dm"
 #include "code\modules\hypnosis\pendulums.dm"
+#include "code\modules\hypnosis\visors.dm"
+#include "code\modules\hypnosis\willpower.dm"
 #include "code\modules\instruments\instrument_data\_instrument_data.dm"
 #include "code\modules\instruments\instrument_data\_instrument_key.dm"
 #include "code\modules\instruments\instrument_data\brass.dm"

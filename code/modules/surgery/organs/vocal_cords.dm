@@ -1,6 +1,6 @@
 #define COOLDOWN_STUN 1200
 #define COOLDOWN_DAMAGE 600
-#define COOLDOWN_MEME 300
+#define COOLDOWN_MEME 300 
 #define COOLDOWN_NONE 100
 
 /obj/item/organ/vocal_cords //organs that are activated through speech with the :x/MODE_KEY_VOCALCORDS channel

@@ -23,6 +23,10 @@
 	update_stamina()
 	doSprintBufferRegen()
 
+	//hypnosis stuff
+	if (stat != DEAD)
+		handle_willpower()
+
 	if(stat != DEAD)
 		handle_brain_damage()
 

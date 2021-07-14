@@ -909,6 +909,7 @@
 	build_path = /obj/machinery/rnd/production/protolathe/department/service
 
 /obj/item/circuitboard/machine/bepis
+	//bhijn what the fuck is a bepis chamber
 	name = "BEPIS Chamber (Machine Board)"
 	build_path = /obj/machinery/rnd/bepis
 	req_components = list(
@@ -1109,6 +1110,7 @@
 		/obj/item/stack/sheet/glass = 1)
 
 /obj/item/circuitboard/machine/hypnochair
+	//:eyes: :sweat_droplets: :sweat_droplets:
 	name = "Enhanced Interrogation Chamber (Machine Board)"
 	icon_state = "security"
 	build_path = /obj/machinery/hypnochair
