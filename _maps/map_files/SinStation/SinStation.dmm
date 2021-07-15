@@ -7972,12 +7972,6 @@
 "apJ" = (
 /turf/closed/wall,
 /area/construction/mining/aux_base)
-"apK" = (
-/obj/machinery/status_display{
-	pixel_x = -32
-	},
-/turf/open/floor/plasteel/dark,
-/area/security/brig)
 "apL" = (
 /obj/structure/table,
 /obj/effect/spawner/lootdrop/maintenance{
@@ -54536,8 +54530,8 @@
 /obj/item/clothing/neck/petcollar/locked,
 /obj/item/clothing/neck/petcollar/locked,
 /obj/item/clothing/neck/petcollar/locked,
-/obj/item/clothing/glasses/hypnovisor/lurevisor,
-/obj/item/clothing/glasses/hypnovisor/lurevisor,
+/obj/item/clothing/glasses/hypnovisor,
+/obj/item/clothing/glasses/hypnovisor,
 /turf/open/floor/wood,
 /area/crew_quarters/bar)
 "imH" = (
@@ -84629,9 +84623,9 @@ age
 kZS
 agu
 agj
-apK
-apK
-apK
+amL
+amL
+amL
 aiX
 aiE
 aiK

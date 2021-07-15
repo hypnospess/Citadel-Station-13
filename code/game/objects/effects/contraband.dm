@@ -537,6 +537,16 @@
 	desc = "A shimmering, dazzling poster that encourages Lure patrons to lose themselves to the music."
 	icon_state = "lunarlure4"
 
+/obj/structure/sign/poster/contraband/bat_begood
+	name = "Be Good"
+	desc = "The green color of this poster makes you feel oddly safe. The text helps some, too."
+	icon_state = "bat_begood"
+
+/obj/structure/sign/poster/contraband/bat_seesyou
+	name = "Peeking Fang"
+	desc = "You're not sure why, but you find it hard to break eye contact."
+	icon_state = "bat_seesyou"
+
 /obj/structure/sign/poster/official
 	poster_item_name = "motivational poster"
 	poster_item_desc = "An official Nanotrasen-issued poster to foster a compliant and obedient workforce. It comes with state-of-the-art adhesive backing, for easy pinning to any vertical surface."

@@ -6,6 +6,7 @@
 //write the thing that applies zonk damage [x]
 //institute passive willpower regeneration [x] 
 //zonk feedback
+//moodlets/examine text for zonked players
 //assign willpower regeneration buffs to things that might have that
 //assign zonk damage to thinks that might have that
 //make resisting do something (?)
@@ -43,8 +44,8 @@
 #define MINDLESS    3
 #define MINDBROKEN  4
 
-mob/var/maxWillPower = 300 //subject to change throughout development. also may be this should only apply to humans?
-mob/var/WillPower = 300
+mob/var/maxWillPower = 625 //subject to change throughout development. also may be this should only apply to humans?
+mob/var/WillPower = 625
 mob/var/lucidity = LUCID
 mob/var/WillLoss = 0 //only change this with procs, as with any other damage type
 
@@ -55,38 +56,28 @@ mob/var/WillLoss = 0 //only change this with procs, as with any other damage typ
 	update_lucidity()
 
 /mob/living/carbon/proc/update_lucidity()
-	var/list/in_sight = view(3, src)
 	if(status_flags & GODMODE)
 		return
 	if(stat != DEAD)
-		if (WillPower > 260 && lucidity != LUCID)
+		if (WillPower > 585 && lucidity != LUCID)
 			lucidity = LUCID
-			to_chat(src, "<span class='notice'>You feel much more awake.</span>")
-			for (var/mob/living/carbon/M in in_sight)
-				to_chat(M, "<span class='notice'>[src] seems to awaken.</span>")
-		if (WillPower <= 260 && WillPower > 200 && lucidity != FUZZY)
+			//to_chat(src, "<span class='notice'>You feel much more awake.</span>")
+			visible_message("<span class='userlove'>[src] seems to awaken.</span>", "<span class='userlove'>You feel much more awake.</span>", null, 3) //just gonna test this here
+		if (WillPower <= 585 && WillPower > 525 && lucidity != FUZZY)
 			lucidity = FUZZY
-			to_chat(src, "<span class='notice'>Your head feels fuzzy.</span>")
-			for (var/mob/living/carbon/M in in_sight)
-				to_chat(M, "<span class='notice'>[src] looks relaxed.</span>")
+			visible_message("<span class='userlove'>[src] looks relaxed.</span>", "<span class='userlove'>Your head feels fuzzy.</span>", null, 3)
 			if (HAS_TRAIT(src, TRAIT_MINDBROKEN))
 				REMOVE_TRAIT(src, TRAIT_MINDBROKEN, ZONK_TRAIT)
 				to_chat(src, "<span class='warning'>You feel more like yourself again, as your mind recovers.</span>")
-		if (WillPower <= 200 && WillPower > 100 && lucidity != DAZED)
+		if (WillPower <= 525 && WillPower > 375 && lucidity != DAZED)
 			lucidity = DAZED
-			to_chat(src, "<span class='notice'>You fall into a pleasant daze.</span>")
-			for (var/mob/living/carbon/M in in_sight)
-				to_chat(M, "<span class='notice'>[src] looks really out of it.</span>")
-		if (WillPower <= 100 && WillPower > 0 && lucidity != MINDLESS)
+			visible_message("<span class='userlove'>[src] looks really out of it.</span>", "<span class='userlove'>You fall into a pleasant daze.</span>", null, 3)
+		if (WillPower <= 375 && WillPower > 0 && lucidity != MINDLESS)
 			lucidity = MINDLESS
-			to_chat(src, "<span class='notice'>Your thoughts fade away, leaving your mind completely empty.</span>")
-			for (var/mob/living/carbon/M in in_sight)
-				to_chat(M, "<span class='notice'>[src]'s eyes glass over, and they seem very deep in a trance.</span>")
+			visible_message("<span class='userlove'>[src]'s eyes glass over, and they seem very deep in a trance.</span>", "<span class='userlove'>Your thoughts fade away, leaving your mind completely empty.</span>", null, 3)
 		if (WillPower <= 0 && lucidity != MINDBROKEN)
 			lucidity = MINDBROKEN
-			to_chat(src, "<span class='warning'>Something in your mind snaps.</span>")
-			for (var/mob/living/carbon/M in in_sight)
-				to_chat(M, "<span class='notice'>[src] looks completely fargone.</span>")
+			visible_message("<span class='userlove'>[src] looks completely fargone.</span>", "<span class='warning'>Something in your mind snaps.</span>", null, 3)
 			if (!HAS_TRAIT(src, TRAIT_MINDBROKEN)) //we make mindbroken a trait so that it can persist for longer than just having 0 WP
 				ADD_TRAIT(src, TRAIT_MINDBROKEN, ZONK_TRAIT)
 
